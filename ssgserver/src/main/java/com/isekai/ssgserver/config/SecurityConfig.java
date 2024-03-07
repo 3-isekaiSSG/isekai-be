@@ -8,11 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CorsFilter corsFilter;
 
     // Spring Security 검사 비활성화
     @Bean
@@ -25,6 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChai(HttpSecurity http) throws Exception {
         return http
+                .addFilter(corsFilter)
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
