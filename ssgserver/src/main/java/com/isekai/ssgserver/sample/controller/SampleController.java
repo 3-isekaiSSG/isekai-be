@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.sample.controller;
 
+import com.isekai.ssgserver.config.aop.TimeTrace;
 import com.isekai.ssgserver.sample.dto.SampleResponseDto;
 import com.isekai.ssgserver.sample.service.SampleService;
 import com.isekai.ssgserver.util.MessageResponse;
@@ -25,10 +26,13 @@ public class SampleController {
     /**
      * ResponseEntity를 이용 - HttpStatus 사용 + message 구분 가능
      */
+    @TimeTrace
     @GetMapping("/http/{sample_pk}")
     @Operation(summary = "HttpStatus 사용", description = "Sample 응답값을 확인 할 수 있습니다.")
     public ResponseEntity<?> test(
-            @PathVariable @Parameter(example = "1") Long sample_pk) {
+        @PathVariable @Parameter(example = "1") Long sample_pk) throws InterruptedException {
+        // 시간 측정을 위해 코드 추가
+        Thread.sleep(1000);
 
         if (sample_pk != 1) {
             return new ResponseEntity<>(new MessageResponse("조회를 실패했습니다."),
