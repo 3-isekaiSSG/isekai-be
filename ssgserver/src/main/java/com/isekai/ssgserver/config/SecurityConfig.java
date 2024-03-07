@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     // Http Security
     @Bean
-    public SecurityFilterChain filterChai(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .addFilter(corsFilter)
                 .csrf().disable()
