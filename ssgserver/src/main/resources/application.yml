@@ -33,3 +33,9 @@ logging:
         type:
           descriptor:
             sql: trace
+
+jwt:
+  key: ${JWT_SECRET_KEY}
+  token:
+    access-expire-time: 300000
+    refresh-expire-time: 86400000

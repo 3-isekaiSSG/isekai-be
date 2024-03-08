@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.config;
 
+import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
+import com.isekai.ssgserver.jwt.service.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -16,6 +19,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
+    private final JwtProvider jwtProvider;
 
     // Spring Security 검사 비활성화
     @Bean
@@ -37,7 +41,10 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests()
                 .anyRequest().permitAll()  // 모든 요청에 모든 사용자 접근 허용(개발 편의를 위해 설정)
-                .and().build();
+                .and()
+                // jwt 인증 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .build();
 
     }
 }
