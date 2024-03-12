@@ -6,23 +6,25 @@ server:
 spring:
   profiles:
     active: local
-  jpa:
-    database: mysql
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#    빌드 테스트 (주석 풀어서 사용하세요)
+#  jpa:
+#    database: mysql
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+#    빌드 테스트 (주석 풀어서 사용하세요)
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${LOCAL_DB_URL}
+#    username: ${LOCAL_DB_USERNAME}
+#    password: ${LOCAL_DB_PASSWORD}
   main:
     log-startup-info: false
 
