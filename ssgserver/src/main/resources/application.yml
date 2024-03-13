@@ -6,15 +6,15 @@ server:
 spring:
   profiles:
     active: local
-  jpa:
-    database: mysql
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#  jpa:
+#    database: mysql
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
