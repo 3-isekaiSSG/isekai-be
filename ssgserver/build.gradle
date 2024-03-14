@@ -47,6 +47,12 @@ dependencies {
 
 	// aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // 휴대폰 인증
+    implementation 'net.nurigo:sdk:4.3.0'
 }
 
 tasks.named('bootBuildImage') {

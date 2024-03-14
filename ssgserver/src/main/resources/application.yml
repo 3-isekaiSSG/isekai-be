@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8000
   servlet:
     context-path: /api
 
@@ -20,9 +20,9 @@ spring:
       matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   main:
     log-startup-info: false
 
@@ -33,3 +33,9 @@ logging:
         type:
           descriptor:
             sql: trace
+
+coolsms:
+  api:
+    key: ${COOL_API_KEY}
+    secret: ${COOL_SECRET_KEY}
+    number: ${COOL_PHONE_NUM}
