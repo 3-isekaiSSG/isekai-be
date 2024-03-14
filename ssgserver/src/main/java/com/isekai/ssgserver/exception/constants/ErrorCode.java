@@ -9,6 +9,7 @@ public enum ErrorCode {
 
     // 400 : 잘못된 요청
     REQUEST_PARAMETER(400, "요청 파라미터 값이 올바르지 않습니다."),
+    WRONG_NUMBER(400, "인증번호가 일치하지 않습니다."),
 
     // 401 : 접근 권한이 없음
     NO_AUTHORITY(401, "접근 권한이 없습니다." ),
