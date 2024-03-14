@@ -1,16 +1,16 @@
 server:
-  port: 8080
+  port: 8000
   servlet:
     context-path: /api
 
 spring:
-  profiles:
-    active: local
+#  profiles:
+#    active: local
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
@@ -20,11 +20,16 @@ spring:
       matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   main:
     log-startup-info: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
 logging:
   level:
@@ -39,3 +44,8 @@ jwt:
   token:
     access-expire-time: 300000
     refresh-expire-time: 86400000
+coolsms:
+  api:
+    key: ${COOL_API_KEY}
+    secret: ${COOL_SECRET_KEY}
+    number: ${COOL_PHONE_NUM}
