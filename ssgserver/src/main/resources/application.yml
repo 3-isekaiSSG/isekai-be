@@ -43,3 +43,4 @@ coolsms:
   api:
     key: ${COOL_API_KEY}
     secret: ${COOL_SECRET_KEY}
+    number: ${COOL_PHONE_NUM}
