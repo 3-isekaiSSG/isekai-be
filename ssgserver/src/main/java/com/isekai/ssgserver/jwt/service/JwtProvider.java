@@ -1,10 +1,9 @@
 package com.isekai.ssgserver.jwt.service;
 
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.jwt.dto.JwtToken;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,13 +33,13 @@ public class JwtProvider {
 
     /**
      * 토큰 생성
-     * @param accountId 유저 계정ID
+     * @param uuid 유저 uuid
      * @param role 유저 역할 (SSG: 통합회원 / SOCIAL: 소셜회원)
      * @return Access token, Refresh token (String)
      */
-    public JwtToken createToken(String accountId, String role) {
+    public JwtToken createToken(String uuid, String role) {
 
-        Claims claims = Jwts.claims().setSubject(accountId);  // subject 사용자 식별
+        Claims claims = Jwts.claims().setSubject(uuid);  // subject 사용자 식별(uuid)
         claims.put("role", role);
 
         Date now = new Date();
@@ -87,27 +86,30 @@ public class JwtProvider {
      */
     public boolean verifyToken(String token) {
         try {
-            // 토큰 파싱하여 claims 추출
-            Jws<Claims> claims = Jwts.parserBuilder()
+            // 토큰 파싱
+            Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-            // 토큰이 유효한지 (만료시간) 검증 - t/f 반환
-            return claims.getBody()
-                    .getExpiration()
-                    .after(new Date());
+            System.out.println("검증성공");
+            return true;
+        } catch (ExpiredJwtException e) {
+            System.out.println("만료됨");
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
         } catch (Exception e) {
             // 토큰 파싱 과정에서 어떠한 예외라도 발생한다면, 토큰 유효하지 않은 것으로 상정
-            return false;
+            System.out.println("예외발생");
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
     }
+
 
     /**
      * 토큰에 담겨있는 계정 id(로그인 입력 id) 획득. 변경 필요
      * @param token
      * @return 계정 id
      */
-    public String getAccountId(String token) {
+    public String getUuid(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody()

@@ -1,10 +1,12 @@
 package com.isekai.ssgserver.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.exception.dto.ErrorDto;
 import com.isekai.ssgserver.jwt.dto.AuthDto;
 import com.isekai.ssgserver.jwt.service.JwtProvider;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,34 +34,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                      FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("Authorization");
 
-        Authentication auth = null; //인증 정보를 저장
+        try {
+            String token = request.getHeader("Authorization");
+            Authentication auth = null; //인증 정보를 저장
 
-        if(token != null) {
-            if (!jwtProvider.verifyToken(token)) {
-                // todo Jwt 검증 로직 추가 필요 (Refresh Token 구현 후)
-            }
-            //token 으로 id 읽어오기
-            String accountId = jwtProvider.getAccountId(token);
-            String role = jwtProvider.getValue(token, "role");
+            if (token != null && jwtProvider.verifyToken(token)) {
+                System.out.println("받은 token : " + token);
+
+                //token 으로 id 읽어오기
+                String uuid = jwtProvider.getUuid(token);
+                String role = jwtProvider.getValue(token, "role");
+                System.out.println("uuid:" + uuid);  // test
+                System.out.println("role:" + role);   // test
 
 
-            //role 에 따라 다르게 authentication 주기
-            if ("SSG".equals(role)) {
-                auth = getAuthentication(accountId, "SSG");
-            } else if ("SOCIAL".equals(role)) {
-                auth = getAuthentication(accountId, "SOCIAL");
+                //role 에 따라 다르게 authentication 주기
+                if ("SSG".equals(role)) {
+                    auth = getAuthentication(uuid, "SSG");
+                } else if ("SOCIAL".equals(role)) {
+                    auth = getAuthentication(uuid, "SOCIAL");
+                } else { //예외처리
+                    setErrorResponse(response, ErrorCode.INTERNAL_SERVER_ERROR);
+                    return;
+                }
+                //securityContext 에 auth 정보 저장
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(request, response);
+            } else {
+                System.out.println("null???");
             }
-            else { //예외처리
-                setErrorResponse(response, ErrorCode.INTERNAL_SERVER_ERROR);
-                return;
-            }
-            //securityContext 에 auth 저장
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            }
-        // request, response를 필터 체인의 다음 필터로 넘김
-        filterChain.doFilter(request, response);
+        } catch (CustomException e) {
+            /* - verify token 과정에서 exception 발생한 경우 해당 내용 response
+            *  1. 유효하지만, 인증 기간이 만료된 경우
+            *  2. 토큰 자체가 유효하지 않은 경우*/
+            response.setStatus(e.getErrorCode().getStatus());
+            response.getWriter().write("message: " + e.getErrorCode().getMessage());
+        }
+
     }
 
     private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) {

@@ -18,6 +18,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler({CustomException.class})
     protected ResponseEntity<?> handleCustomException(CustomException ex) {
+        System.out.println("error is" + ex.getErrorCode());  // test
         return new ResponseEntity<>(new ErrorDto(ex.getErrorCode().getStatus(), ex.getErrorCode().getMessage()), HttpStatus.valueOf(ex.getErrorCode().getStatus()));
     }
 

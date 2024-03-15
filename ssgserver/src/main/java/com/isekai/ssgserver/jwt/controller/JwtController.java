@@ -5,12 +5,10 @@ import com.isekai.ssgserver.jwt.service.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/jwt")
 @RequiredArgsConstructor
 public class JwtController {
 
@@ -20,14 +18,16 @@ public class JwtController {
      * token 생성 및 header 전송 테스트 !
      * (지울 예정)
      */
-    @GetMapping("/token")
-    public ResponseEntity<JwtToken> createToken() {
+    @GetMapping("/token/test")
+    public ResponseEntity<?> createToken() {
         JwtToken createdToken = jwtProvider.createToken("sseedd", "SSG");
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", createdToken.getAccessToken());
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(null);
+                .build();
     }
+
+    
 }
