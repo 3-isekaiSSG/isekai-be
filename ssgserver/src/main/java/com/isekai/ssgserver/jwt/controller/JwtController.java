@@ -20,7 +20,7 @@ public class JwtController {
      */
     @GetMapping("/token/test")
     public ResponseEntity<?> createToken() {
-        JwtToken createdToken = jwtProvider.createToken("sseedd", "SSG");
+        JwtToken createdToken = jwtProvider.createToken("sseedd");
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", createdToken.getAccessToken());
 
@@ -29,5 +29,13 @@ public class JwtController {
                 .build();
     }
 
-    
+    @GetMapping("/token/{uuid}")
+    public ResponseEntity<?> reissueToken(@RequestHeader("Authorization") String token, @PathVariable String uuid) {
+        System.out.println("controller 작동");
+        HttpHeaders headers = new HttpHeaders();
+//        JwtToken createdToken = jwtProvider.reissueToken(token, uuid);
+        jwtProvider.reissueToken(token, uuid);
+//        headers.set("Authorization", createdToken.getAccessToken());
+        return ResponseEntity.ok().build();
+    }
 }

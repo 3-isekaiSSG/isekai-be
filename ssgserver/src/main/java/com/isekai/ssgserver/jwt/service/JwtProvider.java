@@ -33,13 +33,15 @@ public class JwtProvider {
 
     /**
      * 토큰 생성
+     * role 유저 역할 (SSG: 통합회원 / SOCIAL: 소셜회원)
      * @param uuid 유저 uuid
-     * @param role 유저 역할 (SSG: 통합회원 / SOCIAL: 소셜회원)
      * @return Access token, Refresh token (String)
      */
-    public JwtToken createToken(String uuid, String role) {
+    public JwtToken createToken(String uuid) {
 
         Claims claims = Jwts.claims().setSubject(uuid);  // subject 사용자 식별(uuid)
+// todo uuid로 role 가져오기 ??
+        String role = "SSG";
         claims.put("role", role);
 
         Date now = new Date();
@@ -77,6 +79,27 @@ public class JwtProvider {
         }
 
         return tokenInfo;
+    }
+
+    public JwtToken reissueToken(String token, String uuid) {
+
+        // 보낸 access token의 서명키 확인
+        try {
+                verifyToken(token);
+        } catch (CustomException e) {
+            System.out.println(e.getErrorCode().getMessage());
+            if (e.getErrorCode().getMessage().equals("접근 권한이 없습니다.")) {
+                throw new CustomException(ErrorCode.NO_AUTHORITY);
+            }
+        }
+        // 우리 서버에서 발급해준 jwt만 재발급해주겠다!!!
+        // todo uuid로 refresh token redis에서 가져오고 기존 것 지우기
+        // refresh token 대조
+        // create token
+
+        JwtToken newAccessToken = createToken(uuid);
+        // 새로운 refresh token redis 저장
+        return newAccessToken;
     }
 
     /**

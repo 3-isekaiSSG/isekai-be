@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                      FilterChain filterChain) throws ServletException, IOException {
-
+        System.out.println("filter 시작");
         try {
             String token = request.getHeader("Authorization");
             Authentication auth = null; //인증 정보를 저장
@@ -60,10 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
                 //securityContext 에 auth 정보 저장
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                filterChain.doFilter(request, response);
-            } else {
-                System.out.println("null???");
             }
+            filterChain.doFilter(request, response);
         } catch (CustomException e) {
             /* - verify token 과정에서 exception 발생한 경우 해당 내용 response
             *  1. 유효하지만, 인증 기간이 만료된 경우

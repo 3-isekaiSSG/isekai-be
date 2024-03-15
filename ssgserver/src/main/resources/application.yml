@@ -41,6 +41,10 @@ logging:
         type:
           descriptor:
             sql: trace
+#            로그 수준 - 디버깅
+      springframework:
+        security: debug
+
 
 jwt:
   key: ${JWT_SECRET_KEY}

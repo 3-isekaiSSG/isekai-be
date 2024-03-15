@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-resources/**");
+                        "/swagger-resources/**",
+                        "/jwt/**");
     }
 
     // Http Security
