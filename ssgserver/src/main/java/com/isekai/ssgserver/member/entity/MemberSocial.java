@@ -1,6 +1,4 @@
-package com.isekai.ssgserver.category.entity;
-
-import com.isekai.ssgserver.product.entity.Product;
+package com.isekai.ssgserver.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -26,27 +23,21 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "category_product")
-public class CategoryProduct {
+public class MemberSocial {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_product")
-	private long categoryProductId;
+	@Column(name = "member_social_id")
+	private long memberSocialId;
+
+	@Column(name = "member_social_code", nullable = false)
+	private String memberSocialCode;
+
+	@Column(name = "socail_division_code", nullable = false)
+	private byte socailDivisionCode;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_l_id", nullable = false)
-	private CategoryL categoryL;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_m_id", nullable = false)
-	private CategoryM categoryM;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_s_id", nullable = false)
-	private CategoryS categoryS;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Memeber member;
 }
