@@ -14,7 +14,7 @@ public enum ErrorCode {
     // 401 : 접근 권한이 없음
     NO_AUTHORITY(401, "접근 권한이 없습니다." ),
 
-    TOKEN_EXPIRED(401, "토큰이 만료되었습니다. 다시 로그인해주세요."),
+    TOKEN_EXPIRED(401, "토큰이 만료되었습니다."),
 
     // 403: Forbidden
     PASSWORD_ERROR(403, "비밀번호가 일치하지 않습니다."),

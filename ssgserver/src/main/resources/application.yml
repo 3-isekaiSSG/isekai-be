@@ -2,6 +2,9 @@ server:
   port: 8000
   servlet:
     context-path: /api
+    encoding:
+      charset: utf-8
+      force: true
 
 spring:
 #  profiles:
@@ -10,7 +13,7 @@ spring:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -38,7 +41,16 @@ logging:
         type:
           descriptor:
             sql: trace
+#            로그 수준 - 디버깅
+      springframework:
+        security: debug
 
+
+jwt:
+  key: ${JWT_SECRET_KEY}
+  token:
+    access-expire-time: 300000
+    refresh-expire-time: 18000000
 coolsms:
   api:
     key: ${COOL_API_KEY}
