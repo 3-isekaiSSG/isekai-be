@@ -1,5 +1,8 @@
-package com.isekai.ssgserver.category.entity;
+package com.isekai.ssgserver.option.entity;
 
+import com.isekai.ssgserver.category.entity.CategoryL;
+import com.isekai.ssgserver.category.entity.CategoryM;
+import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
@@ -16,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -25,28 +27,36 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "category_product")
-public class CategoryProduct {
-
+@Table(name = "option")
+public class Option {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_product")
-	private long categoryProductId;
+	@Column(name = "option_id")
+	private long optionId;
 
-	// 연관 관계
+	@Column(nullable = false)
+	private String value;
+
+	@Column(nullable = false)
+	private int stock;
+
+	@Column(name = "order_limit")
+	private int orderLimit;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
+	@JoinColumn(name = "procut_id", nullable = false)
 	private Product product;
 
-	@ManyToOne
-	@JoinColumn(name = "category_l_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "option_first_id")
 	private CategoryL categoryL;
 
-	@ManyToOne
-	@JoinColumn(name = "category_m_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "option_second_id")
 	private CategoryM categoryM;
 
-	@ManyToOne
-	@JoinColumn(name = "category_s_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "option_third_id")
 	private CategoryS categoryS;
+
 }
