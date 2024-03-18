@@ -19,12 +19,12 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "order_id")
-	private long orderId;
+	@Column(name = "orders_id")
+	private long ordersId;
 
 	@Column(name = "member_id", nullable = false)
 	private long memberId;
@@ -47,13 +47,13 @@ public class Order {
 	@Column(name = "pay_price", nullable = false)
 	private int payPrice;
 
-	@Column (name = "order_name", nullable = false)
+	@Column (name = "orders_name", nullable = false)
 	private String orderName;
 
-	@Column (name = "order_phone", nullable = false)
-	private String orderPhone;
+	@Column (name = "orders_phone", nullable = false)
+	private String ordersPhone;
 
-	@Column (name = "order_email", nullable = false)
-	private String orderEmail;
+	@Column (name = "orders_email", nullable = false)
+	private String ordersEmail;
 
 }

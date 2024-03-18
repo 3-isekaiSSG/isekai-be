@@ -1,9 +1,4 @@
-package com.isekai.ssgserver.cart.entity;
-
-import java.time.LocalDateTime;
-
-import com.isekai.ssgserver.member.entity.Memeber;
-import com.isekai.ssgserver.option.entity.Option;
+package com.isekai.ssgserver.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,28 +22,18 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "cart")
-public class Cart {
+@Table(name = "withdraw_info")
+public class WithdrawInfo {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cart_id")
-	private long cartId;
+	@Column(name = "withdraw_info_id")
+	private long withdrawInfoId;
 
-	@Column(nullable = false)
-	private int count;
-
-	@Column(nullable = false)
-	private byte checked;
-
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
+	private String reason;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Memeber memeber;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "options_id", nullable = false)
-	private Option option;
 }

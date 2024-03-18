@@ -1,7 +1,6 @@
 package com.isekai.ssgserver.delivery.entity;
 
 import com.isekai.ssgserver.deliveryAddress.entity.DeliveryAddress;
-import com.isekai.ssgserver.member.entity.Memeber;
 import com.isekai.ssgserver.order.entity.Order;
 
 import jakarta.persistence.Column;
@@ -54,7 +53,7 @@ public class Delivery {
 	private int deliveryFee;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id", nullable = false)
+	@JoinColumn(name = "orders_id", nullable = false)
 	private Order order;
 
 	@ManyToOne(fetch = FetchType.LAZY)

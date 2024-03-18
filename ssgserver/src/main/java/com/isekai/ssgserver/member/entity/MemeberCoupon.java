@@ -1,9 +1,8 @@
-package com.isekai.ssgserver.cart.entity;
+package com.isekai.ssgserver.member.entity;
 
 import java.time.LocalDateTime;
 
-import com.isekai.ssgserver.member.entity.Memeber;
-import com.isekai.ssgserver.option.entity.Option;
+import com.isekai.ssgserver.coupon.entity.Coupon;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,21 +26,22 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "cart")
-public class Cart {
+@Table(name = "member_coupon")
+public class MemeberCoupon {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cart_id")
-	private long cartId;
-
-	@Column(nullable = false)
-	private int count;
-
-	@Column(nullable = false)
-	private byte checked;
+	@Column(name = "member_coupon_id")
+	private long memberCouponId;
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
+
+	@Column(name = "is_used")
+	private byte isUsed;
+
+	@Column(nullable = false)
+	private int quantity;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,6 +49,6 @@ public class Cart {
 	private Memeber memeber;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "options_id", nullable = false)
-	private Option option;
+	@JoinColumn(name = "coupon_id", nullable = false)
+	private Coupon coupon;
 }
