@@ -32,9 +32,11 @@ public class CategoryL {
 	@OneToMany(mappedBy = "categoryL")
 	private List<CategoryM> categoryMList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "categoryL")
+	private List<CategoryProduct> categoryProductList = new ArrayList<>();
+
 	@Builder
-	public CategoryL(Long categoryLId, String name) {
-		this.categoryLId = categoryLId;
+	public CategoryL(String name) {
 		this.name = name;
 	}
 }
