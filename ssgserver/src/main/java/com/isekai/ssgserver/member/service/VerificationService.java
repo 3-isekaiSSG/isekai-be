@@ -36,7 +36,7 @@ public class VerificationService {
     	}
 		 */
 
-		int randomNumber = (int) (Math.random() * 1000000); // 0부터 999999까지의 6자리 숫자
+		int randomNumber = (int)(Math.random() * 1000000); // 0부터 999999까지의 6자리 숫자
 		String verificationNumber = String.format("%06d", randomNumber); // 6자리 숫자로 포맷
 		phoneVerificationUtil.sendSms(to, verificationNumber);
 		verificationRepository.createSmsVerification(to, verificationNumber);

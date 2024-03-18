@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class SampleResponseDto {
 
-    private String content;
-    private int idx;
+	private String content;
+	private int idx;
 }

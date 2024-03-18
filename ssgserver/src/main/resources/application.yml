@@ -7,8 +7,8 @@ server:
       force: true
 
 spring:
-#  profiles:
-#    active: local
+  #  profiles:
+  #    active: local
   jpa:
     database: mysql
     show-sql: true
@@ -41,7 +41,7 @@ logging:
         type:
           descriptor:
             sql: trace
-#            로그 수준 - 디버깅
+      #            로그 수준 - 디버깅
       springframework:
         security: debug
 
