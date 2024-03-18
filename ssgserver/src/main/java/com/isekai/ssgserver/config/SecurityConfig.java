@@ -45,8 +45,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .authorizeRequests()
-//                .anyRequest().permitAll()  // 모든 요청에 모든 사용자 접근 허용(개발 편의를 위해 설정)
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()  // 모든 요청에 모든 사용자 접근 허용(개발 편의를 위해 설정)
+//                .anyRequest().authenticated()
                 .and()
                 // jwt 인증 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)

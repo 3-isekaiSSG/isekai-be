@@ -45,42 +45,26 @@ public class JwtProvider {
     public JwtToken createToken(String uuid) {
 
         Claims claims = Jwts.claims().setSubject(uuid);  // subject 사용자 식별(uuid)
-// todo uuid로 role 가져오기 ??
+// todo uuid로 role 가져오기  & role에 따라 다른 jwt 조건 설정 ??
         String role = "SSG";
         claims.put("role", role);
 
         Date now = new Date();
         JwtToken tokenInfo = null;
-        if(role.equals("SSG")) {
-            tokenInfo = new JwtToken(
-                    Jwts.builder()
-                            .setClaims(claims)
-                            .setIssuedAt(now)
-                            .setExpiration(new Date(now.getTime()+accessExpireTime))
-                            .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact(),
-                    Jwts.builder()
-                            .setClaims(claims)
-                            .setIssuedAt(now)
-                            .setExpiration(new Date(now.getTime()+refreshExpireTime))
-                            .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact());
-        }
-        if (role.equals("SOCIAL")) {
-            tokenInfo = new JwtToken(
-                    Jwts.builder()
-                            .setClaims(claims)
-                            .setIssuedAt(now)
-                            .setExpiration(new Date(now.getTime()+accessExpireTime))
-                            .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact(),
-                    Jwts.builder()
-                            .setClaims(claims)
-                            .setIssuedAt(now)
-                            .setExpiration(new Date(now.getTime()+refreshExpireTime))
-                            .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact());
-        }
+
+        tokenInfo = new JwtToken(
+                Jwts.builder()
+                        .setClaims(claims)
+                        .setIssuedAt(now)
+                        .setExpiration(new Date(now.getTime()+accessExpireTime))
+                        .signWith(SignatureAlgorithm.HS256, secretKey)
+                        .compact(),
+                Jwts.builder()
+                        .setClaims(claims)
+                        .setIssuedAt(now)
+                        .setExpiration(new Date(now.getTime()+refreshExpireTime))
+                        .signWith(SignatureAlgorithm.HS256, secretKey)
+                        .compact());
 
         // Reids DB에 {uuid: refresh token} 정보 저장
         redisService.saveRefreshToken(uuid, tokenInfo.getRefreshToken());
@@ -88,26 +72,28 @@ public class JwtProvider {
         return tokenInfo;
     }
 
-    public JwtToken reissueToken(String token, String uuid) {
+    public JwtToken reissueToken(String accessToken, String refreshToken) {
 
+        // 우리 서버에서 발급해준 jwt만 재발급해주겠다!!!
         // 보낸 access token의 서명키 확인
         try {
-                verifyToken(token);
+                verifyToken(accessToken);
         } catch (CustomException e) {
             System.out.println(e.getErrorCode().getMessage());
             if (e.getErrorCode().getMessage().equals("접근 권한이 없습니다.")) {
                 throw new CustomException(ErrorCode.NO_AUTHORITY);
             }
         }
-        // 우리 서버에서 발급해준 jwt만 재발급해주겠다!!!
-        // todo uuid로 refresh token redis에서 가져오고 기존 것 지우기
-        // refresh token 대조
-        // create token
 
-
-        JwtToken newAccessToken = createToken(uuid);
-        // 새로운 refresh token redis 저장
-        return newAccessToken;
+        // uuid로 redis에 저장된 refresh token - 클라이언트 쿠키의 refresh token 대조
+        String uuid = getUuid(accessToken);
+        if (refreshToken == null || !redisService.getRefreshToken(uuid).equals(refreshToken)) {
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        }
+        // 기존 Redis 데이터 삭제, 신규 생성
+        redisService.deleteRefreshToken(uuid);
+        JwtToken newTokenInfo = createToken(uuid);
+        return newTokenInfo;
     }
 
     /**
