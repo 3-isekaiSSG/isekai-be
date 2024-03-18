@@ -10,6 +10,6 @@ import lombok.Data;
 public class JwtToken {
 
     private String accessToken;
-//    private String refreshToken;
+    private String refreshToken;
 
 }

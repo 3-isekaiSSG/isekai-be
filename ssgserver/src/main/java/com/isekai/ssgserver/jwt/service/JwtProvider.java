@@ -3,14 +3,17 @@ package com.isekai.ssgserver.jwt.service;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.jwt.dto.JwtToken;
+import com.isekai.ssgserver.redis.RedisService;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Service
 public class JwtProvider {
     @Value("${jwt.key}")
@@ -21,6 +24,8 @@ public class JwtProvider {
 
     @Value("${jwt.token.refresh-expire-time}")
     private long refreshExpireTime;
+
+    private final RedisService redisService;
 
     /**
      * secret key (서명키) 생성
@@ -53,19 +58,13 @@ public class JwtProvider {
                             .setIssuedAt(now)
                             .setExpiration(new Date(now.getTime()+accessExpireTime))
                             .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact()
-//                    todo refresh token
-//                    Jwts.builder()
-//                            .setClaims(claims)
-//                            .setIssuedAt(now)
-//                            .setExpiration(new Date(now.getTime()+refreshExpireTime))
-//                            .signWith(SignatureAlgorithm.HS256, secretKey)
-//                            .compact()
-            );
-
-//            redisService.saveRefreshToken(tokenInfo.getAccessToken(), tokenInfo.getRefreshToken());
-//            redisService.saveRefreshToken(tokenInfo.getAccessToken(),accountId);
-
+                            .compact(),
+                    Jwts.builder()
+                            .setClaims(claims)
+                            .setIssuedAt(now)
+                            .setExpiration(new Date(now.getTime()+refreshExpireTime))
+                            .signWith(SignatureAlgorithm.HS256, secretKey)
+                            .compact());
         }
         if (role.equals("SOCIAL")) {
             tokenInfo = new JwtToken(
@@ -74,9 +73,17 @@ public class JwtProvider {
                             .setIssuedAt(now)
                             .setExpiration(new Date(now.getTime()+accessExpireTime))
                             .signWith(SignatureAlgorithm.HS256, secretKey)
-                            .compact()
-            );
+                            .compact(),
+                    Jwts.builder()
+                            .setClaims(claims)
+                            .setIssuedAt(now)
+                            .setExpiration(new Date(now.getTime()+refreshExpireTime))
+                            .signWith(SignatureAlgorithm.HS256, secretKey)
+                            .compact());
         }
+
+        // Reids DB에 {uuid: refresh token} 정보 저장
+        redisService.saveRefreshToken(uuid, tokenInfo.getRefreshToken());
 
         return tokenInfo;
     }
@@ -96,6 +103,7 @@ public class JwtProvider {
         // todo uuid로 refresh token redis에서 가져오고 기존 것 지우기
         // refresh token 대조
         // create token
+
 
         JwtToken newAccessToken = createToken(uuid);
         // 새로운 refresh token redis 저장
