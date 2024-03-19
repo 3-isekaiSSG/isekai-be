@@ -1,8 +1,5 @@
-package com.isekai.ssgserver.option.entity;
+package com.isekai.ssgserver.delivery.entity;
 
-import com.isekai.ssgserver.category.entity.CategoryL;
-import com.isekai.ssgserver.category.entity.CategoryM;
-import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
@@ -27,36 +24,20 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "options")
-public class Option {
+@Table(name = "product_delivery_type")
+public class ProductDeliveryType {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "options_id")
-	private long optionsId;
+	@Column(name = "product_delivery_type_id")
+	private long productDeliveryTypeId;
 
-	@Column(nullable = false)
-	private String value;
-
-	@Column(nullable = false)
-	private int stock;
-
-	@Column(name = "orders_limit")
-	private int ordersLimit;
-
+	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "procut_id", nullable = false)
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_first_id")
-	private CategoryL categoryL;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_second_id")
-	private CategoryM categoryM;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_third_id")
-	private CategoryS categoryS;
-
+	@JoinColumn(name = "delivery_type_id", nullable = false)
+	private DeliveryType deliveryType;
 }

@@ -31,7 +31,7 @@ public class CategoryL {
 	@Column(name = "category_l_id")
 	private long categoryLId;
 
-	@Column(name ="large_name",nullable = false)
+	@Column(name = "large_name", nullable = false)
 	private String largeName;
 
 	// 연관 관계

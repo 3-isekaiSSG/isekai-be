@@ -1,7 +1,6 @@
-package com.isekai.ssgserver.category.entity;
+package com.isekai.ssgserver.review.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,14 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -27,27 +24,26 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "category_S")
-public class CategoryS {
+@Table(name = "review_score")
+public class ReviewScore {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_s_id")
-	private long categorySId;
+	@Column(name = "total_score_id")
+	private long totalScoreId;
 
-	@Column(name = "small_name", nullable = false)
-	private String smallName;
+	@Column(name = "review_count", nullable = false)
+	private long reviewCount;
+
+	@Column(name = "total_score", nullable = false)
+	private long totalScore;
+
+	@Column(name = "avg_score", nullable = false)
+	private double avgScore;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_m_id", nullable = false)
-	private CategoryM categoryM;
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
-	// @OneToMany(mappedBy = "categoryS")
-	// private List<CategoryProduct> categoryProductList = new ArrayList<>();
-	//
-	// @Builder
-	// public CategoryS(String smallName) {
-	// 	this.smallName = smallName;
-	// }
 }
