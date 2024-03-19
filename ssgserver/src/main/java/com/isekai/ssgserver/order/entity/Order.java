@@ -35,7 +35,7 @@ public class Order {
 	@Column(name = "member_coupon_id")
 	private long memeberCouponId;
 
-	@Column(name = "regular_price",nullable = false)
+	@Column(name = "regular_price", nullable = false)
 	private int regularPrice;
 
 	@Column(name = "discount_price", nullable = false)
@@ -47,13 +47,13 @@ public class Order {
 	@Column(name = "pay_price", nullable = false)
 	private int payPrice;
 
-	@Column (name = "orders_name", nullable = false)
-	private String orderName;
+	@Column(name = "orders_name", nullable = false)
+	private String ordersName;
 
-	@Column (name = "orders_phone", nullable = false)
+	@Column(name = "orders_phone", nullable = false)
 	private String ordersPhone;
 
-	@Column (name = "orders_email", nullable = false)
+	@Column(name = "orders_email", nullable = false)
 	private String ordersEmail;
 
 }
