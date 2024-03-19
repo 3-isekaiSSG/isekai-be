@@ -1,7 +1,8 @@
-package com.isekai.ssgserver.category.entity;
+package com.isekai.ssgserver.member.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+
+import com.isekai.ssgserver.coupon.entity.Coupon;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,14 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -27,27 +26,29 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "category_S")
-public class CategoryS {
+@Table(name = "member_coupon")
+public class MemeberCoupon {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_s_id")
-	private long categorySId;
+	@Column(name = "member_coupon_id")
+	private long memberCouponId;
 
-	@Column(name = "small_name", nullable = false)
-	private String smallName;
+	@Column(name = "created_at", nullable = false)
+	private LocalDateTime createdAt;
+
+	@Column(name = "is_used")
+	private byte isUsed;
+
+	@Column(nullable = false)
+	private int quantity;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_m_id", nullable = false)
-	private CategoryM categoryM;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Memeber memeber;
 
-	// @OneToMany(mappedBy = "categoryS")
-	// private List<CategoryProduct> categoryProductList = new ArrayList<>();
-	//
-	// @Builder
-	// public CategoryS(String smallName) {
-	// 	this.smallName = smallName;
-	// }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "coupon_id", nullable = false)
+	private Coupon coupon;
 }
