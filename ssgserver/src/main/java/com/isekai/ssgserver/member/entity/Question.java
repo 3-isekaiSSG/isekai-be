@@ -50,5 +50,4 @@ public class Question {
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
-
 }

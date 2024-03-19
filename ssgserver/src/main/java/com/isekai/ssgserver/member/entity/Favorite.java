@@ -46,6 +46,4 @@ public class Favorite {
 	@JoinColumn(name = "member_id", nullable = false)
 	private Memeber member;
 
-
-
 }

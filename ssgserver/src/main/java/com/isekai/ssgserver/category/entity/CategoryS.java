@@ -35,12 +35,12 @@ public class CategoryS {
 	@Column(name = "category_s_id")
 	private long categorySId;
 
-	@Column(name = "small_name",nullable = false)
+	@Column(name = "small_name", nullable = false)
 	private String smallName;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_m_id",nullable = false)
+	@JoinColumn(name = "category_m_id", nullable = false)
 	private CategoryM categoryM;
 
 	// @OneToMany(mappedBy = "categoryS")

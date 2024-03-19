@@ -52,7 +52,7 @@ public class Memeber {
 	@Column(nullable = false)
 	private byte gender;
 
-	@Column(name = "is_withdraw",nullable = false)
+	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;
 
 	@Column(name = "withdraw_at")

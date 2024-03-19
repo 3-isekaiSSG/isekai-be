@@ -35,15 +35,15 @@ public class CategoryM {
 	@Column(name = "category_m_id")
 	private long categoryMId;
 
-	@Column(name = "medium_name",nullable = false)
+	@Column(name = "medium_name", nullable = false)
 	private String mediumName;
 
-	@Column(name = "isSelected",nullable = false)
+	@Column(name = "isSelected", nullable = false)
 	private Boolean isSelected;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_l_id",nullable = false)
+	@JoinColumn(name = "category_l_id", nullable = false)
 	private CategoryL categoryL;
 
 	// @OneToMany(mappedBy = "categoryM")
