@@ -1,10 +1,5 @@
 package com.isekai.ssgserver.config;
 
-import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
-
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +9,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
+
+import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
+import com.isekai.ssgserver.jwt.service.JwtProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +32,9 @@ public class SecurityConfig {
 				"/swagger-ui/**",
 				"/swagger-resources/**",
 				// jwt 토큰 재발급
-				"/jwt/**");
+				"/jwt/**",
+				// 전체 허용
+				"/**");
 	}
 
 	// Http Security

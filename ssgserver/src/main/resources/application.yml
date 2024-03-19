@@ -45,14 +45,24 @@ logging:
       springframework:
         security: debug
 
-
 jwt:
   key: ${JWT_SECRET_KEY}
   token:
     access-expire-time: 300000
     refresh-expire-time: 18000000
+
 coolsms:
   api:
     key: ${COOL_API_KEY}
     secret: ${COOL_SECRET_KEY}
     number: ${COOL_PHONE_NUM}
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    region:
+      static: ${AWS_REGION}
+      auto: false
