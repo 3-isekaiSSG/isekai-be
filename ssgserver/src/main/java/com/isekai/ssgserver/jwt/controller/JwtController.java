@@ -1,17 +1,20 @@
 package com.isekai.ssgserver.jwt.controller;
 
-import com.isekai.ssgserver.jwt.dto.JwtToken;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
-
-import io.jsonwebtoken.JwtBuilder;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.isekai.ssgserver.jwt.dto.JwtToken;
+import com.isekai.ssgserver.jwt.service.JwtProvider;
+
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/jwt")
@@ -26,7 +29,7 @@ public class JwtController {
 	 */
 	@GetMapping("/token/test")
 	@Operation(summary = "JWT 토큰 생성 Test", description = "Access Token은 Header로 전송, Refresh Token은 Cookie로 설정됩니다.")
-	public ResponseEntity<?> createToken(HttpServletResponse response) {
+	public ResponseEntity<Void> createToken(HttpServletResponse response) {
 		JwtToken createdTokenInfo = jwtProvider.createToken("sseedd");
 		// access token -> header - Authorization
 		HttpHeaders headers = new HttpHeaders();
@@ -53,7 +56,7 @@ public class JwtController {
 	 */
 	@GetMapping("/token")
 	@Operation(summary = "JWT 토큰 재발급", description = "Access token을 재발급하며, Refresh token도 갱신됩니다.")
-	public ResponseEntity<?> reissueToken(@RequestHeader("Authorization") String accessToken,
+	public ResponseEntity<Void> reissueToken(@RequestHeader("Authorization") String accessToken,
 		@CookieValue(name = "refreshToken") String refreshToken,
 		HttpServletResponse response) {
 		System.out.println("controller 작동");
