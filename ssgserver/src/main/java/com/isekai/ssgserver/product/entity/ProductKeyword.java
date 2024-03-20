@@ -30,7 +30,7 @@ public class ProductKeyword {
 	@Column(name = "product_keyword_id")
 	private long productKeywordId;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	// 연관 관계

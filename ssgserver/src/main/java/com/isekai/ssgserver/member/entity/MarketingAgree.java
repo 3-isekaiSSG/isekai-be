@@ -32,10 +32,10 @@ public class MarketingAgree {
 	@Column(name = "member_agree_id")
 	private long memberAgree;
 
-	@Column(nullable = false)
+	@Column(name = "email", nullable = false)
 	private byte email;
 
-	@Column(nullable = false)
+	@Column(name = "sms", nullable = false)
 	private byte sms;
 
 	@Column(name = "updated_at")

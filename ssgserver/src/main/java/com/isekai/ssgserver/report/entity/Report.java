@@ -26,10 +26,10 @@ public class Report {
 	@Column(name = "report_id")
 	private long reportId;
 
-	@Column(nullable = false)
+	@Column(name = "division", nullable = false)
 	private byte division;
 
-	@Column(nullable = false)
+	@Column(name = "content", nullable = false)
 	private String content;
 
 	@Column(name = "image_url")

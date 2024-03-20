@@ -34,10 +34,10 @@ public class Option {
 	@Column(name = "options_id")
 	private long optionsId;
 
-	@Column(nullable = false)
+	@Column(name = "value", nullable = false)
 	private String value;
 
-	@Column(nullable = false)
+	@Column(name = "stock", nullable = false)
 	private int stock;
 
 	@Column(name = "orders_limit")

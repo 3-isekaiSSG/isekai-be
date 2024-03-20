@@ -26,6 +26,6 @@ public class OptionThird {
 	@Column(name = "option_third_id")
 	private long optionThirdId;
 
-	@Column(nullable = false)
+	@Column(name = "division", nullable = false)
 	private String division;
 }

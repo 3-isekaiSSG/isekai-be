@@ -27,6 +27,6 @@ public class DeliveryType {
 	@Column(name = "delivery_type_id")
 	private long deliveryTypeId;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 }
