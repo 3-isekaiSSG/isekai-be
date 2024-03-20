@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class CategoryResponseDto {
 
+	private Long id;
 	private Long categoryLId;
 	private String largeName;
 

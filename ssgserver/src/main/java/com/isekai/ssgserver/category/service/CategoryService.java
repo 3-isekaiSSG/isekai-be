@@ -41,12 +41,16 @@ public class CategoryService {
 			List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
 			List<CategoryMList> categoryMLists;
 
+			int responseDtoId = 0;
+
 			for (CategoryL cl : categoriesL) {
 				categoryMLists = new ArrayList<>();
+				int categoryMListId = 0;
 
 				for (CategoryM cm : categoriesM) {
 					if (Objects.equals(cm.getCategoryL().getCategoryLId(), cl.getCategoryLId())) {
 						categoryMLists.add(CategoryMList.builder()
+							.id((long)categoryMListId++)
 							.categoryMId(cm.getCategoryMId())
 							.mediumName(cm.getMediumName())
 							.isColored(cm.getIsColored())
@@ -54,6 +58,7 @@ public class CategoryService {
 					}
 				}
 				categoryResponseDtoList.add(CategoryResponseDto.builder()
+					.id((long)responseDtoId++)
 					.categoryLId(cl.getCategoryLId())
 					.largeName(cl.getLargeName())
 					.categoryMList(categoryMLists)
