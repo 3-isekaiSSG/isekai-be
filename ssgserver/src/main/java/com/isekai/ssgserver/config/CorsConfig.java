@@ -1,18 +1,16 @@
 package com.isekai.ssgserver.config;
 
-import com.isekai.ssgserver.exception.common.CustomException;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
 
 	@Bean
-	public CorsFilter corsFilter() {
+	public CorsConfigurationSource corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 
@@ -23,6 +21,6 @@ public class CorsConfig {
 		config.addAllowedMethod("*");  // 모든 요청 method 응답 허용
 		source.registerCorsConfiguration("/api/**", config);
 
-		return new CorsFilter(source);
+		return source;
 	}
 }

@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
 
 import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
 import com.isekai.ssgserver.jwt.service.JwtProvider;
@@ -19,9 +18,9 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-	private final CorsFilter corsFilter;
+	
 	private final JwtProvider jwtProvider;
+	private final CorsConfig corsConfig;
 
 	// Spring Security 검사 비활성화
 	@Bean
@@ -41,7 +40,9 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
-			.addFilter(corsFilter)
+			// .addFilter(corsFilter)
+			.cors().configurationSource(corsConfig.corsFilter())
+			.and()
 			.csrf().disable()
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
