@@ -22,7 +22,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "category_M")
+@Table(name = "category_m")
 public class CategoryM {
 
 	@Id

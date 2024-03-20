@@ -2,8 +2,6 @@ package com.isekai.ssgserver.member.entity;
 
 import java.time.LocalDateTime;
 
-import com.isekai.ssgserver.product.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +29,7 @@ public class MarketingAgree {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_agree")
+	@Column(name = "member_agree_id")
 	private long memberAgree;
 
 	@Column(nullable = false)
