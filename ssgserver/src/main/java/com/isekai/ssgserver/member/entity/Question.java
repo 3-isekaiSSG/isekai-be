@@ -32,13 +32,13 @@ public class Question {
 	@Column(name = "question_id")
 	private long questionId;
 
-	@Column(nullable = false)
-	private byte divison;
+	@Column(name = "division", nullable = false)
+	private byte division;
 
-	@Column(nullable = false)
+	@Column(name = "content", nullable = false)
 	private String content;
 
-	@Column(nullable = false)
+	@Column(name = "title", nullable = false)
 	private String title;
 
 	// 연관 관계

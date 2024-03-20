@@ -32,7 +32,7 @@ public class TotalPurchase {
 	@Column(name = "total_purchase_id")
 	private long totalPurchaseId;
 
-	@Column(nullable = false)
+	@Column(name = "count", nullable = false)
 	private int count;
 
 	@Column(name = "cur_rank")

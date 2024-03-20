@@ -32,8 +32,8 @@ public class Favorite {
 	@Column(name = "favorite_id")
 	private long favoriteId;
 
-	@Column(nullable = false)
-	private byte divison;
+	@Column(name = "division", nullable = false)
+	private byte division;
 
 	@Column(name = "product_id", nullable = false)
 	private long productId;

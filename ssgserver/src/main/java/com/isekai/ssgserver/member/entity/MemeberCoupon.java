@@ -40,7 +40,7 @@ public class MemeberCoupon {
 	@Column(name = "is_used")
 	private byte isUsed;
 
-	@Column(nullable = false)
+	@Column(name = "quantity", nullable = false)
 	private int quantity;
 
 	// 연관 관계

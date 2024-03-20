@@ -33,7 +33,7 @@ public class OrderProduct {
 	@Column(name = "order_product_id")
 	private long orderProductId;
 
-	@Column(nullable = false)
+	@Column(name = "count", nullable = false)
 	private int count;
 
 	@Column(name = "buy_price", nullable = false)

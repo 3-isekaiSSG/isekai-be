@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,10 +29,10 @@ public class Product {
 	@Column(name = "product_name", nullable = false)
 	private String productName;
 
-	@Column(nullable = false)
+	@Column(name = "price", nullable = false)
 	private int price;
 
-	@Column(nullable = false)
+	@Column(name = "code", nullable = false)
 	private String code;
 
 	@Column(name = "product_detail")
@@ -42,7 +41,7 @@ public class Product {
 	@Column(name = "adult_sales", nullable = false)
 	private int adultSales;
 
-	@Column(nullable = false)
+	@Column(name = "status", nullable = false)
 	private int status;
 
 	// @PrePersist

@@ -1,7 +1,6 @@
 package com.isekai.ssgserver.review.entity;
 
 import com.isekai.ssgserver.order.entity.OrderProduct;
-import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +38,7 @@ public class Review {
 	@Column(name = "account_id", nullable = false)
 	private String accountId;
 
-	@Column(nullable = false)
+	@Column(name = "score", nullable = false)
 	private String score;
 
 	@Column(name = "reivew_content", nullable = false)

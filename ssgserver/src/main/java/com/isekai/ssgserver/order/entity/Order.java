@@ -29,7 +29,7 @@ public class Order {
 	@Column(name = "member_id", nullable = false)
 	private long memberId;
 
-	@Column(nullable = false)
+	@Column(name = "code", nullable = false)
 	private String code;
 
 	@Column(name = "member_coupon_id")

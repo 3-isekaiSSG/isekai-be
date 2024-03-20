@@ -30,10 +30,10 @@ public class ProductInfo {
 	@Column(name = "product_info_id")
 	private long productInfoId;
 
-	@Column(nullable = false)
+	@Column(name = "keyword", nullable = false)
 	private String keyword;
 
-	@Column(nullable = false)
+	@Column(name = "valueword", nullable = false)
 	private String valueword;
 
 	// 연관 관계

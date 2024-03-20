@@ -25,7 +25,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "Delivery")
+@Table(name = "delivery")
 public class Delivery {
 
 	@Id

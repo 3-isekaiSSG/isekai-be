@@ -27,7 +27,7 @@ public class Seller {
 	@Column(name = "seller_id")
 	private long sellerId;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
 }

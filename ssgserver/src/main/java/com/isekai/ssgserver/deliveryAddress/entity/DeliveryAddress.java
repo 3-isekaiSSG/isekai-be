@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "Delivery")
+@Table(name = "delivery_address")
 public class DeliveryAddress {
 
 	@Id
@@ -31,15 +30,16 @@ public class DeliveryAddress {
 	@Column(name = "member_id")
 	private long memeberId;
 
-	@Column(nullable = false)
+	@Column(name = "nickname", nullable = false)
 	private String nickname;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(name = "cellphone", nullable = false)
 	private String cellphone;
 
+	@Column(name = "telephone", nullable = true)
 	private String telephone;
 
 	@Column(name = "zip_code", nullable = false)

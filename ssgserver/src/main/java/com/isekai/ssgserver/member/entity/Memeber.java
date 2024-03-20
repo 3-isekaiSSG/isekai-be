@@ -1,6 +1,5 @@
 package com.isekai.ssgserver.member.entity;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -8,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,22 +32,22 @@ public class Memeber {
 	@Column(name = "account_id", nullable = false)
 	private String accountId;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(nullable = false)
+	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(nullable = false)
+	@Column(name = "phone", nullable = false)
 	private String phone;
 
-	@Column(nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 
-	@Column(nullable = false)
+	@Column(name = "gender", nullable = false)
 	private byte gender;
 
 	@Column(name = "is_withdraw", nullable = false)

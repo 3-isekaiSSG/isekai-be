@@ -30,7 +30,7 @@ public class Coupon {
 	@Column(name = "coupon_id")
 	private long couponId;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	@Column(name = "discount_rate")

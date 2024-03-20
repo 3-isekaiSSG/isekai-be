@@ -2,8 +2,6 @@ package com.isekai.ssgserver.member.entity;
 
 import java.time.LocalDateTime;
 
-import com.isekai.ssgserver.product.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,10 +32,10 @@ public class MarketingAgree {
 	@Column(name = "member_agree")
 	private long memberAgree;
 
-	@Column(nullable = false)
+	@Column(name = "email", nullable = false)
 	private byte email;
 
-	@Column(nullable = false)
+	@Column(name = "sms", nullable = false)
 	private byte sms;
 
 	@Column(name = "updated_at")
