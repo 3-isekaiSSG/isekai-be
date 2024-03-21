@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
+
 	private final JwtProvider jwtProvider;
 	private final CorsConfig corsConfig;
 
@@ -33,7 +33,8 @@ public class SecurityConfig {
 				// jwt 토큰 재발급
 				"/jwt/**",
 				// 전체 허용
-				"/**");
+				"/**"
+			);
 	}
 
 	// Http Security

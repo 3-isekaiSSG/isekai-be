@@ -1,22 +1,27 @@
 package com.isekai.ssgserver.jwt.service;
 
+import java.util.Base64;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.jwt.dto.JwtToken;
 import com.isekai.ssgserver.redis.RedisService;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.Base64;
-import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class JwtProvider {
 	@Value("${jwt.key}")
 	private String secretKey;
@@ -75,26 +80,27 @@ public class JwtProvider {
 	}
 
 	public JwtToken reissueToken(String accessToken, String refreshToken) {
-
-		// 우리 서버에서 발급해준 jwt만 재발급해주겠다!!!
-		// 보낸 access token의 서명키 확인
+		// 보낸 redis token의 서명키 확인
 		try {
-			verifyToken(accessToken);
+			verifyToken(refreshToken);
 		} catch (CustomException e) {
-			System.out.println(e.getErrorCode().getMessage());
-			if (e.getErrorCode().getMessage().equals("접근 권한이 없습니다.")) {
-				throw new CustomException(ErrorCode.NO_AUTHORITY);
-			}
+			throw new CustomException(ErrorCode.NO_AUTHORITY);
 		}
 
 		// uuid로 redis에 저장된 refresh token - 클라이언트 쿠키의 refresh token 대조
-		String uuid = getUuid(accessToken);
-		if (refreshToken == null || !redisService.getRefreshToken(uuid).equals(refreshToken)) {
+		String uuid = getUuid(refreshToken);
+		String redisRefreshToken = redisService.getRefreshToken(uuid);
+		log.info(redisRefreshToken);
+		log.info(uuid);
+		log.info(refreshToken);
+		if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
 			throw new CustomException(ErrorCode.NO_AUTHORITY);
 		}
 		// 기존 Redis 데이터 삭제, 신규 생성
 		redisService.deleteRefreshToken(uuid);
+		log.info("redis refresh token 삭제");
 		JwtToken newTokenInfo = createToken(uuid);
+		log.info("redis refresh token 생성");
 		return newTokenInfo;
 	}
 
@@ -110,14 +116,14 @@ public class JwtProvider {
 				.setSigningKey(secretKey)
 				.build()
 				.parseClaimsJws(token);
-			System.out.println("검증성공");
+			log.info("검증성공");
 			return true;
 		} catch (ExpiredJwtException e) {
-			System.out.println("만료됨");
+			log.info("만료됨");
 			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
 		} catch (Exception e) {
 			// 토큰 파싱 과정에서 어떠한 예외라도 발생한다면, 토큰 유효하지 않은 것으로 상정
-			System.out.println("예외발생");
+			log.info("예외발생");
 			throw new CustomException(ErrorCode.NO_AUTHORITY);
 		}
 	}
