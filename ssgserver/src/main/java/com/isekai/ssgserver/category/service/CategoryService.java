@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.dto.CategoryMList;
+import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.entity.CategoryL;
 import com.isekai.ssgserver.category.entity.CategoryM;
@@ -41,16 +42,16 @@ public class CategoryService {
 			List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
 			List<CategoryMList> categoryMLists;
 
-			int responseDtoId = 0;
+			Long responseDtoId = 0L;
 
 			for (CategoryL cl : categoriesL) {
 				categoryMLists = new ArrayList<>();
-				int categoryMListId = 0;
+				Long categoryMListId = 0L;
 
 				for (CategoryM cm : categoriesM) {
 					if (Objects.equals(cm.getCategoryL().getCategoryLId(), cl.getCategoryLId())) {
 						categoryMLists.add(CategoryMList.builder()
-							.id((long)categoryMListId++)
+							.id(categoryMListId++)
 							.categoryMId(cm.getCategoryMId())
 							.mediumName(cm.getMediumName())
 							.isColored(cm.getIsColored())
@@ -58,7 +59,7 @@ public class CategoryService {
 					}
 				}
 				categoryResponseDtoList.add(CategoryResponseDto.builder()
-					.id((long)responseDtoId++)
+					.id(responseDtoId++)
 					.categoryLId(cl.getCategoryLId())
 					.largeName(cl.getLargeName())
 					.categoryMList(categoryMLists)
@@ -67,6 +68,46 @@ public class CategoryService {
 			}
 			return categoryResponseDtoList;
 
+		} catch (Exception exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 중분류
+	public CategoryMResponseDto getCategoryM(Long categoryLId) {
+
+		try {
+			CategoryL categoryL = categoryLRepository.getById(categoryLId);
+
+			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLCategoryLId(categoryLId);
+			List<CategoryMList> categoryMLists = new ArrayList<>();
+
+			Long categoryListId = 0L;
+
+			for (CategoryM cm : categoryM) {
+				categoryMLists.add(CategoryMList.builder()
+					.id(categoryListId++)
+					.categoryMId(cm.getCategoryMId())
+					.mediumName(cm.getMediumName())
+					.isColored(cm.getIsColored())
+					.build());
+			}
+
+			// categoryM.forEach(cm -> {
+			// 	categoryMLists.add(CategoryMList.builder()
+			// 		.id(categoryListId++)
+			// 		.categoryMId(cm.getCategoryMId())
+			// 		.mediumName(cm.getMediumName())
+			// 		.isColored(cm.getIsColored())
+			// 		.build());
+			// });
+
+			return CategoryMResponseDto.builder()
+				.id(0L)
+				.categoryLId(categoryLId)
+				.largeName(categoryL.getLargeName())
+				.categoryMList(categoryMLists)
+				.build();
 		} catch (Exception exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}

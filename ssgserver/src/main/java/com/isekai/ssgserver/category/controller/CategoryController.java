@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.service.CategoryService;
 import com.isekai.ssgserver.exception.common.CustomException;
@@ -40,6 +42,19 @@ public class CategoryController {
 		try {
 			List<CategoryResponseDto> categoryResponseDto = categoryService.getCategory();
 			return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
+		} catch (Exception exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 카테고리 중분류 조회
+	@GetMapping("/category/medium/{categoryLId}")
+	@Operation(summary = "카테고리 중분류 이름", description = "대분류 상품 전체보기 클릭시 나오는 중분류 이름 데이터를 내려줍니다.")
+	public ResponseEntity<CategoryMResponseDto> getCategoryM(@PathVariable Long categoryLId) {
+
+		try {
+			CategoryMResponseDto categoryMResponseDto = categoryService.getCategoryM(categoryLId);
+			return new ResponseEntity<>(categoryMResponseDto, HttpStatus.OK);
 		} catch (Exception exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}
