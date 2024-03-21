@@ -22,10 +22,10 @@ public class JwtProvider {
 	private String secretKey;
 
 	@Value("${jwt.token.access-expire-time}")
-	private long accessExpireTime;
+	private Long accessExpireTime;
 
 	@Value("${jwt.token.refresh-expire-time}")
-	private long refreshExpireTime;
+	private Long refreshExpireTime;
 
 	private final RedisService redisService;
 

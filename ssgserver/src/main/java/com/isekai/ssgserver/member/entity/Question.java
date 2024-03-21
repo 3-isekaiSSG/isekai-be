@@ -30,7 +30,10 @@ public class Question {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "question_id")
-	private long questionId;
+	private Long questionId;
+
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "division", nullable = false)
 	private byte division;
@@ -42,10 +45,6 @@ public class Question {
 	private String title;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Memeber member;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;

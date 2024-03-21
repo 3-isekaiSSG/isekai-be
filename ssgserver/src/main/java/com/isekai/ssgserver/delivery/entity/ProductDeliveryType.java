@@ -30,7 +30,7 @@ public class ProductDeliveryType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_delivery_type_id")
-	private long productDeliveryTypeId;
+	private Long productDeliveryTypeId;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)

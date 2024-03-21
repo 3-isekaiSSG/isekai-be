@@ -2,12 +2,9 @@ package com.isekai.ssgserver.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,16 +25,14 @@ public class MemberSocial {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_social_id")
-	private long memberSocialId;
+	private Long memberSocialId;
+
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "member_social_code", nullable = false)
 	private String memberSocialCode;
 
 	@Column(name = "socail_division_code", nullable = false)
 	private byte socailDivisionCode;
-
-	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Memeber member;
 }

@@ -2,7 +2,6 @@ package com.isekai.ssgserver.cart.entity;
 
 import java.time.LocalDateTime;
 
-import com.isekai.ssgserver.member.entity.Memeber;
 import com.isekai.ssgserver.option.entity.Option;
 
 import jakarta.persistence.Column;
@@ -32,7 +31,10 @@ public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "cart_id")
-	private long cartId;
+	private Long cartId;
+
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(nullable = false)
 	private int count;
@@ -44,10 +46,6 @@ public class Cart {
 	private LocalDateTime createdAt;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Memeber memeber;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "options_id", nullable = false)
 	private Option option;

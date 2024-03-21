@@ -24,16 +24,16 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "orders_id")
-	private long ordersId;
+	private Long ordersId;
 
 	@Column(name = "member_id", nullable = false)
-	private long memberId;
+	private Long memberId;
 
 	@Column(name = "code", nullable = false)
 	private String code;
 
 	@Column(name = "member_coupon_id")
-	private long memeberCouponId;
+	private Long memeberCouponId;
 
 	@Column(name = "regular_price", nullable = false)
 	private int regularPrice;
