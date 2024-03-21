@@ -3,16 +3,21 @@ package com.isekai.ssgserver.category.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.dto.CategoryMList;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
+import com.isekai.ssgserver.category.dto.CategorySList;
+import com.isekai.ssgserver.category.dto.CategorySResponseDto;
 import com.isekai.ssgserver.category.entity.CategoryL;
 import com.isekai.ssgserver.category.entity.CategoryM;
+import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.category.repository.CategoryLRepository;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
+import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 
@@ -26,6 +31,7 @@ public class CategoryService {
 
 	private final CategoryLRepository categoryLRepository;
 	private final CategoryMRepository categoryMRepository;
+	private final CategorySRepository categorySRepository;
 
 	// public CategoryService(CategoryLRepository categoryLRepository, CategoryMRepository categoryMRepository) {
 	// 	this.categoryLRepository = categoryLRepository;
@@ -109,6 +115,33 @@ public class CategoryService {
 				.categoryMList(categoryMLists)
 				.build();
 		} catch (Exception exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 소분류
+	public CategorySResponseDto getCategoryS(Long categoryMId) {
+
+		try {
+			List<CategoryS> categoryS = categorySRepository.findAllByCategoryMCategoryMId(categoryMId);
+			List<CategorySList> categorySLists = new ArrayList<>();
+
+			AtomicInteger categoryListId = new AtomicInteger(0);
+
+			categoryS.forEach(cs -> {
+				categorySLists.add(CategorySList.builder()
+					.id(categoryListId.getAndIncrement())
+					.categorySId(cs.getCategorySId())
+					.smallName(cs.getSmallName())
+					.build());
+			});
+
+			return CategorySResponseDto.builder()
+				.id(0)
+				.categoryMId(categoryMId)
+				.categorySList(categorySLists)
+				.build();
+		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}
 	}
