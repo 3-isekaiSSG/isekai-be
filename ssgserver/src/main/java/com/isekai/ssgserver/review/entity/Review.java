@@ -30,10 +30,10 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
-	private long rewiewId;
+	private Long rewiewId;
 
 	@Column(name = "member_id", nullable = false)
-	private long memberId;
+	private Long memberId;
 
 	@Column(name = "account_id", nullable = false)
 	private String accountId;
@@ -48,7 +48,7 @@ public class Review {
 	private String reviewImage;
 
 	@Column(name = "product_id")
-	private long productId;
+	private Long productId;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)

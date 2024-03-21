@@ -32,7 +32,10 @@ public class MemeberCoupon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_coupon_id")
-	private long memberCouponId;
+	private Long memberCouponId;
+
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
@@ -44,10 +47,6 @@ public class MemeberCoupon {
 	private int quantity;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Memeber memeber;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coupon_id", nullable = false)
 	private Coupon coupon;

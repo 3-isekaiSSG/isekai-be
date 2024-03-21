@@ -25,10 +25,10 @@ public class DeliveryAddress {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "delivery_address_id")
-	private long deliveryAddressId;
+	private Long deliveryAddressId;
 
 	@Column(name = "member_id")
-	private long memeberId;
+	private Long memeberId;
 
 	@Column(name = "nickname", nullable = false)
 	private String nickname;

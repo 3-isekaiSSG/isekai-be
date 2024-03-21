@@ -31,9 +31,9 @@ public class Delivery {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "delivery_id")
-	private long deliveryId;
+	private Long deliveryId;
 
-	private long status;
+	private Long status;
 
 	// @Column(name = "Filed")
 	private byte filed;

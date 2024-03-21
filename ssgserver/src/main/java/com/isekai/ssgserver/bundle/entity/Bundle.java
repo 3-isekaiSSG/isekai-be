@@ -25,7 +25,7 @@ public class Bundle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bundle_id")
-	private long bundleId;
+	private Long bundleId;
 
 	@Column(name = "outer_name", nullable = false)
 	private String outerName;
@@ -40,13 +40,13 @@ public class Bundle {
 	private int minPrice;
 
 	@Column(name = "review_count", nullable = false)
-	private long reviewCount;
+	private Long reviewCount;
 
 	@Column(name = "avg_score", nullable = false)
 	private double avgScore;
 
 	@Column(name = "buy_count")
-	private long buyCount;
+	private Long buyCount;
 
 	@Column(name = "delivery_type", nullable = false)
 	private byte deliveryType;

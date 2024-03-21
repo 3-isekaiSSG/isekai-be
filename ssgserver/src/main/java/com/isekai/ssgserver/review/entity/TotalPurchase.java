@@ -30,16 +30,16 @@ public class TotalPurchase {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "total_purchase_id")
-	private long totalPurchaseId;
+	private Long totalPurchaseId;
 
 	@Column(name = "count", nullable = false)
 	private int count;
 
 	@Column(name = "cur_rank")
-	private long curRank;
+	private Long curRank;
 
 	@Column(name = "pre_rank")
-	private long preRank;
+	private Long preRank;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)

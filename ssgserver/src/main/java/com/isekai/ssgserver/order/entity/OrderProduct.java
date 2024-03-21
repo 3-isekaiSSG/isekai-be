@@ -31,7 +31,7 @@ public class OrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_product_id")
-	private long orderProductId;
+	private Long orderProductId;
 
 	@Column(name = "count", nullable = false)
 	private int count;

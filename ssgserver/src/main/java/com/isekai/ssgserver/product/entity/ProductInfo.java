@@ -28,7 +28,7 @@ public class ProductInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_info_id")
-	private long productInfoId;
+	private Long productInfoId;
 
 	@Column(name = "keyword", nullable = false)
 	private String keyword;

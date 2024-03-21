@@ -24,7 +24,7 @@ public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "report_id")
-	private long reportId;
+	private Long reportId;
 
 	@Column(name = "division", nullable = false)
 	private byte division;

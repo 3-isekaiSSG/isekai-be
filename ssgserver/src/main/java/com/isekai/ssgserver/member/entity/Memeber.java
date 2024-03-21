@@ -27,7 +27,10 @@ public class Memeber {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
-	private long memberId;
+	private Long memberId;
+
+	@Column(unique = true, nullable = false, updatable = false)
+	private String uuid;
 
 	@Column(name = "account_id", nullable = false)
 	private String accountId;

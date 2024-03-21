@@ -32,7 +32,7 @@ public class Option {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "options_id")
-	private long optionsId;
+	private Long optionsId;
 
 	@Column(name = "value", nullable = false)
 	private String value;

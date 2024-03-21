@@ -30,13 +30,13 @@ public class ReviewScore {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "total_score_id")
-	private long totalScoreId;
+	private Long totalScoreId;
 
 	@Column(name = "review_count", nullable = false)
-	private long reviewCount;
+	private Long reviewCount;
 
 	@Column(name = "total_score", nullable = false)
-	private long totalScore;
+	private Long totalScore;
 
 	@Column(name = "avg_score", nullable = false)
 	private double avgScore;

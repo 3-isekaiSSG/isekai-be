@@ -24,7 +24,7 @@ public class OptionThird {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "option_third_id")
-	private long optionThirdId;
+	private Long optionThirdId;
 
 	@Column(name = "division", nullable = false)
 	private String division;

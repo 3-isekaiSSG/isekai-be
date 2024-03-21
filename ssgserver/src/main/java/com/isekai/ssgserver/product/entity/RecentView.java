@@ -2,10 +2,6 @@ package com.isekai.ssgserver.product.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
-
-import com.isekai.ssgserver.member.entity.Memeber;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,16 +30,15 @@ public class RecentView {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "recent_view_id")
-	private long recentViewId;
+	private Long recentViewId;
+
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Memeber member;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;

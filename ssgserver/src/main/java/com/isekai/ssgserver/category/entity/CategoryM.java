@@ -28,7 +28,7 @@ public class CategoryM {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "category_m_id")
-	private long categoryMId;
+	private Long categoryMId;
 
 	@Column(name = "medium_name", nullable = false)
 	private String mediumName;
