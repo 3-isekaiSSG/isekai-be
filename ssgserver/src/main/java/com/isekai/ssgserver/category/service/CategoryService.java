@@ -2,8 +2,8 @@ package com.isekai.ssgserver.category.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -33,11 +33,6 @@ public class CategoryService {
 	private final CategoryMRepository categoryMRepository;
 	private final CategorySRepository categorySRepository;
 
-	// public CategoryService(CategoryLRepository categoryLRepository, CategoryMRepository categoryMRepository) {
-	// 	this.categoryLRepository = categoryLRepository;
-	// 	this.categoryMRepository = categoryMRepository;
-	// }
-
 	// 대,중분류
 	public List<CategoryResponseDto> getCategory() {
 
@@ -46,27 +41,25 @@ public class CategoryService {
 			List<CategoryM> categoriesM = categoryMRepository.findAll();
 
 			List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
-			List<CategoryMList> categoryMLists;
 
-			Long responseDtoId = 0L;
+			AtomicInteger responseDtoId = new AtomicInteger(0);
 
 			for (CategoryL cl : categoriesL) {
-				categoryMLists = new ArrayList<>();
-				Long categoryMListId = 0L;
+				Long categoryLId = cl.getCategoryLId();
+				AtomicInteger categoryMListId = new AtomicInteger(0);
 
-				for (CategoryM cm : categoriesM) {
-					if (Objects.equals(cm.getCategoryL().getCategoryLId(), cl.getCategoryLId())) {
-						categoryMLists.add(CategoryMList.builder()
-							.id(categoryMListId++)
-							.categoryMId(cm.getCategoryMId())
-							.mediumName(cm.getMediumName())
-							.isColored(cm.getIsColored())
-							.build());
-					}
-				}
+				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLCategoryLId(categoryLId);
+				List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
+						.id(categoryMListId.getAndIncrement())
+						.categoryMId(cm.getCategoryMId())
+						.mediumName(cm.getMediumName())
+						.isColored(cm.getIsColored())
+						.build())
+					.collect(Collectors.toList());
+
 				categoryResponseDtoList.add(CategoryResponseDto.builder()
-					.id(responseDtoId++)
-					.categoryLId(cl.getCategoryLId())
+					.id(responseDtoId.getAndIncrement())
+					.categoryLId(categoryLId)
 					.largeName(cl.getLargeName())
 					.categoryMList(categoryMLists)
 					.build()
@@ -83,35 +76,24 @@ public class CategoryService {
 	public CategoryMResponseDto getCategoryM(Long categoryLId) {
 
 		try {
-			CategoryL categoryL = categoryLRepository.getById(categoryLId);
 
 			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLCategoryLId(categoryLId);
 			List<CategoryMList> categoryMLists = new ArrayList<>();
 
-			Long categoryListId = 0L;
+			AtomicInteger categoryListId = new AtomicInteger(0);
 
-			for (CategoryM cm : categoryM) {
+			categoryM.forEach(cm -> {
 				categoryMLists.add(CategoryMList.builder()
-					.id(categoryListId++)
+					.id(categoryListId.getAndIncrement())
 					.categoryMId(cm.getCategoryMId())
 					.mediumName(cm.getMediumName())
 					.isColored(cm.getIsColored())
 					.build());
-			}
-
-			// categoryM.forEach(cm -> {
-			// 	categoryMLists.add(CategoryMList.builder()
-			// 		.id(categoryListId++)
-			// 		.categoryMId(cm.getCategoryMId())
-			// 		.mediumName(cm.getMediumName())
-			// 		.isColored(cm.getIsColored())
-			// 		.build());
-			// });
+			});
 
 			return CategoryMResponseDto.builder()
-				.id(0L)
+				.id(0)
 				.categoryLId(categoryLId)
-				.largeName(categoryL.getLargeName())
 				.categoryMList(categoryMLists)
 				.build();
 		} catch (Exception exception) {

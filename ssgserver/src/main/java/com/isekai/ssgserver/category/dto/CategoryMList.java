@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class CategoryMList {
 
-	private Long id;
+	private int id;
 	private Long categoryMId;
 	private String mediumName;
 	private boolean isColored;
