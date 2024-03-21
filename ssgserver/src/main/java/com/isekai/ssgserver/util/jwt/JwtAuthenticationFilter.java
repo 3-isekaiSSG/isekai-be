@@ -1,18 +1,7 @@
-package com.isekai.ssgserver.jwt.filter;
+package com.isekai.ssgserver.util.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isekai.ssgserver.exception.common.CustomException;
-import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.exception.dto.ErrorDto;
-import com.isekai.ssgserver.jwt.dto.AuthDto;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +10,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.exception.dto.ErrorDto;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

@@ -1,4 +1,4 @@
-package com.isekai.ssgserver.jwt.dto;
+package com.isekai.ssgserver.util.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

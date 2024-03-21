@@ -1,4 +1,4 @@
-package com.isekai.ssgserver.jwt.controller;
+package com.isekai.ssgserver.util.jwt;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.isekai.ssgserver.jwt.dto.JwtToken;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;

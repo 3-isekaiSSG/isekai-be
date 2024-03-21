@@ -9,8 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
+import com.isekai.ssgserver.util.jwt.JwtAuthenticationFilter;
+import com.isekai.ssgserver.util.jwt.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.isekai.ssgserver.jwt.service;
+package com.isekai.ssgserver.util.jwt;
 
 import java.util.Base64;
 import java.util.Date;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.jwt.dto.JwtToken;
 import com.isekai.ssgserver.redis.RedisService;
 
 import io.jsonwebtoken.Claims;
