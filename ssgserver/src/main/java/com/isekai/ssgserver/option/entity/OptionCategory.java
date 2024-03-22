@@ -19,14 +19,14 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "option_first")
-public class OptionFirst {
+@Table(name = "option_category")
+public class OptionCategory {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "option_first_id")
-	private Long optionFirstId;
+	@Column(name = "option_category_id")
+	private Long optionCategoryId;
 
 	@Column(name = "division", nullable = false)
 	private String division;
-
 }
