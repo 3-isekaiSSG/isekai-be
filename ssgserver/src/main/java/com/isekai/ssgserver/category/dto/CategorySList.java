@@ -5,10 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CategoryMList {
+public class CategorySList {
 
 	private int id;
-	private Long categoryMId;
-	private String mediumName;
-	private boolean isColored;
+	private Long categorySId;
+	private String smallName;
 }

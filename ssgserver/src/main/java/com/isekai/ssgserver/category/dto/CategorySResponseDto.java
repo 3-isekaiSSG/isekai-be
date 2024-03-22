@@ -7,11 +7,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CategoryResponseDto {
+public class CategorySResponseDto {
 
 	private int id;
-	private Long categoryLId;
-	private String largeName;
+	private Long categoryMId;
 
-	private List<CategoryMList> categoryMList;
+	private List<CategorySList> categorySList;
 }

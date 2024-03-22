@@ -9,9 +9,8 @@ import lombok.Getter;
 @Builder
 public class CategoryMResponseDto {
 
-	private Long id;
+	private int id;
 	private Long categoryLId;
-	private String largeName;
 
 	private List<CategoryMList> categoryMList;
 
