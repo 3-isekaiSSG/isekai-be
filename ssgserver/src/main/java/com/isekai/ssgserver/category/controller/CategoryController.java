@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping("/categories")
 @Tag(name = "Category", description = "각 카테고리 조회 API document")
 public class CategoryController {
 
@@ -36,7 +36,7 @@ public class CategoryController {
 	// }
 
 	// 카테고리 대,중분류
-	@GetMapping("/category")
+	@GetMapping
 	@Operation(summary = "카테고리 대,중분류 이름", description = "하단 카테고리 클릭시 나오는 대,중분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<List<CategoryResponseDto>> getCategory() {
 
@@ -49,7 +49,7 @@ public class CategoryController {
 	}
 
 	// 카테고리 중분류 조회
-	@GetMapping("/category/medium/{categoryLId}")
+	@GetMapping("/medium/{categoryLId}")
 	@Operation(summary = "카테고리 중분류 조회", description = "대분류 상품 전체보기 클릭시 나오는 중분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<CategoryMResponseDto> getCategoryM(@PathVariable Long categoryLId) {
 
@@ -62,7 +62,7 @@ public class CategoryController {
 	}
 
 	// 카테고리 소분류 조회
-	@GetMapping("/category/small/{categoryMId}")
+	@GetMapping("/small/{categoryMId}")
 	@Operation(summary = "카테고리 소분류 조회", description = "중분류 상품 조회시 나오는 소분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<CategorySResponseDto> getCategoryS(@PathVariable Long categoryMId) {
 
