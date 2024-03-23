@@ -12,8 +12,13 @@ import com.isekai.ssgserver.product.entity.Product;
 
 @Repository
 public interface CategoryProductRepository extends JpaRepository<CategoryProduct, Long> {
-
 	// 중분류 상품 조회
 	@Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryM.categoryMId = :categoryMId)")
 	List<Product> findByCategoryMId(@Param("categoryMId") Long categoryMId);
+
+	// 소분류 상품 조회
+	@Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryS.categorySId = :categorySId)")
+	List<Product> findByCategorySId(@Param("categorySId") Long categorySId);
 }
+
+
