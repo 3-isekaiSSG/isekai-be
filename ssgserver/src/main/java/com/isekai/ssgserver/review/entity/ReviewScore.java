@@ -29,8 +29,8 @@ public class ReviewScore {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "total_score_id")
-	private Long totalScoreId;
+	@Column(name = "review_score_id")
+	private Long reviewScoreId;
 
 	@Column(name = "review_count", nullable = false)
 	private Long reviewCount;

@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.product.entity;
 
-import com.isekai.ssgserver.member.entity.Memeber;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

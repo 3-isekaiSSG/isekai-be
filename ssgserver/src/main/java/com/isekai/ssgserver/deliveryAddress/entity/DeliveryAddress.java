@@ -28,7 +28,7 @@ public class DeliveryAddress {
 	private Long deliveryAddressId;
 
 	@Column(name = "member_id")
-	private Long memeberId;
+	private Long memberId;
 
 	@Column(name = "nickname", nullable = false)
 	private String nickname;

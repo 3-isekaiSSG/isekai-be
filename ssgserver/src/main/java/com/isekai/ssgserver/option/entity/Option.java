@@ -1,8 +1,5 @@
 package com.isekai.ssgserver.option.entity;
 
-import com.isekai.ssgserver.category.entity.CategoryL;
-import com.isekai.ssgserver.category.entity.CategoryM;
-import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
@@ -34,7 +31,7 @@ public class Option {
 	@Column(name = "options_id")
 	private Long optionsId;
 
-	@Column(name = "value", nullable = false)
+	@Column(name = "value")
 	private String value;
 
 	@Column(name = "stock", nullable = false)
@@ -44,19 +41,16 @@ public class Option {
 	private int ordersLimit;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "procut_id", nullable = false)
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_first_id")
-	private CategoryL categoryL;
+	@Column(name = "option_first_id")
+	private Long optionFirstId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_second_id")
-	private CategoryM categoryM;
+	@Column(name = "option_second_id")
+	private Long optionSecondId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option_third_id")
-	private CategoryS categoryS;
+	@Column(name = "option_third_id")
+	private Long optionThirdId;
 
 }
