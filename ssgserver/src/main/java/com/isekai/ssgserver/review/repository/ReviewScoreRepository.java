@@ -10,5 +10,5 @@ import com.isekai.ssgserver.review.entity.ReviewScore;
 @Repository
 public interface ReviewScoreRepository extends JpaRepository<ReviewScore, Long> {
 
-	Optional<ReviewScore> findByProductId(Long productId);
+	Optional<ReviewScore> findByProductProductId(Long productId);
 }
