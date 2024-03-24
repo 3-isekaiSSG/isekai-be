@@ -44,7 +44,7 @@ public class Option {
 	private int ordersLimit;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "procut_id", nullable = false)
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY)
