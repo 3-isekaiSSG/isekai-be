@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.product.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +31,11 @@ public class ProductController {
 	@GetMapping("/medium/{categoryMId}")
 	@Operation(summary = "카테고리 중분류 상품 조회", description = "카테고리 중분류별 상품 데이터 입니다.")
 	public ResponseEntity<ProductMResponseDto> getCategoryMProduct(@PathVariable Long categoryMId,
+		@RequestParam(required = false, defaultValue = "0", value = "page") int index,
 		@RequestParam(required = false, value = "sort") String sortCriteria) {
 
 		try {
-			ProductMResponseDto productsM = productService.getProductsM(categoryMId);
+			ProductMResponseDto productsM = productService.getProductsM(categoryMId, index);
 			return new ResponseEntity<>(productsM, HttpStatus.OK);
 		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.repository.CategoryProductRepository;
@@ -41,13 +44,17 @@ public class ProductService {
 	private final ProductDeliveryTypeRepository productDeliveryTypeRepository;
 
 	// 중분류 상품 조회
-	public ProductMResponseDto getProductsM(Long categoryMId) {
+	public ProductMResponseDto getProductsM(Long categoryMId, int index) {
 
 		try {
-			List<Product> productsM = categoryProductRepository.findByCategoryMId(categoryMId);
+			// pageable 객체 생성
+			Pageable pageable = PageRequest.of(index, 40);
+			Page<Product> productsMPage = categoryProductRepository.findByCategoryMId(categoryMId, pageable);
+
+			// List<Product> productsM = categoryProductRepository.findByCategoryMId(categoryMId);
 			// List<ProductMResponseDto> productMResponseDtoList = new ArrayList<>();
 
-			List<ProductDto> products = productsM.stream()
+			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
 				.collect(Collectors.toList());
 
@@ -69,9 +76,9 @@ public class ProductService {
 		List<DeliveryType> deliveryType = productDeliveryTypeRepository.findByProductId(productId);
 
 		List<DiscountDto> discounts = discount.stream().map(dc -> DiscountDto.builder()
-			.discountRate((long)dc.getDiscountRate())
-			.discountPrice((long)dc.getDiscountPrice())
-			.build())
+				.discountRate((long)dc.getDiscountRate())
+				.discountPrice((long)dc.getDiscountPrice())
+				.build())
 			.collect(Collectors.toList());
 
 		// Optional 객체가 비어 있지 않은 경우에만 변환 로직 실행
@@ -85,15 +92,14 @@ public class ProductService {
 		}).orElse(Collections.emptyList());  // reviewScoreOptional이 비어있는 경우 빈 리스트 반환
 
 		List<SellerDto> sellers = seller.stream().map(s -> SellerDto.builder()
-			.name(s.getName())
-			.build())
+				.name(s.getName())
+				.build())
 			.collect(Collectors.toList());
 
 		List<DeliveryTypeDto> deliveryTypes = deliveryType.stream().map(dt -> DeliveryTypeDto.builder()
-			.name(dt.getName())
-			.build())
+				.name(dt.getName())
+				.build())
 			.collect(Collectors.toList());
-
 
 		return ProductDto.builder()
 			.productId(productId)
