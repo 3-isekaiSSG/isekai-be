@@ -13,12 +13,16 @@ import com.isekai.ssgserver.delivery.entity.DeliveryType;
 import com.isekai.ssgserver.delivery.repository.ProductDeliveryTypeRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.image.dto.ImageDto;
+import com.isekai.ssgserver.image.repository.ImageRepository;
 import com.isekai.ssgserver.product.dto.DiscountDto;
 import com.isekai.ssgserver.product.dto.ProductDto;
 import com.isekai.ssgserver.product.dto.ProductMResponseDto;
+import com.isekai.ssgserver.product.dto.ProductSummaryDto;
 import com.isekai.ssgserver.product.entity.Discount;
 import com.isekai.ssgserver.product.entity.Product;
 import com.isekai.ssgserver.product.repository.DiscountRepository;
+import com.isekai.ssgserver.product.repository.ProductRepository;
 import com.isekai.ssgserver.review.dto.ReviewScoreDto;
 import com.isekai.ssgserver.review.entity.ReviewScore;
 import com.isekai.ssgserver.review.repository.ReviewScoreRepository;
@@ -39,6 +43,8 @@ public class ProductService {
 	private final DiscountRepository discountRepository;
 	private final SellerProductRepository sellerProductRepository;
 	private final ProductDeliveryTypeRepository productDeliveryTypeRepository;
+	private final ProductRepository productRepository;
+	private final ImageRepository imageReposiroty;
 
 	// 중분류 상품 조회
 	public ProductMResponseDto getProductsM(Long categoryMId) {
@@ -69,9 +75,9 @@ public class ProductService {
 		List<DeliveryType> deliveryType = productDeliveryTypeRepository.findByProductId(productId);
 
 		List<DiscountDto> discounts = discount.stream().map(dc -> DiscountDto.builder()
-			.discountRate((long)dc.getDiscountRate())
-			.discountPrice((long)dc.getDiscountPrice())
-			.build())
+				.discountRate((long)dc.getDiscountRate())
+				.discountPrice((long)dc.getDiscountPrice())
+				.build())
 			.collect(Collectors.toList());
 
 		// Optional 객체가 비어 있지 않은 경우에만 변환 로직 실행
@@ -85,15 +91,14 @@ public class ProductService {
 		}).orElse(Collections.emptyList());  // reviewScoreOptional이 비어있는 경우 빈 리스트 반환
 
 		List<SellerDto> sellers = seller.stream().map(s -> SellerDto.builder()
-			.name(s.getName())
-			.build())
+				.name(s.getName())
+				.build())
 			.collect(Collectors.toList());
 
 		List<DeliveryTypeDto> deliveryTypes = deliveryType.stream().map(dt -> DeliveryTypeDto.builder()
-			.name(dt.getName())
-			.build())
+				.name(dt.getName())
+				.build())
 			.collect(Collectors.toList());
-
 
 		return ProductDto.builder()
 			.productId(productId)
@@ -108,4 +113,44 @@ public class ProductService {
 			.build();
 	}
 
+	public ProductSummaryDto getProductSummary(String productCode) {
+		// 상품 정보
+		Product product = productRepository.findByCode(productCode)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		// 배송 타입 (쓱배송 or 택배배송)
+		Long deliveryTypeId = productDeliveryTypeRepository.findFirstByProduct(product).getDeliveryType()
+			.getDeliveryTypeId();
+		// 이미지
+		List<ImageDto> imageDtoList = imageReposiroty.findAllByProduct(product)
+			.stream()
+			.map(image -> ImageDto.builder()
+				.imageId(image.getImageId())
+				.isThumbnail(image.getIsThumbnail())
+				.seq(image.getSeq())
+				.imageUrl(image.getImageUrl())
+				.build())
+			.collect(Collectors.toList());
+		// 판매자
+		Seller seller = sellerProductRepository.findByProduct(product).getSeller();
+		// 할인 정보
+		Discount discount = discountRepository.findByProduct(product);
+		// 리뷰 집계 정보
+		ReviewScore reviewScore = reviewScoreRepository.findByProduct(product);
+
+		return ProductSummaryDto.builder()
+			.productCode(product.getCode())
+			.deliveryTypeId(deliveryTypeId)
+			.images(imageDtoList)
+			.productName(product.getProductName())
+			.sellerId(seller.getSellerId())
+			.sellerName(seller.getName())
+			.originPrice(product.getPrice())
+			.discountPrice(discount.getDiscountPrice())
+			.discountRate(discount.getDiscountRate())
+			.adultSales(product.getAdultSales())
+			.avgScore(reviewScore.getAvgScore())
+			.reviewCount(reviewScore.getReviewCount())
+			.build();
+	}
 }
+
