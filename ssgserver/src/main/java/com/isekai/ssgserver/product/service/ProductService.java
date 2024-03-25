@@ -1,8 +1,7 @@
 package com.isekai.ssgserver.product.service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -51,9 +50,6 @@ public class ProductService {
 			Pageable pageable = PageRequest.of(index, 40);
 			Page<Product> productsMPage = categoryProductRepository.findByCategoryMId(categoryMId, pageable);
 
-			// List<Product> productsM = categoryProductRepository.findByCategoryMId(categoryMId);
-			// List<ProductMResponseDto> productMResponseDtoList = new ArrayList<>();
-
 			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
 				.collect(Collectors.toList());
@@ -71,37 +67,29 @@ public class ProductService {
 
 		Long productId = product.getProductId();
 		List<Discount> discount = discountRepository.findByProductProductId(productId);
-		Optional<ReviewScore> reviewScoreOptional = reviewScoreRepository.findByProductProductId(productId);
+		List<ReviewScore> reviewScore = reviewScoreRepository.findByProductProductId(productId);
 		List<Seller> seller = sellerProductRepository.findByProductId(productId);
 		List<DeliveryType> deliveryType = productDeliveryTypeRepository.findByProductId(productId);
 
-		List<DiscountDto> discounts = discount.stream().map(dc -> DiscountDto.builder()
-				.discountRate((long)dc.getDiscountRate())
-				.discountPrice((long)dc.getDiscountPrice())
-				.build())
+		List<DiscountDto.Response> discounts = discount.stream()
+			.map(DiscountDto::mapDiscountDto)
 			.collect(Collectors.toList());
 
-		// Optional 객체가 비어 있지 않은 경우에만 변환 로직 실행
-		List<ReviewScoreDto> reviews = reviewScoreOptional.map(rs -> {
-			// 여기서는 단일 객체를 처리하므로, List가 아니라 단일 객체를 생성
-			// Optional 내부의 객체를 List로 변환하려면 Collections.singletonList 사용
-			return Collections.singletonList(ReviewScoreDto.builder()
-				.reviewCount(rs.getReviewCount())
-				.avgScore(rs.getAvgScore())
-				.build());
-		}).orElse(Collections.emptyList());  // reviewScoreOptional이 비어있는 경우 빈 리스트 반환
-
-		List<SellerDto> sellers = seller.stream().map(s -> SellerDto.builder()
-				.name(s.getName())
-				.build())
+		List<ReviewScoreDto.Response> reviews = reviewScore.stream()
+			.map(ReviewScoreDto::mapReviewScoreDto)
 			.collect(Collectors.toList());
 
-		List<DeliveryTypeDto> deliveryTypes = deliveryType.stream().map(dt -> DeliveryTypeDto.builder()
-				.name(dt.getName())
-				.build())
+		List<SellerDto.Response> sellers = seller.stream()
+			.map(SellerDto::mapSellerDto)
 			.collect(Collectors.toList());
 
+		List<DeliveryTypeDto.Response> deliveryTypes = deliveryType.stream()
+			.map(DeliveryTypeDto::mapDeliveryTypeDto)
+			.collect(Collectors.toList());
+
+		AtomicLong id = new AtomicLong();
 		return ProductDto.builder()
+			.id(id.getAndIncrement())
 			.productId(productId)
 			.productName(product.getProductName())
 			.adultSales(product.getAdultSales())
