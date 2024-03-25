@@ -15,8 +15,8 @@ public interface CategoryProductRepository extends JpaRepository<CategoryProduct
 	// 중분류 상품 조회
 	// @Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryM.categoryMId = :categoryMId)")
 	// Page<Product> findByCategoryMId(@Param("categoryMId") Long categoryMId, Pageable pageable);
-	@Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryM.mediumName = :mediumName)")
-	Page<Product> findByCategoryMName(@Param("mediumName") String mediumName, Pageable pageable);
+	// @Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryM.mediumName = :mediumName)")
+	// Page<Product> findByCategoryMName(@Param("mediumName") String mediumName, Pageable pageable);
 
 	// 소분류 상품 조회
 	// @Query("SELECT cp.product FROM CategoryProduct cp WHERE (cp.categoryS.categorySId = :categorySId)")

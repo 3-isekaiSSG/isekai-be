@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.isekai.ssgserver.category.repository.CategoryProductRepository;
+import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
 import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
 import com.isekai.ssgserver.delivery.entity.DeliveryType;
 import com.isekai.ssgserver.delivery.repository.ProductDeliveryTypeRepository;
@@ -36,7 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ProductService {
 
-	private final CategoryProductRepository categoryProductRepository;
+	// private final CategoryProductRepository categoryProductRepository;
+	private final CategoryProductCustomRepository categoryProductCustomRepository;
 	private final ReviewScoreRepository reviewScoreRepository;
 	private final DiscountRepository discountRepository;
 	private final SellerProductRepository sellerProductRepository;
@@ -48,7 +49,7 @@ public class ProductService {
 		try {
 			// pageable 객체 생성
 			Pageable pageable = PageRequest.of(index, 40);
-			Page<Product> productsMPage = categoryProductRepository.findByCategoryMName(mediumName, pageable);
+			Page<Product> productsMPage = categoryProductCustomRepository.findByCategoryMName(mediumName, pageable);
 
 			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
