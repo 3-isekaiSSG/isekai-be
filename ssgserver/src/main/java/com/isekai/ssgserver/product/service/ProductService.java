@@ -43,12 +43,12 @@ public class ProductService {
 	private final ProductDeliveryTypeRepository productDeliveryTypeRepository;
 
 	// 중분류 상품 조회
-	public ProductMResponseDto getProductsM(Long categoryMId, int index) {
+	public ProductMResponseDto getProductsM(String mediumName, int index) {
 
 		try {
 			// pageable 객체 생성
 			Pageable pageable = PageRequest.of(index, 40);
-			Page<Product> productsMPage = categoryProductRepository.findByCategoryMId(categoryMId, pageable);
+			Page<Product> productsMPage = categoryProductRepository.findByCategoryMName(mediumName, pageable);
 
 			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
