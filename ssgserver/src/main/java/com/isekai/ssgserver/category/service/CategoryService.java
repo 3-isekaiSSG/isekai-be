@@ -38,7 +38,6 @@ public class CategoryService {
 
 		try {
 			List<CategoryL> categoriesL = categoryLRepository.findAll();
-			List<CategoryM> categoriesM = categoryMRepository.findAll();
 
 			List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
 
