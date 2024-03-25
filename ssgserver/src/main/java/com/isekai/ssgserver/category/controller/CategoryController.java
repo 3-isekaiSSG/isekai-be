@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
@@ -43,6 +44,19 @@ public class CategoryController {
 		try {
 			List<CategoryResponseDto> categoryResponseDto = categoryService.getCategory();
 			return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
+		} catch (CustomException exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 카테고리 대분류 조회
+	@GetMapping("/large")
+	@Operation(summary = "카테고리 대분류 조회", description = "대분류만 내려줍니다.")
+	public ResponseEntity<List<CategoryLResponseDto>> getCategoryL() {
+
+		try {
+			List<CategoryLResponseDto> categoryLResponseDto = categoryService.getCategoryL();
+			return new ResponseEntity<>(categoryLResponseDto, HttpStatus.OK);
 		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}

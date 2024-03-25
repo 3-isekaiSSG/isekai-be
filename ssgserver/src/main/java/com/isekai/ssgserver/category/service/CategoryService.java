@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMList;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
@@ -67,6 +68,24 @@ public class CategoryService {
 			return categoryResponseDtoList;
 
 		} catch (Exception exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 대분류
+	public List<CategoryLResponseDto> getCategoryL() {
+
+		try {
+			List<CategoryL> categoriesL = categoryLRepository.findAll();
+			AtomicInteger responseId = new AtomicInteger();
+
+			return categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
+					.id(responseId.getAndIncrement())
+					.categoryLId(cl.getCategoryLId())
+					.largeName(cl.getLargeName())
+					.build())
+				.collect(Collectors.toList());
+		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}
 	}
