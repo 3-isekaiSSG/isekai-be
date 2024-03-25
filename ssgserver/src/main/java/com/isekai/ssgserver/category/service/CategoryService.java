@@ -44,10 +44,10 @@ public class CategoryService {
 			AtomicInteger responseDtoId = new AtomicInteger(0);
 
 			for (CategoryL cl : categoriesL) {
-				Long categoryLId = cl.getCategoryLId();
+				String largeName = cl.getLargeName();
 				AtomicInteger categoryMListId = new AtomicInteger(0);
 
-				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLCategoryLId(categoryLId);
+				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
 				List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
 						.id(categoryMListId.getAndIncrement())
 						.categoryMId(cm.getCategoryMId())
@@ -58,7 +58,7 @@ public class CategoryService {
 
 				categoryResponseDtoList.add(CategoryResponseDto.builder()
 					.id(responseDtoId.getAndIncrement())
-					.categoryLId(categoryLId)
+					.categoryLId(cl.getCategoryLId())
 					.largeName(cl.getLargeName())
 					.categoryMList(categoryMLists)
 					.build()
@@ -72,11 +72,11 @@ public class CategoryService {
 	}
 
 	// 중분류
-	public CategoryMResponseDto getCategoryM(Long categoryLId) {
+	public CategoryMResponseDto getCategoryM(String largeName) {
 
 		try {
 
-			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLCategoryLId(categoryLId);
+			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
 			List<CategoryMList> categoryMLists = new ArrayList<>();
 
 			AtomicInteger categoryListId = new AtomicInteger(0);
@@ -92,7 +92,7 @@ public class CategoryService {
 
 			return CategoryMResponseDto.builder()
 				.id(0)
-				.categoryLId(categoryLId)
+				.largeName(largeName)
 				.categoryMList(categoryMLists)
 				.build();
 		} catch (Exception exception) {
@@ -101,10 +101,10 @@ public class CategoryService {
 	}
 
 	// 소분류
-	public CategorySResponseDto getCategoryS(Long categoryMId) {
+	public CategorySResponseDto getCategoryS(String mediumName) {
 
 		try {
-			List<CategoryS> categoryS = categorySRepository.findAllByCategoryMCategoryMId(categoryMId);
+			List<CategoryS> categoryS = categorySRepository.findAllByCategoryMMediumName(mediumName);
 			List<CategorySList> categorySLists = new ArrayList<>();
 
 			AtomicInteger categoryListId = new AtomicInteger(0);
@@ -119,7 +119,7 @@ public class CategoryService {
 
 			return CategorySResponseDto.builder()
 				.id(0)
-				.categoryMId(categoryMId)
+				.mediumName(mediumName)
 				.categorySList(categorySLists)
 				.build();
 		} catch (CustomException exception) {
