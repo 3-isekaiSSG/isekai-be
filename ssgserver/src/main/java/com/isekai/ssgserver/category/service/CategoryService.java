@@ -54,6 +54,7 @@ public class CategoryService {
 						.categoryMId(cm.getCategoryMId())
 						.mediumName(cm.getMediumName())
 						.isColored(cm.getIsColored())
+						.mediumImg(cm.getMediumImg())
 						.build())
 					.collect(Collectors.toList());
 
@@ -61,6 +62,7 @@ public class CategoryService {
 					.id(responseDtoId.getAndIncrement())
 					.categoryLId(cl.getCategoryLId())
 					.largeName(cl.getLargeName())
+					.largeImg(cl.getLargeImg())
 					.categoryMList(categoryMLists)
 					.build()
 				);
@@ -83,6 +85,7 @@ public class CategoryService {
 					.id(responseId.getAndIncrement())
 					.categoryLId(cl.getCategoryLId())
 					.largeName(cl.getLargeName())
+					.largeImg(cl.getLargeImg())
 					.build())
 				.collect(Collectors.toList());
 		} catch (CustomException exception) {
@@ -106,6 +109,7 @@ public class CategoryService {
 					.categoryMId(cm.getCategoryMId())
 					.mediumName(cm.getMediumName())
 					.isColored(cm.getIsColored())
+					.mediumImg(cm.getMediumImg())
 					.build());
 			});
 

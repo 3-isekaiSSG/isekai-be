@@ -12,6 +12,7 @@ public class CategoryResponseDto {
 	private int id;
 	private Long categoryLId;
 	private String largeName;
+	private String largeImg;
 
 	private List<CategoryMList> categoryMList;
 }
