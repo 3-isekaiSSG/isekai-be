@@ -2,7 +2,6 @@ package com.isekai.ssgserver.product.service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +52,7 @@ public class ProductService {
 
 			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
-				.collect(Collectors.toList());
+				.toList();
 
 			return ProductMResponseDto.builder()
 				.products(products)
@@ -74,19 +73,19 @@ public class ProductService {
 
 		List<DiscountDto.Response> discounts = discount.stream()
 			.map(DiscountDto::mapDiscountDto)
-			.collect(Collectors.toList());
+			.toList();
 
 		List<ReviewScoreDto.Response> reviews = reviewScore.stream()
 			.map(ReviewScoreDto::mapReviewScoreDto)
-			.collect(Collectors.toList());
+			.toList();
 
 		List<SellerDto.Response> sellers = seller.stream()
 			.map(SellerDto::mapSellerDto)
-			.collect(Collectors.toList());
+			.toList();
 
 		List<DeliveryTypeDto.Response> deliveryTypes = deliveryType.stream()
 			.map(DeliveryTypeDto::mapDeliveryTypeDto)
-			.collect(Collectors.toList());
+			.toList();
 
 		AtomicLong id = new AtomicLong();
 		return ProductDto.builder()

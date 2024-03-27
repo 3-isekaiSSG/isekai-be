@@ -3,7 +3,6 @@ package com.isekai.ssgserver.category.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -56,7 +55,7 @@ public class CategoryService {
 						.isColored(cm.getIsColored())
 						.mediumImg(cm.getMediumImg())
 						.build())
-					.collect(Collectors.toList());
+					.toList();
 
 				categoryResponseDtoList.add(CategoryResponseDto.builder()
 					.id(responseDtoId.getAndIncrement())
@@ -87,7 +86,7 @@ public class CategoryService {
 					.largeName(cl.getLargeName())
 					.largeImg(cl.getLargeImg())
 					.build())
-				.collect(Collectors.toList());
+				.toList();
 		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
 		}
