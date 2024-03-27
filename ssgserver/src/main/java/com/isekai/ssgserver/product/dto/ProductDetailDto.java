@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.product.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.isekai.ssgserver.image.dto.ImageDto;
@@ -22,6 +23,10 @@ public class ProductDetailDto {
 	private String productName;
 	// 상품 디테일
 	private String productDetail;
+	// 상품 상태
+	private int status;
+	// 생성일자
+	private LocalDateTime createdAt;
 	// 	판매자 pk
 	private Long sellerId;
 	// 판매자 이름
