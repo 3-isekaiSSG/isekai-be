@@ -13,5 +13,5 @@ public interface ReviewScoreRepository extends JpaRepository<ReviewScore, Long> 
 
 	Optional<ReviewScore> findByProductProductId(Long productId);
 
-	ReviewScore findByProduct(Product product);
+	Optional<ReviewScore> findByProduct(Product product);
 }

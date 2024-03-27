@@ -1,5 +1,9 @@
 package com.isekai.ssgserver.product.dto;
 
+import java.util.List;
+
+import com.isekai.ssgserver.image.dto.ImageDto;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,9 +17,11 @@ public class ProductDetailDto {
 	// 	배송유형
 	private Long deliveryTypeId;
 	//  사진
-	private String imageUrl;
+	private List<ImageDto> images;
 	// 	상품 이름 (outer)
 	private String productName;
+	// 상품 디테일
+	private String productDetail;
 	// 	판매자 pk
 	private Long sellerId;
 	// 판매자 이름

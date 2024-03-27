@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.product.dto.ProductDetailDto;
 import com.isekai.ssgserver.product.dto.ProductMResponseDto;
 import com.isekai.ssgserver.product.dto.ProductSummaryDto;
 import com.isekai.ssgserver.product.service.ProductService;
@@ -52,8 +53,7 @@ public class ProductController {
 	@GetMapping("/{productCode}/detail")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 페이지에서 사용되는 자세한 정보입니다.")
 	public ResponseEntity<?> getProductDetail(@PathVariable String productCode) {
-
-		// ProductDetailDto
-		return ResponseEntity.ok().build();
+		ProductDetailDto productDetailDto = productService.getProductDetail(productCode);
+		return ResponseEntity.ok(productDetailDto);
 	}
 }

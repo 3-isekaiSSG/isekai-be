@@ -1,6 +1,7 @@
 package com.isekai.ssgserver.seller.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,5 @@ public interface SellerProductRepository extends JpaRepository<SellerProduct, Lo
 	@Query("SELECT sp.seller FROM SellerProduct sp WHERE(sp.product.productId = :productId)")
 	List<Seller> findByProductId(Long productId);
 
-	SellerProduct findByProduct(Product product);
+	Optional<SellerProduct> findByProduct(Product product);
 }

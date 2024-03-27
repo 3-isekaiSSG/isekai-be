@@ -1,6 +1,7 @@
 package com.isekai.ssgserver.delivery.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,6 @@ public interface ProductDeliveryTypeRepository extends JpaRepository<ProductDeli
 	@Query("SELECT pdt.deliveryType FROM ProductDeliveryType pdt WHERE(pdt.product.productId = :productId)")
 	List<DeliveryType> findByProductId(Long productId);
 
-	ProductDeliveryType findFirstByProduct(Product product);
+	Optional<ProductDeliveryType> findFirstByProduct(Product product);
 }
 
