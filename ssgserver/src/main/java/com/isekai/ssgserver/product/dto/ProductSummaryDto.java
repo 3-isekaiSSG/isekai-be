@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +18,10 @@ public class ProductSummaryDto {
 	private String image;
 	// 	상품 이름 (outer)
 	private String productName;
+	// 상품 상태
+	private int status;
+	// 생성일자
+	private LocalDateTime createdAt;
 	// 	판매자 pk
 	private Long sellerId;
 	// 판매자 이름
