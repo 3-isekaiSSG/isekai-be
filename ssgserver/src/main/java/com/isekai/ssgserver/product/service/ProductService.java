@@ -1,13 +1,14 @@
 package com.isekai.ssgserver.product.service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.isekai.ssgserver.category.repository.CategoryProductRepository;
+import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
 import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
 import com.isekai.ssgserver.delivery.entity.DeliveryType;
 import com.isekai.ssgserver.delivery.repository.ProductDeliveryTypeRepository;
@@ -41,7 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ProductService {
 
-	private final CategoryProductRepository categoryProductRepository;
+	// private final CategoryProductRepository categoryProductRepository;
+	private final CategoryProductCustomRepository categoryProductCustomRepository;
 	private final ReviewScoreRepository reviewScoreRepository;
 	private final DiscountRepository discountRepository;
 	private final SellerProductRepository sellerProductRepository;
@@ -50,15 +52,16 @@ public class ProductService {
 	private final ImageRepository imageReposiroty;
 
 	// 중분류 상품 조회
-	public ProductMResponseDto getProductsM(Long categoryMId) {
+	public ProductMResponseDto getProductsM(String mediumName, int index) {
 
 		try {
-			List<Product> productsM = categoryProductRepository.findByCategoryMId(categoryMId);
-			// List<ProductMResponseDto> productMResponseDtoList = new ArrayList<>();
+			// pageable 객체 생성
+			Pageable pageable = PageRequest.of(index, 40);
+			Page<Product> productsMPage = categoryProductCustomRepository.findByCategoryMName(mediumName, pageable);
 
-			List<ProductDto> products = productsM.stream()
+			List<ProductDto> products = productsMPage.stream()
 				.map(this::mapProductDto)
-				.collect(Collectors.toList());
+				.toList();
 
 			return ProductMResponseDto.builder()
 				.products(products)
@@ -73,37 +76,29 @@ public class ProductService {
 
 		Long productId = product.getProductId();
 		List<Discount> discount = discountRepository.findByProductProductId(productId);
-		Optional<ReviewScore> reviewScoreOptional = reviewScoreRepository.findByProductProductId(productId);
+		List<ReviewScore> reviewScore = reviewScoreRepository.findByProductProductId(productId);
 		List<Seller> seller = sellerProductRepository.findByProductId(productId);
 		List<DeliveryType> deliveryType = productDeliveryTypeRepository.findByProductId(productId);
 
-		List<DiscountDto> discounts = discount.stream().map(dc -> DiscountDto.builder()
-				.discountRate((long)dc.getDiscountRate())
-				.discountPrice((long)dc.getDiscountPrice())
-				.build())
-			.collect(Collectors.toList());
+		List<DiscountDto.Response> discounts = discount.stream()
+			.map(DiscountDto::mapDiscountDto)
+			.toList();
 
-		// Optional 객체가 비어 있지 않은 경우에만 변환 로직 실행
-		List<ReviewScoreDto> reviews = reviewScoreOptional.map(rs -> {
-			// 여기서는 단일 객체를 처리하므로, List가 아니라 단일 객체를 생성
-			// Optional 내부의 객체를 List로 변환하려면 Collections.singletonList 사용
-			return Collections.singletonList(ReviewScoreDto.builder()
-				.reviewCount(rs.getReviewCount())
-				.avgScore(rs.getAvgScore())
-				.build());
-		}).orElse(Collections.emptyList());  // reviewScoreOptional이 비어있는 경우 빈 리스트 반환
+		List<ReviewScoreDto.Response> reviews = reviewScore.stream()
+			.map(ReviewScoreDto::mapReviewScoreDto)
+			.toList();
 
-		List<SellerDto> sellers = seller.stream().map(s -> SellerDto.builder()
-				.name(s.getName())
-				.build())
-			.collect(Collectors.toList());
+		List<SellerDto.Response> sellers = seller.stream()
+			.map(SellerDto::mapSellerDto)
+			.toList();
 
-		List<DeliveryTypeDto> deliveryTypes = deliveryType.stream().map(dt -> DeliveryTypeDto.builder()
-				.name(dt.getName())
-				.build())
-			.collect(Collectors.toList());
+		List<DeliveryTypeDto.Response> deliveryTypes = deliveryType.stream()
+			.map(DeliveryTypeDto::mapDeliveryTypeDto)
+			.toList();
 
+		AtomicLong id = new AtomicLong();
 		return ProductDto.builder()
+			.id(id.getAndIncrement())
 			.productId(productId)
 			.productName(product.getProductName())
 			.adultSales(product.getAdultSales())
@@ -209,4 +204,5 @@ public class ProductService {
 			.orElse(null);
 	}
 }
+
 

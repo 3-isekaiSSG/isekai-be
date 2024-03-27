@@ -36,6 +36,9 @@ public class CategoryM {
 	@Column(name = "is_colored", nullable = false)
 	private Boolean isColored;
 
+	@Column(name = "medium_img", nullable = true)
+	private String mediumImg;
+
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_l_id", nullable = false)

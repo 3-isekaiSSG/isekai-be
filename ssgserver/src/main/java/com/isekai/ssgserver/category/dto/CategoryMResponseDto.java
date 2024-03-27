@@ -10,7 +10,7 @@ import lombok.Getter;
 public class CategoryMResponseDto {
 
 	private int id;
-	private Long categoryLId;
+	private String largeName;
 
 	private List<CategoryMList> categoryMList;
 
