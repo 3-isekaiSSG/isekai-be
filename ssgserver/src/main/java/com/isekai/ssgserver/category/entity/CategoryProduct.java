@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.category.entity;
 
-import com.isekai.ssgserver.product.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,11 +30,10 @@ public class CategoryProduct {
 	@Column(name = "category_product_id")
 	private long categoryProductId;
 
-	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
+	@Column(name = "product_code")
+	private String productCode;
 
+	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_l_id", nullable = false)
 	private CategoryL categoryL;

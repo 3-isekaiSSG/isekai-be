@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.seller.entity;
 
-import com.isekai.ssgserver.product.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,10 +32,8 @@ public class SellerProduct {
 
 	private String status;
 
-	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
+	@Column(name = "product_code")
+	private String productCode;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id", nullable = false)
