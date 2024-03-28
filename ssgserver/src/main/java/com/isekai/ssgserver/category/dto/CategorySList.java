@@ -8,6 +8,6 @@ import lombok.Getter;
 public class CategorySList {
 
 	private int id;
-	private Long categorySId;
-	private String smallName;
+	private Long categoryId;
+	private String name;
 }
