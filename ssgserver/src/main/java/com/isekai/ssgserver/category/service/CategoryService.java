@@ -115,28 +115,26 @@ public class CategoryService {
 	// 소분류
 	public CategorySResponseDto getCategoryS(String mediumName) {
 
-		try {
-			List<CategoryS> categoryS = categorySRepository.findAllByCategoryMMediumName(mediumName);
-			List<CategorySList> categorySLists = new ArrayList<>();
+		List<CategoryS> categoryS = categorySRepository.findAllByCategoryMMediumName(mediumName)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		List<CategorySList> categorySLists = new ArrayList<>();
 
-			AtomicInteger categoryListId = new AtomicInteger(0);
+		AtomicInteger categoryListId = new AtomicInteger(0);
 
-			categoryS.forEach(cs -> {
-				categorySLists.add(CategorySList.builder()
-					.id(categoryListId.getAndIncrement())
-					.categorySId(cs.getCategorySId())
-					.smallName(cs.getSmallName())
-					.build());
-			});
+		categoryS.forEach(cs -> {
+			categorySLists.add(CategorySList.builder()
+				.id(categoryListId.getAndIncrement())
+				.categorySId(cs.getCategorySId())
+				.smallName(cs.getSmallName())
+				.build());
+		});
 
-			return CategorySResponseDto.builder()
-				.id(0)
-				.mediumName(mediumName)
-				.categorySList(categorySLists)
-				.build();
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		return CategorySResponseDto.builder()
+			.id(0)
+			.mediumName(mediumName)
+			.categorySList(categorySLists)
+			.build();
+
 	}
 
 }

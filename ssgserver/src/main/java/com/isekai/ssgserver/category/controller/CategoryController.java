@@ -14,8 +14,6 @@ import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
 import com.isekai.ssgserver.category.service.CategoryService;
-import com.isekai.ssgserver.exception.common.CustomException;
-import com.isekai.ssgserver.exception.constants.ErrorCode;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,11 +70,10 @@ public class CategoryController {
 	@Operation(summary = "카테고리 소분류 조회", description = "중분류 상품 조회시 나오는 소분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<CategorySResponseDto> getCategoryS(@PathVariable String mediumName) {
 
-		try {
-			CategorySResponseDto categorySResponseDto = categoryService.getCategoryS(mediumName);
-			return new ResponseEntity<>(categorySResponseDto, HttpStatus.OK);
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		String modifiedMediumName = mediumName.replace('-', '/');
+
+		CategorySResponseDto categorySResponseDto = categoryService.getCategoryS(modifiedMediumName);
+		return new ResponseEntity<>(categorySResponseDto, HttpStatus.OK);
+
 	}
 }
