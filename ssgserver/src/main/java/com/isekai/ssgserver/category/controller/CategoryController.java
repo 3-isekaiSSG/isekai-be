@@ -41,12 +41,9 @@ public class CategoryController {
 	@Operation(summary = "카테고리 대,중분류 이름", description = "하단 카테고리 클릭시 나오는 대,중분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<List<CategoryResponseDto>> getCategory() {
 
-		try {
-			List<CategoryResponseDto> categoryResponseDto = categoryService.getCategory();
-			return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategory();
+		return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
+
 	}
 
 	// 카테고리 대분류 조회

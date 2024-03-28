@@ -36,61 +36,53 @@ public class CategoryService {
 	// 대,중분류
 	public List<CategoryResponseDto> getCategory() {
 
-		try {
-			List<CategoryL> categoriesL = categoryLRepository.findAll();
+		List<CategoryL> categoriesL = categoryLRepository.findAll();
 
-			List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
+		List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
 
-			AtomicInteger responseDtoId = new AtomicInteger(0);
+		AtomicInteger responseDtoId = new AtomicInteger(0);
 
-			for (CategoryL cl : categoriesL) {
-				String largeName = cl.getLargeName();
-				AtomicInteger categoryMListId = new AtomicInteger(0);
+		for (CategoryL cl : categoriesL) {
+			String largeName = cl.getLargeName();
+			AtomicInteger categoryMListId = new AtomicInteger(0);
 
-				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
-					.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-				List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
-						.id(categoryMListId.getAndIncrement())
-						.categoryMId(cm.getCategoryMId())
-						.mediumName(cm.getMediumName())
-						.isColored(cm.getIsColored())
-						.mediumImg(cm.getMediumImg())
-						.build())
-					.toList();
+			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
+					.id(categoryMListId.getAndIncrement())
+					.categoryMId(cm.getCategoryMId())
+					.mediumName(cm.getMediumName())
+					.isColored(cm.getIsColored())
+					.mediumImg(cm.getMediumImg())
+					.build())
+				.toList();
 
-				categoryResponseDtoList.add(CategoryResponseDto.builder()
-					.id(responseDtoId.getAndIncrement())
-					.categoryLId(cl.getCategoryLId())
-					.largeName(cl.getLargeName())
-					.largeImg(cl.getLargeImg())
-					.categoryMList(categoryMLists)
-					.build()
-				);
-			}
-			return categoryResponseDtoList;
-
-		} catch (Exception exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+			categoryResponseDtoList.add(CategoryResponseDto.builder()
+				.id(responseDtoId.getAndIncrement())
+				.categoryLId(cl.getCategoryLId())
+				.largeName(cl.getLargeName())
+				.largeImg(cl.getLargeImg())
+				.categoryMList(categoryMLists)
+				.build()
+			);
 		}
+		return categoryResponseDtoList;
 	}
 
 	// 대분류
 	public List<CategoryLResponseDto> getCategoryL() {
 
-		try {
-			List<CategoryL> categoriesL = categoryLRepository.findAll();
-			AtomicInteger responseId = new AtomicInteger();
+		List<CategoryL> categoriesL = categoryLRepository.findAll();
+		AtomicInteger responseId = new AtomicInteger();
 
-			return categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
-					.id(responseId.getAndIncrement())
-					.categoryLId(cl.getCategoryLId())
-					.largeName(cl.getLargeName())
-					.largeImg(cl.getLargeImg())
-					.build())
-				.toList();
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		return categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
+				.id(responseId.getAndIncrement())
+				.categoryLId(cl.getCategoryLId())
+				.largeName(cl.getLargeName())
+				.largeImg(cl.getLargeImg())
+				.build())
+			.toList();
+
 	}
 
 	// 중분류
