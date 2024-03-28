@@ -18,8 +18,6 @@ import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.category.repository.CategoryLRepository;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
-import com.isekai.ssgserver.exception.common.CustomException;
-import com.isekai.ssgserver.exception.constants.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +44,7 @@ public class CategoryService {
 			String largeName = cl.getLargeName();
 			AtomicInteger categoryMListId = new AtomicInteger(0);
 
-			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
 			List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
 					.id(categoryMListId.getAndIncrement())
 					.categoryMId(cm.getCategoryMId())
@@ -88,8 +85,7 @@ public class CategoryService {
 	// 중분류
 	public CategoryMResponseDto getCategoryM(String largeName) {
 
-		List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
 		List<CategoryMList> categoryMLists = new ArrayList<>();
 
 		AtomicInteger categoryListId = new AtomicInteger(0);
@@ -115,8 +111,7 @@ public class CategoryService {
 	// 소분류
 	public CategorySResponseDto getCategoryS(String mediumName) {
 
-		List<CategoryS> categoryS = categorySRepository.findAllByCategoryMMediumName(mediumName)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		List<CategoryS> categoryS = categorySRepository.findAllByCategoryMMediumName(mediumName);
 		List<CategorySList> categorySLists = new ArrayList<>();
 
 		AtomicInteger categoryListId = new AtomicInteger(0);
