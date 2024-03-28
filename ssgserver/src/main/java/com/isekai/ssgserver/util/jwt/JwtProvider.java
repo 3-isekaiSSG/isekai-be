@@ -78,7 +78,7 @@ public class JwtProvider {
 		return tokenInfo;
 	}
 
-	public JwtToken reissueToken(String accessToken, String refreshToken) {
+	public JwtToken reissueToken(String refreshToken) {
 		// 보낸 redis token의 서명키 확인
 		try {
 			verifyToken(refreshToken);
