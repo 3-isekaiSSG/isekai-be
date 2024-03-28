@@ -1,6 +1,5 @@
 package com.isekai.ssgserver.bundle.entity;
 
-import com.isekai.ssgserver.member.entity.Memeber;
 import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;

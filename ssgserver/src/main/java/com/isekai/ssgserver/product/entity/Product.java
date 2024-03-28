@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +37,7 @@ public class Product {
 	@Column(name = "code", nullable = false)
 	private String code;
 
-	@Column(name = "product_detail")
+	@Column(name = "product_detail", columnDefinition = "TEXT")
 	private String productDetail;
 
 	@Column(name = "adult_sales", nullable = false)
@@ -43,6 +45,9 @@ public class Product {
 
 	@Column(name = "status", nullable = false)
 	private int status;
+
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
 	// @PrePersist
 	// public void prePersist() {

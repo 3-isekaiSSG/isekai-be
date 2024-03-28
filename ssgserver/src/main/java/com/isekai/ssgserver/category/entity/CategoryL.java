@@ -29,4 +29,7 @@ public class CategoryL {
 
 	@Column(name = "large_name", nullable = false)
 	private String largeName;
+
+	@Column(name = "large_img", nullable = false)
+	private String largeImg;
 }

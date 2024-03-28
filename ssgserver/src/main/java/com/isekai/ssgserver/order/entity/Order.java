@@ -33,7 +33,7 @@ public class Order {
 	private String code;
 
 	@Column(name = "member_coupon_id")
-	private Long memeberCouponId;
+	private Long memberCouponId;
 
 	@Column(name = "regular_price", nullable = false)
 	private int regularPrice;
