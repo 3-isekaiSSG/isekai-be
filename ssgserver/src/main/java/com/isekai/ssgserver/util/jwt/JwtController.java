@@ -1,16 +1,13 @@
-package com.isekai.ssgserver.jwt.controller;
+package com.isekai.ssgserver.util.jwt;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.isekai.ssgserver.jwt.dto.JwtToken;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/jwt")
 @RequiredArgsConstructor
 public class JwtController {
+
+	@Value("${jwt.token.refresh-expire-time}")
+	private long refreshExpireTime;
 
 	private final JwtProvider jwtProvider;
 
@@ -41,7 +41,7 @@ public class JwtController {
 			.secure(true) // HTTPS 환경에서만 사용할 경우 true로 설정
 			.sameSite("Lax")  // 같은 사이트 내의 요청에서만 쿠키를 전송
 			.path("/")
-			.maxAge(18000000) // 쿠키의 유효 기간을 설정 (예: 7일)
+			.maxAge(refreshExpireTime) // 쿠키의 유효 기간 설정
 			.build();
 		response.setHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
@@ -56,21 +56,20 @@ public class JwtController {
 	 */
 	@GetMapping("/token")
 	@Operation(summary = "JWT 토큰 재발급", description = "Access token을 재발급하며, Refresh token도 갱신됩니다.")
-	public ResponseEntity<Void> reissueToken(@RequestHeader("Authorization") String accessToken,
-		@CookieValue(name = "refreshToken") String refreshToken,
+	public ResponseEntity<Void> reissueToken(@CookieValue(name = "refreshToken") String refreshToken,
 		HttpServletResponse response) {
-		System.out.println("controller 작동");
+		System.out.println("refresh token 재발급 controller 작동");
 		HttpHeaders headers = new HttpHeaders();
-		JwtToken createdTokenInfo = jwtProvider.reissueToken(accessToken, refreshToken);
-		headers.set("Authorization", createdTokenInfo.getAccessToken());
+		JwtToken createdTokenInfo = jwtProvider.reissueToken(refreshToken);
 		ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", createdTokenInfo.getRefreshToken())
 			.httpOnly(true)
 			.secure(true) // HTTPS 환경에서만 사용할 경우 true로 설정
 			.sameSite("Lax")  // 같은 사이트 내의 요청에서만 쿠키를 전송
 			.path("/")
-			.maxAge(18000000) // 쿠키의 유효 기간을 설정 (예: 7일)
+			.maxAge(refreshExpireTime) // 쿠키의 유효 기간 설정
 			.build();
 		response.setHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+		response.setHeader(HttpHeaders.AUTHORIZATION, createdTokenInfo.getAccessToken());
 		return ResponseEntity.ok().build();
 	}
 }
