@@ -4,7 +4,12 @@ import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
 import com.isekai.ssgserver.delivery.repository.ProductDeliveryTypeRepository;
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.image.repository.ImageRepository;
+import com.isekai.ssgserver.product.dto.ProductDetailDto;
+import com.isekai.ssgserver.product.dto.ProductSummaryDto;
+import com.isekai.ssgserver.product.entity.Product;
 import com.isekai.ssgserver.product.repository.DiscountRepository;
 import com.isekai.ssgserver.product.repository.ProductRepository;
 import com.isekai.ssgserver.review.repository.ReviewScoreRepository;
@@ -87,81 +92,66 @@ public class ProductService {
 	// 		.build();
 	// }
 	//
-	// /**
-	//  * 상품 리스트의 요약된 카드 형식 데이터 조회
-	//  * @param productCode 상품 코드
-	//  * @return
-	//  */
-	// public ProductSummaryDto getProductSummary(String productCode) {
-	// 	Product product = productRepository.findByCode(productCode)
-	// 		.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-	// 	Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
-	// 	Seller seller = getSellerByProduct(product);
-	// 	Discount discount = getDiscountByProduct(product);
-	// 	ReviewScore reviewScore = getReviewScoreByProduct(product);
-	// 	String imageUrl = imageReposiroty.findByProductAndIsThumbnail(product, 1)
-	// 		.map(Image::getImageUrl)
-	// 		.orElse("defaultUrl");
-	//
-	// 	return ProductSummaryDto.builder()
-	// 		.productCode(product.getCode())
-	// 		.deliveryTypeId(deliveryTypeId)
-	// 		.image(imageUrl)
-	// 		.productName(product.getProductName())
-	// 		.status(product.getStatus())
-	// 		.createdAt(product.getCreatedAt())
-	// 		.sellerId(seller.getSellerId())
-	// 		.sellerName(seller.getName())
-	// 		.originPrice(product.getPrice())
-	// 		.discountPrice(discount.getDiscountPrice())
-	// 		.discountRate(discount.getDiscountRate())
-	// 		.adultSales(product.getAdultSales())
-	// 		.avgScore(reviewScore.getAvgScore())
-	// 		.reviewCount(reviewScore.getReviewCount())
-	// 		.build();
-	// }
-	//
-	// /**
-	//  * 상품 상세 페이지의 상단 ~ 상품 디테일까지 조회
-	//  * @param productCode 상품 코드
-	//  * @return
-	//  */
-	// public ProductDetailDto getProductDetail(String productCode) {
-	// 	Product product = productRepository.findByCode(productCode)
-	// 		.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-	// 	Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
-	// 	Seller seller = getSellerByProduct(product);
-	// 	Discount discount = getDiscountByProduct(product);
-	// 	ReviewScore reviewScore = getReviewScoreByProduct(product);
-	// 	List<ImageDto> imageDtoList = imageReposiroty.findAllByProduct(product)
-	// 		.stream()
-	// 		.map(image -> ImageDto.builder()
-	// 			.imageId(image.getImageId())
-	// 			.isThumbnail(image.getIsThumbnail())
-	// 			.seq(image.getSeq())
-	// 			.imageUrl(image.getImageUrl())
-	// 			.build())
-	// 		.toList();
-	//
-	// 	return ProductDetailDto.builder()
-	// 		.productCode(product.getCode())
-	// 		.deliveryTypeId(deliveryTypeId)
-	// 		.images(imageDtoList)
-	// 		.productName(product.getProductName())
-	// 		.productDetail(product.getProductDetail())
-	// 		.status(product.getStatus())
-	// 		.createdAt(product.getCreatedAt())
-	// 		.sellerId(seller.getSellerId())
-	// 		.sellerName(seller.getName())
-	// 		.originPrice(product.getPrice())
-	// 		.discountPrice(discount.getDiscountPrice())
-	// 		.discountRate(discount.getDiscountRate())
-	// 		.adultSales(product.getAdultSales())
-	// 		.avgScore(reviewScore.getAvgScore())
-	// 		.reviewCount(reviewScore.getReviewCount())
-	// 		.build();
-	// }
-	//
+
+	/**
+	 * 상품 리스트의 요약된 카드 형식 데이터 조회
+	 * @param productCode 상품 코드
+	 * @return
+	 */
+	public ProductSummaryDto getProductInfo(String productCode) {
+		Product product = productRepository.findByCode(productCode)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		// Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
+		// Seller seller = getSellerByProduct(product);
+		// Discount discount = getDiscountByProduct(product);
+		// ReviewScore reviewScore = getReviewScoreByProduct(product);
+		// String imageUrl = imageReposiroty.findByProductAndIsThumbnail(product, 1)
+		// 	.map(Image::getImageUrl)
+		// 	.orElse("defaultUrl");
+
+		return ProductSummaryDto.builder()
+			.productCode(product.getCode())
+			.productName(product.getProductName())
+			.status(product.getStatus())
+			.createdAt(product.getCreatedAt())
+			.originPrice(product.getPrice())
+			.adultSales(product.getAdultSales())
+			.build();
+	}
+
+	/**
+	 * 상품 상세 페이지의 상단 ~ 상품 디테일까지 조회
+	 * @param productCode 상품 코드
+	 * @return
+	 */
+	public ProductDetailDto getProductDetail(String productCode) {
+		Product product = productRepository.findByCode(productCode)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		// Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
+		// Seller seller = getSellerByProduct(product);
+		// Discount discount = getDiscountByProduct(product);
+		// ReviewScore reviewScore = getReviewScoreByProduct(product);
+		// List<ImageDto> imageDtoList = imageReposiroty.findAllByProduct(product)
+		// 	.stream()
+		// 	.map(image -> ImageDto.builder()
+		// 		.imageId(image.getImageId())
+		// 		.isThumbnail(image.getIsThumbnail())
+		// 		.seq(image.getSeq())
+		// 		.imageUrl(image.getImageUrl())
+		// 		.build())
+		// 	.toList();
+
+		return ProductDetailDto.builder()
+			.productCode(product.getCode())
+			.productName(product.getProductName())
+			.productDetail(product.getProductDetail())
+			.status(product.getStatus())
+			.createdAt(product.getCreatedAt())
+			.originPrice(product.getPrice())
+			.adultSales(product.getAdultSales())
+			.build();
+	}
+
 	// public Seller getSellerByProduct(Product product) {
 	// 	return sellerProductRepository.findByProduct(product)
 	// 		.map(SellerProduct::getSeller)
