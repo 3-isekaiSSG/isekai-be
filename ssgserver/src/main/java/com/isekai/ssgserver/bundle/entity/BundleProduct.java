@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.bundle.entity;
 
-import com.isekai.ssgserver.product.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,12 +33,11 @@ public class BundleProduct {
 	@Column(name = "is_cart")
 	private byte isCart;
 
+	@Column(name = "product_code")
+	private String productCode;
+
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bundle_id", nullable = false)
 	private Bundle bundle;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
 }
