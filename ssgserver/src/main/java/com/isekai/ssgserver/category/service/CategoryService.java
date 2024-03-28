@@ -95,31 +95,27 @@ public class CategoryService {
 	// 중분류
 	public CategoryMResponseDto getCategoryM(String largeName) {
 
-		try {
+		List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
+		List<CategoryMList> categoryMLists = new ArrayList<>();
 
-			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
-			List<CategoryMList> categoryMLists = new ArrayList<>();
+		AtomicInteger categoryListId = new AtomicInteger(0);
 
-			AtomicInteger categoryListId = new AtomicInteger(0);
+		categoryM.forEach(cm -> {
+			categoryMLists.add(CategoryMList.builder()
+				.id(categoryListId.getAndIncrement())
+				.categoryMId(cm.getCategoryMId())
+				.mediumName(cm.getMediumName())
+				.isColored(cm.getIsColored())
+				.mediumImg(cm.getMediumImg())
+				.build());
+		});
 
-			categoryM.forEach(cm -> {
-				categoryMLists.add(CategoryMList.builder()
-					.id(categoryListId.getAndIncrement())
-					.categoryMId(cm.getCategoryMId())
-					.mediumName(cm.getMediumName())
-					.isColored(cm.getIsColored())
-					.mediumImg(cm.getMediumImg())
-					.build());
-			});
+		return CategoryMResponseDto.builder()
+			.id(0)
+			.largeName(largeName)
+			.categoryMList(categoryMLists)
+			.build();
 
-			return CategoryMResponseDto.builder()
-				.id(0)
-				.largeName(largeName)
-				.categoryMList(categoryMLists)
-				.build();
-		} catch (Exception exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
 	}
 
 	// 소분류

@@ -54,12 +54,9 @@ public class CategoryController {
 	@Operation(summary = "카테고리 대분류 조회", description = "대분류만 내려줍니다.")
 	public ResponseEntity<List<CategoryLResponseDto>> getCategoryL() {
 
-		try {
-			List<CategoryLResponseDto> categoryLResponseDto = categoryService.getCategoryL();
-			return new ResponseEntity<>(categoryLResponseDto, HttpStatus.OK);
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		List<CategoryLResponseDto> categoryLResponseDto = categoryService.getCategoryL();
+		return new ResponseEntity<>(categoryLResponseDto, HttpStatus.OK);
+
 	}
 
 	// 카테고리 중분류 조회
@@ -67,12 +64,10 @@ public class CategoryController {
 	@Operation(summary = "카테고리 중분류 조회", description = "대분류 상품 전체보기 클릭시 나오는 중분류 이름 데이터를 내려줍니다.")
 	public ResponseEntity<CategoryMResponseDto> getCategoryM(@PathVariable String largeName) {
 
-		try {
-			CategoryMResponseDto categoryMResponseDto = categoryService.getCategoryM(largeName);
-			return new ResponseEntity<>(categoryMResponseDto, HttpStatus.OK);
-		} catch (CustomException exception) {
-			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-		}
+		String modifiedLargeName = largeName.replace('-', '/');  // largeName에 '-' 있으면 '/' 로 바꿔주는 작업
+
+		CategoryMResponseDto categoryMResponseDto = categoryService.getCategoryM(modifiedLargeName);
+		return new ResponseEntity<>(categoryMResponseDto, HttpStatus.OK);
 	}
 
 	// 카테고리 소분류 조회
