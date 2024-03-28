@@ -2,8 +2,6 @@ package com.isekai.ssgserver.member.entity;
 
 import java.time.LocalDateTime;
 
-import com.isekai.ssgserver.member.dto.WithdrawMemberDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -24,7 +21,6 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Setter
 @Table(name = "member")
 public class Member {
 
@@ -69,23 +65,23 @@ public class Member {
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updateAt;
 
-	public static Member toWithdrawMember(WithdrawMemberDto withdrawMemberDto) {
+	public static Member toWithdrawMember(Member withdrawMember) {
 		LocalDateTime currentTime = LocalDateTime.now();
 
-		Member member = new Member();
-		member.setMemberId(withdrawMemberDto.getMemberId());
-		member.setUuid(withdrawMemberDto.getUuid());
-		member.setAccountId(withdrawMemberDto.getAccountId());
-		member.setName(withdrawMemberDto.getName());
-		member.setPassword(withdrawMemberDto.getPassword());
-		member.setEmail(withdrawMemberDto.getEmail());
-		member.setPhone(withdrawMemberDto.getPhone());
-		member.setAddress(withdrawMemberDto.getAddress());
-		member.setGender(withdrawMemberDto.getGender());
-		member.setIsWithdraw((byte)1);
-		member.setWithdrawAt(currentTime);
-		member.setCreditedAt(withdrawMemberDto.getCreatedAt());
-		member.setUpdateAt(currentTime);
-		return member;
+		return Member.builder()
+			.memberId(withdrawMember.getMemberId())
+			.uuid(withdrawMember.getUuid())
+			.accountId(withdrawMember.getAccountId())
+			.name(withdrawMember.getName())
+			.password(withdrawMember.getPassword())
+			.email(withdrawMember.getEmail())
+			.phone(withdrawMember.getPhone())
+			.address(withdrawMember.getAddress())
+			.gender(withdrawMember.getGender())
+			.isWithdraw((byte)1)
+			.withdrawAt(currentTime)
+			.creditedAt(withdrawMember.getCreditedAt())
+			.updateAt(currentTime)
+			.build();
 	}
 }
