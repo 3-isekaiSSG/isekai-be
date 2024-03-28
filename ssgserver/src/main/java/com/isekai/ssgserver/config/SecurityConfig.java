@@ -9,8 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.isekai.ssgserver.jwt.filter.JwtAuthenticationFilter;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
+import com.isekai.ssgserver.util.jwt.JwtAuthenticationFilter;
+import com.isekai.ssgserver.util.jwt.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
+
 	private final JwtProvider jwtProvider;
 	private final CorsConfig corsConfig;
 
@@ -33,7 +33,8 @@ public class SecurityConfig {
 				// jwt 토큰 재발급
 				"/jwt/**",
 				// 전체 허용
-				"/**");
+				"/**"
+			);
 	}
 
 	// Http Security
