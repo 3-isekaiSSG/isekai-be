@@ -48,10 +48,10 @@ public class CategoryService {
 			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
 			List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
 					.id(categoryMListId.getAndIncrement())
-					.categoryMId(cm.getCategoryMId())
-					.mediumName(cm.getMediumName())
+					.categoryId(cm.getCategoryMId())
+					.name(cm.getMediumName())
 					.isColored(cm.getIsColored())
-					.mediumImg(cm.getMediumImg())
+					.img(cm.getMediumImg())
 					.build())
 				.toList();
 
@@ -76,18 +76,18 @@ public class CategoryService {
 		// "전체" 항목을 포함하는 CategoryLResponseDto 객체를 생성
 		CategoryLResponseDto whole = CategoryLResponseDto.builder()
 			.id(responseId.getAndIncrement())
-			.categoryLId(null)
-			.largeName("전체")
-			.largeImg("")
+			.categoryId(0L)
+			.name("전체")
+			.img("")
 			.build();
 
 		// 스트림 처리를 통해 기존 리스트에 "전체" 항목을 추가
 		List<CategoryLResponseDto> categoryLResponse = Stream.concat(Stream.of(whole),
 				categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
 					.id(responseId.getAndIncrement())
-					.categoryLId(cl.getCategoryLId())
-					.largeName(cl.getLargeName())
-					.largeImg(cl.getLargeImg())
+					.categoryId(cl.getCategoryLId())
+					.name(cl.getLargeName())
+					.img(cl.getLargeImg())
 					.build()))
 			.toList();
 
@@ -106,10 +106,10 @@ public class CategoryService {
 		categoryM.forEach(cm -> {
 			categoryMLists.add(CategoryMList.builder()
 				.id(categoryListId.getAndIncrement())
-				.categoryMId(cm.getCategoryMId())
-				.mediumName(cm.getMediumName())
+				.categoryId(cm.getCategoryMId())
+				.name(cm.getMediumName())
 				.isColored(cm.getIsColored())
-				.mediumImg(cm.getMediumImg())
+				.img(cm.getMediumImg())
 				.build());
 		});
 
@@ -132,8 +132,8 @@ public class CategoryService {
 		categoryS.forEach(cs -> {
 			categorySLists.add(CategorySList.builder()
 				.id(categoryListId.getAndIncrement())
-				.categorySId(cs.getCategorySId())
-				.smallName(cs.getSmallName())
+				.categoryId(cs.getCategorySId())
+				.name(cs.getSmallName())
 				.build());
 		});
 
