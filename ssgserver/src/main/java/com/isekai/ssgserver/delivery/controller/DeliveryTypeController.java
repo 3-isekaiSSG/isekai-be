@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/delivery-type")
+@RequestMapping("/delivery-types")
 @Tag(name = "Delivery Type", description = "배송 유형 조회 API document")
 public class DeliveryTypeController {
 
