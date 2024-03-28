@@ -32,16 +32,29 @@ public class WithdrawService {
 	}
 
 	@Transactional
-	public void withdrawUpdate(Long id) {
+	public void withdrawUpdate(String uuid) {
 		/*
 		 * 1. 회원 찾기
 		 * 2. 탈퇴여부 0 -> 1로 수정, 탈퇴일시, 수정일자 업데이트
 		 *  - is_withdraw, withdraw_at, updated_at
 		 */
-		Member member = memberRepository.findById(id)
+		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-		Member member1 = Member.toWithdrawMember(member);
-		memberRepository.save(member1);
+
+		Member withdrawMember = Member.builder()
+			.memberId(member.getMemberId())
+			.uuid(member.getUuid())
+			.accountId(member.getAccountId())
+			.name((member.getName()))
+			.password(member.getPassword())
+			.email(member.getEmail())
+			.phone(member.getPhone())
+			.address(member.getAddress())
+			.gender(member.getGender())
+			.isWithdraw((byte)1)
+			.build();
+
+		memberRepository.save(withdrawMember);
 	}
 
 	@Transactional

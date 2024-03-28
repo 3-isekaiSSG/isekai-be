@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@Builder
+@AllArgsConstructor
 @Getter
 @Table(name = "member")
 public class Member extends BaseEntity {
@@ -52,47 +55,5 @@ public class Member extends BaseEntity {
 
 	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;
-
-	// @Column(name = "withdraw_at")
-	// private LocalDateTime withdrawAt;
-	@Builder
-	public Member(String uuid, String accountId, String name, String password, String email, String phone,
-		String address,
-		byte gender, byte isWithdraw) {
-		this.uuid = uuid;
-		this.accountId = accountId;
-		this.name = name;
-		this.password = password;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-		this.gender = gender;
-		this.isWithdraw = isWithdraw;
-	}
-
-	// @Column(name = "credited_at", nullable = false)
-	// private LocalDateTime creditedAt;
-	//
-	// @Column(name = "updated_at", nullable = false)
-	// private LocalDateTime updateAt;
-
-	public static Member toWithdrawMember(Member withdrawMember) {
-		LocalDateTime currentTime = LocalDateTime.now();
-
-		return Member.builder()
-			.memberId(withdrawMember.getMemberId())
-			.uuid(withdrawMember.getUuid())
-			.accountId(withdrawMember.getAccountId())
-			.name(withdrawMember.getName())
-			.password(withdrawMember.getPassword())
-			.email(withdrawMember.getEmail())
-			.phone(withdrawMember.getPhone())
-			.address(withdrawMember.getAddress())
-			.gender(withdrawMember.getGender())
-			.isWithdraw((byte)1)
-			.withdrawAt(currentTime)
-			.creditedAt(withdrawMember.getCreditedAt())
-			.updateAt(currentTime)
-			.build();
-	}
+	
 }

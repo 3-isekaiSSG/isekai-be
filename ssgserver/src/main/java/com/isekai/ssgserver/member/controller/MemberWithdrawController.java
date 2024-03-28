@@ -33,12 +33,12 @@ public class MemberWithdrawController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/{id}")
+	@PostMapping("/{uuid}")
 	@Operation(summary = "회원 탈퇴로 변경", description = "해당 하는 회원 상태값을 탈퇴로 변경합니다.")
-	public ResponseEntity<Object> withdrawUpdate(@PathVariable Long id) {
+	public ResponseEntity<Object> withdrawUpdate(@PathVariable String uuid) {
 		log.info("MemberWithdrawController.withdrawUpdate");
-		log.info("id = {}", id);
-		withdrawService.withdrawUpdate(id);
+		log.info("uuid = {}", uuid);
+		withdrawService.withdrawUpdate(uuid);
 		return ResponseEntity.ok().build();
 	}
 
