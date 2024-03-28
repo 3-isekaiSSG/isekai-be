@@ -47,7 +47,8 @@ public class CategoryService {
 				String largeName = cl.getLargeName();
 				AtomicInteger categoryMListId = new AtomicInteger(0);
 
-				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
+				List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
+					.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 				List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
 						.id(categoryMListId.getAndIncrement())
 						.categoryMId(cm.getCategoryMId())
@@ -95,7 +96,8 @@ public class CategoryService {
 	// 중분류
 	public CategoryMResponseDto getCategoryM(String largeName) {
 
-		List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
+		List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 		List<CategoryMList> categoryMLists = new ArrayList<>();
 
 		AtomicInteger categoryListId = new AtomicInteger(0);
