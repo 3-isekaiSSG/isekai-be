@@ -3,6 +3,7 @@ package com.isekai.ssgserver.category.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -72,13 +73,25 @@ public class CategoryService {
 		List<CategoryL> categoriesL = categoryLRepository.findAll();
 		AtomicInteger responseId = new AtomicInteger();
 
-		return categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
-				.id(responseId.getAndIncrement())
-				.categoryLId(cl.getCategoryLId())
-				.largeName(cl.getLargeName())
-				.largeImg(cl.getLargeImg())
-				.build())
+		// "전체" 항목을 포함하는 CategoryLResponseDto 객체를 생성
+		CategoryLResponseDto whole = CategoryLResponseDto.builder()
+			.id(responseId.getAndIncrement())
+			.categoryLId(null)
+			.largeName("전체")
+			.largeImg("")
+			.build();
+
+		// 스트림 처리를 통해 기존 리스트에 "전체" 항목을 추가
+		List<CategoryLResponseDto> categoryLResponse = Stream.concat(Stream.of(whole),
+				categoriesL.stream().map(cl -> CategoryLResponseDto.builder()
+					.id(responseId.getAndIncrement())
+					.categoryLId(cl.getCategoryLId())
+					.largeName(cl.getLargeName())
+					.largeImg(cl.getLargeImg())
+					.build()))
 			.toList();
+
+		return categoryLResponse;
 
 	}
 
