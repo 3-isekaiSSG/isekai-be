@@ -1,18 +1,7 @@
-package com.isekai.ssgserver.jwt.filter;
+package com.isekai.ssgserver.util.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isekai.ssgserver.exception.common.CustomException;
-import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.exception.dto.ErrorDto;
-import com.isekai.ssgserver.jwt.dto.AuthDto;
-import com.isekai.ssgserver.jwt.service.JwtProvider;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +10,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.exception.dto.ErrorDto;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -39,8 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			String token = request.getHeader("Authorization");
 			Authentication auth = null; //인증 정보를 저장
+			if (token == null) {
+				throw new CustomException(ErrorCode.NO_AUTHORITY);
+			}
 
-			if (token != null && jwtProvider.verifyToken(token)) {
+			if (jwtProvider.verifyToken(token)) {
 				System.out.println("받은 token : " + token);
 
 				//token 으로 id 읽어오기
@@ -60,8 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				}
 				//securityContext 에 auth 정보 저장
 				SecurityContextHolder.getContext().setAuthentication(auth);
+				filterChain.doFilter(request, response);
 			}
-			filterChain.doFilter(request, response);
 		} catch (CustomException e) {
 			/* - verify token 과정에서 exception 발생한 경우 해당 내용 response
 			 *  1. 유효하지만, 인증 기간이 만료된 경우

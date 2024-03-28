@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.member.entity;
 
+import com.isekai.ssgserver.common.BaseEntity;
 import com.isekai.ssgserver.member.dto.WithdrawInfoDto;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "withdraw_info")
-public class WithdrawInfo {
+public class WithdrawInfo extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +41,5 @@ public class WithdrawInfo {
 			.reason(withdrawInfoDto.getReason())
 			.build();
 	}
+
 }

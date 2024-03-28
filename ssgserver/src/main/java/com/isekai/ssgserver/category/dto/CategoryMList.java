@@ -11,4 +11,5 @@ public class CategoryMList {
 	private Long categoryMId;
 	private String mediumName;
 	private boolean isColored;
+	private String mediumImg;
 }

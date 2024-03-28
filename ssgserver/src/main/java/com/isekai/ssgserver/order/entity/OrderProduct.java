@@ -1,7 +1,6 @@
 package com.isekai.ssgserver.order.entity;
 
 import com.isekai.ssgserver.delivery.entity.Delivery;
-import com.isekai.ssgserver.product.entity.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,11 +41,11 @@ public class OrderProduct {
 	@Column(name = "is_confirm", nullable = false)
 	private byte is_confirm;
 
+	@Column(name = "product_code")
+	private String productCode;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "delivery_id", nullable = false)
 	private Delivery delivery;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
@@ -48,13 +49,26 @@ public class CategoryController {
 		}
 	}
 
-	// 카테고리 중분류 조회
-	@GetMapping("/medium/{categoryLId}")
-	@Operation(summary = "카테고리 중분류 조회", description = "대분류 상품 전체보기 클릭시 나오는 중분류 이름 데이터를 내려줍니다.")
-	public ResponseEntity<CategoryMResponseDto> getCategoryM(@PathVariable Long categoryLId) {
+	// 카테고리 대분류 조회
+	@GetMapping("/large")
+	@Operation(summary = "카테고리 대분류 조회", description = "대분류만 내려줍니다.")
+	public ResponseEntity<List<CategoryLResponseDto>> getCategoryL() {
 
 		try {
-			CategoryMResponseDto categoryMResponseDto = categoryService.getCategoryM(categoryLId);
+			List<CategoryLResponseDto> categoryLResponseDto = categoryService.getCategoryL();
+			return new ResponseEntity<>(categoryLResponseDto, HttpStatus.OK);
+		} catch (CustomException exception) {
+			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+		}
+	}
+
+	// 카테고리 중분류 조회
+	@GetMapping("/medium/{largeName}")
+	@Operation(summary = "카테고리 중분류 조회", description = "대분류 상품 전체보기 클릭시 나오는 중분류 이름 데이터를 내려줍니다.")
+	public ResponseEntity<CategoryMResponseDto> getCategoryM(@PathVariable String largeName) {
+
+		try {
+			CategoryMResponseDto categoryMResponseDto = categoryService.getCategoryM(largeName);
 			return new ResponseEntity<>(categoryMResponseDto, HttpStatus.OK);
 		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
@@ -62,12 +76,12 @@ public class CategoryController {
 	}
 
 	// 카테고리 소분류 조회
-	@GetMapping("/small/{categoryMId}")
+	@GetMapping("/small/{mediumName}")
 	@Operation(summary = "카테고리 소분류 조회", description = "중분류 상품 조회시 나오는 소분류 이름 데이터를 내려줍니다.")
-	public ResponseEntity<CategorySResponseDto> getCategoryS(@PathVariable Long categoryMId) {
+	public ResponseEntity<CategorySResponseDto> getCategoryS(@PathVariable String mediumName) {
 
 		try {
-			CategorySResponseDto categorySResponseDto = categoryService.getCategoryS(categoryMId);
+			CategorySResponseDto categorySResponseDto = categoryService.getCategoryS(mediumName);
 			return new ResponseEntity<>(categorySResponseDto, HttpStatus.OK);
 		} catch (CustomException exception) {
 			throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);

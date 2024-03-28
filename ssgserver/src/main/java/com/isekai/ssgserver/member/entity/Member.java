@@ -1,6 +1,6 @@
 package com.isekai.ssgserver.member.entity;
 
-import java.time.LocalDateTime;
+import com.isekai.ssgserver.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,20 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString
 @Getter
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,14 +53,28 @@ public class Member {
 	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;
 
-	@Column(name = "withdraw_at")
-	private LocalDateTime withdrawAt;
+	// @Column(name = "withdraw_at")
+	// private LocalDateTime withdrawAt;
+	@Builder
+	public Member(String uuid, String accountId, String name, String password, String email, String phone,
+		String address,
+		byte gender, byte isWithdraw) {
+		this.uuid = uuid;
+		this.accountId = accountId;
+		this.name = name;
+		this.password = password;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+		this.gender = gender;
+		this.isWithdraw = isWithdraw;
+	}
 
-	@Column(name = "credited_at", nullable = false)
-	private LocalDateTime creditedAt;
-
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updateAt;
+	// @Column(name = "credited_at", nullable = false)
+	// private LocalDateTime creditedAt;
+	//
+	// @Column(name = "updated_at", nullable = false)
+	// private LocalDateTime updateAt;
 
 	public static Member toWithdrawMember(Member withdrawMember) {
 		LocalDateTime currentTime = LocalDateTime.now();

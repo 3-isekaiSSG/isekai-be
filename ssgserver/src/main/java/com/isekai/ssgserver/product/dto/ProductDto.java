@@ -13,15 +13,15 @@ import lombok.Getter;
 @Builder
 public class ProductDto {
 
-	// private Long id;
+	private Long id;
 	private Long productId;
 	private String productName;
 	private int price;
 	private int adultSales;
 	private int status;
 
-	private List<DiscountDto> discounts;
-	private List<ReviewScoreDto> reviews;
-	private List<SellerDto> sellers;
-	private List<DeliveryTypeDto> deliveryTypes;
+	private List<DiscountDto.Response> discounts;
+	private List<ReviewScoreDto.Response> reviews;
+	private List<SellerDto.Response> sellers;
+	private List<DeliveryTypeDto.Response> deliveryTypes;
 }
