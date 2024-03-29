@@ -152,11 +152,7 @@ public class ProductService {
 			.build();
 	}
 
-	// public Seller getSellerByProduct(Product product) {
-	// 	return sellerProductRepository.findByProduct(product)
-	// 		.map(SellerProduct::getSeller)
-	// 		.orElse(null);
-	// }
+
 	//
 	// public Discount getDiscountByProduct(Product product) {
 	// 	return discountRepository.findByProduct(product)
