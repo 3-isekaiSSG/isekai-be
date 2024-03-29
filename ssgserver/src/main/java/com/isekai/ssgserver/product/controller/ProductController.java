@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.controller;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
+import com.isekai.ssgserver.product.dto.DiscountDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,5 +53,12 @@ public class ProductController {
 	public ResponseEntity<?> getProductDetail(@PathVariable String productCode) {
 		ProductDetailDto productDetailDto = productService.getProductDetail(productCode);
 		return ResponseEntity.ok(productDetailDto);
+	}
+
+	@GetMapping("/{productCode}/discount")
+	@Operation(summary = "할인 조회 - 단일 상품", description = "상품코드로 할인율, 할인가 조회")
+	public ResponseEntity<DiscountDto> getProductDeliveryType(@PathVariable String productCode) {
+		DiscountDto discountDto = productService.getDiscountByProduct(productCode);
+		return ResponseEntity.ok(discountDto);
 	}
 }

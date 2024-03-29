@@ -14,6 +14,6 @@ public interface ProductDeliveryTypeRepository extends JpaRepository<ProductDeli
 	// List<DeliveryType> findByProductId(Long productId);
 
 	@EntityGraph(attributePaths = {"deliveryType"})
-	Optional<ProductDeliveryType> findFirstByProductCode(String productCode);
+	Optional<ProductDeliveryType> findByProductCode(String productCode);
 }
 

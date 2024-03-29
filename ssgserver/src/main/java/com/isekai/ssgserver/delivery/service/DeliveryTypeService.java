@@ -19,7 +19,7 @@ public class DeliveryTypeService {
 
 	public DeliveryTypeDto getDeliveryTypeIdByProduct(String productCode) {
 
-		return productDeliveryTypeRepository.findFirstByProductCode(productCode)
+		return productDeliveryTypeRepository.findByProductCode(productCode)
 			.map(dt -> DeliveryTypeDto.builder()
 				.deliveryTypeId(dt.getDeliveryType().getDeliveryTypeId())
 				.name(dt.getDeliveryType().getName())

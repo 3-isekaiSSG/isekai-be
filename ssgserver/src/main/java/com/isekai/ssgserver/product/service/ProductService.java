@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.service;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
+import com.isekai.ssgserver.product.dto.DiscountDto;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
@@ -150,6 +152,16 @@ public class ProductService {
 			.originPrice(product.getPrice())
 			.adultSales(product.getAdultSales())
 			.build();
+	}
+
+	public DiscountDto getDiscountByProduct(String productCode) {
+
+		return discountRepository.findByProductCode(productCode)
+				.map(d -> DiscountDto.builder()
+						.discountRate(d.getDiscountRate())
+						.discountPrice(d.getDiscountPrice())
+						.build())
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
 
 
