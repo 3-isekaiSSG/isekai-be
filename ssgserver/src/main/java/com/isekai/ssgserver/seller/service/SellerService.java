@@ -20,6 +20,7 @@ public class SellerService {
     public SellerDto getSellerByProduct(String productCode) {
         return sellerProductRepository.findByProductCode(productCode)
                 .map(s -> SellerDto.builder()
+                        .sellerId(s.getSeller().getSellerId())
                         .name(s.getSeller().getName())
                         .build())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));

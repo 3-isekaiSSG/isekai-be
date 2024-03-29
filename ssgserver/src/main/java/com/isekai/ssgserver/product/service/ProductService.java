@@ -103,13 +103,6 @@ public class ProductService {
 	public ProductSummaryDto getProductInfo(String productCode) {
 		Product product = productRepository.findByCode(productCode)
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-		// Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
-		// Seller seller = getSellerByProduct(product);
-		// Discount discount = getDiscountByProduct(product);
-		// ReviewScore reviewScore = getReviewScoreByProduct(product);
-		// String imageUrl = imageReposiroty.findByProductAndIsThumbnail(product, 1)
-		// 	.map(Image::getImageUrl)
-		// 	.orElse("defaultUrl");
 
 		return ProductSummaryDto.builder()
 				.productCode(product.getCode())
@@ -129,19 +122,6 @@ public class ProductService {
 	public ProductDetailDto getProductDetail(String productCode) {
 		Product product = productRepository.findByCode(productCode)
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-		// Long deliveryTypeId = getDeliveryTypeIdByProduct(product);
-		// Seller seller = getSellerByProduct(product);
-		// Discount discount = getDiscountByProduct(product);
-		// ReviewScore reviewScore = getReviewScoreByProduct(product);
-		// List<ImageDto> imageDtoList = imageReposiroty.findAllByProduct(product)
-		// 	.stream()
-		// 	.map(image -> ImageDto.builder()
-		// 		.imageId(image.getImageId())
-		// 		.isThumbnail(image.getIsThumbnail())
-		// 		.seq(image.getSeq())
-		// 		.imageUrl(image.getImageUrl())
-		// 		.build())
-		// 	.toList();
 
 		return ProductDetailDto.builder()
 				.productCode(product.getCode())
@@ -154,6 +134,11 @@ public class ProductService {
 				.build();
 	}
 
+	/**
+	 * 상품의 할인 정보 조회(할인율, 할인가)
+	 * @param productCode
+	 * @return
+	 */
 	public DiscountDto getDiscountByProduct(String productCode) {
 
 		return discountRepository.findByProductCode(productCode)
@@ -164,6 +149,11 @@ public class ProductService {
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
 
+	/**
+	 * 상품의 리뷰 집계 조회 (총 리뷰 개수, 리뷰 평점)
+	 * @param productCode
+	 * @return
+	 */
 	public ReviewScoreDto getReviewScoreByProduct(String productCode) {
 
 		return reviewScoreRepository.findByProductCode(productCode)

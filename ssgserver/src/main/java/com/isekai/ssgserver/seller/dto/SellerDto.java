@@ -9,5 +9,6 @@ import lombok.ToString;
 @ToString
 public class SellerDto {
 
+    private Long sellerId;
     private String name;
 }
