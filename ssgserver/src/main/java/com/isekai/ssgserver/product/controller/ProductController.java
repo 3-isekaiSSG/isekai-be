@@ -57,14 +57,14 @@ public class ProductController {
 	}
 
 	@GetMapping("/{productCode}/discount")
-	@Operation(summary = "할인 조회 - 단일 상품", description = "상품코드로 할인율, 할인가 조회")
+	@Operation(summary = "상품 할인 조회 - 단일 상품", description = "상품코드로 할인율, 할인가 조회")
 	public ResponseEntity<DiscountDto> getDiscount(@PathVariable String productCode) {
 		DiscountDto discountDto = productService.getDiscountByProduct(productCode);
 		return ResponseEntity.ok(discountDto);
 	}
 
 	@GetMapping("/{productCode}/review-score")
-	@Operation(summary = "리뷰 집계 조회 - 단일 상품", description = "상품코드로 할인율, 할인가 조회")
+	@Operation(summary = "상품 리뷰 집계 조회 - 단일 상품", description = "상품코드로 할인율, 할인가 조회")
 	public ResponseEntity<ReviewScoreDto> getReviewScore(@PathVariable String productCode) {
 		ReviewScoreDto reviewScoreDto = productService.getReviewScoreByProduct(productCode);
 		return ResponseEntity.ok(reviewScoreDto);

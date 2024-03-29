@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class ImageDto {
 
-	private Long imageId;
 	private byte isThumbnail;
 	private byte seq;
 	private String imageUrl;
