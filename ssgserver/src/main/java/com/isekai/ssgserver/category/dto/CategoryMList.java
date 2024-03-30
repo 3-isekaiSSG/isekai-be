@@ -8,8 +8,8 @@ import lombok.Getter;
 public class CategoryMList {
 
 	private int id;
-	private Long categoryMId;
-	private String mediumName;
+	private Long categoryId;
+	private String name;
 	private boolean isColored;
-	private String mediumImg;
+	private String img;
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 public class CategoryLResponseDto {
 
 	private int id;
-	private Long categoryLId;
-	private String largeName;
-	private String largeImg;
+	private Long categoryId;
+	private String name;
+	private String img;
 }
