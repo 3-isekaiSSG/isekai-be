@@ -143,6 +143,7 @@ public class ProductService {
 
 		return discountRepository.findByProductCode(productCode)
 				.map(d -> DiscountDto.builder()
+						.discounted(d.getDiscountRate() == 0 ? false : true)
 						.discountRate(d.getDiscountRate())
 						.discountPrice(d.getDiscountPrice())
 						.build())

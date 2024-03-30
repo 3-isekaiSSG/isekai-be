@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class DiscountDto {
 
+    private boolean discounted;
     private int discountRate;
     private int discountPrice;
 
