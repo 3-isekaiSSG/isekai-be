@@ -23,10 +23,10 @@ public class ProductController {
 
 	private final ProductService productService;
 
-	// return 값 명시 수정하기
+	// 카테고리 상품 조회
 	@GetMapping
 	@Operation(summary = "카테고리 상품 리스트", description = "카테고리 별 상품 리스트를 내려주고, 정렬과 필터링 가능합니다.")
-	public ResponseEntity<?> getCategoryProduct(
+	public ResponseEntity<CategoryProductResponseDto> getCategoryProduct(
 		@RequestParam(value = "largeName") String largeName,
 		@RequestParam(value = "mediumName") String mediumName,
 		@RequestParam(value = "smallName", required = false) String smallName,
@@ -40,7 +40,7 @@ public class ProductController {
 
 		String modifiedLargeName = largeName.replace('-', '/');
 		String modifiedMediumName = mediumName.replace('-', '/');
-		String modifiedSmallName = smallName.replace('-', '/');
+		String modifiedSmallName = (smallName != null) ? smallName.replace('-', '/') : null;
 
 		CategoryProductResponseDto categoryProductResponse = productService.getCategoryProduct(modifiedLargeName,
 			modifiedMediumName, modifiedSmallName, index, criteria, brandName, dType, minPrc, maxPrc);
