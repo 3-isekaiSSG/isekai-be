@@ -11,5 +11,5 @@ import com.isekai.ssgserver.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("SELECT m FROM Member m WHERE m.uuid = :uuid")
 	Optional<Member> findByUuid(@Param("uuid") String uuid);
-	Optional<Member> findByAccountId(@Param("account_id") String accountId);
+	Optional<Member> findByAccountId(String accountId);
 }
