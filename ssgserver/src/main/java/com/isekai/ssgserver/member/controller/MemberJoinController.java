@@ -3,7 +3,6 @@ package com.isekai.ssgserver.member.controller;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
-import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.service.JoinService;
 import com.isekai.ssgserver.util.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
