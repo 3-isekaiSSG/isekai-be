@@ -18,9 +18,9 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-@Builder
 @AllArgsConstructor
 @Getter
+@Builder
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -47,13 +47,12 @@ public class Member extends BaseEntity {
 	@Column(name = "phone", nullable = false)
 	private String phone;
 
-	@Column(name = "address", nullable = false)
+	@Column(name = "address")
 	private String address;
 
-	@Column(name = "gender", nullable = false)
+	@Column(name = "gender")
 	private byte gender;
 
 	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;
-	
 }

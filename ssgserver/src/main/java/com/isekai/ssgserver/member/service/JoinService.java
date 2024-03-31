@@ -1,0 +1,36 @@
+package com.isekai.ssgserver.member.service;
+
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.member.dto.MemberJoinDto;
+import com.isekai.ssgserver.member.entity.Member;
+import com.isekai.ssgserver.member.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class JoinService {
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public void isDuplicate(String accountId) {
+        Optional<Member> existingMember = memberRepository.findByAccountId(accountId);
+        if (existingMember.isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
+        }
+    }
+
+    public void join(MemberJoinDto joinDto) {
+        // 가입 정보 저장 + 비밀번호는 암호화해서 저장
+        String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
+
+        Member member = joinDto.toEntity(encodedPassword);
+        memberRepository.save(member);
+    }
+}
