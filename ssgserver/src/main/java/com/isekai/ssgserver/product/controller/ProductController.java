@@ -51,7 +51,7 @@ public class ProductController {
 
 	@GetMapping("/{productCode}/detail")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 페이지에서 사용되는 자세한 정보입니다.")
-	public ResponseEntity<?> getProductDetail(@PathVariable String productCode) {
+	public ResponseEntity<ProductDetailDto> getProductDetail(@PathVariable String productCode) {
 		ProductDetailDto productDetailDto = productService.getProductDetail(productCode);
 		return ResponseEntity.ok(productDetailDto);
 	}
