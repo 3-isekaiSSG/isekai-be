@@ -107,7 +107,7 @@ public class CategoryProductCustomRepository extends QuerydslRepositorySupport {
 
 		// 할인가가 존재하는지 체크하고 가격 정렬시 할인가 사용
 		NumberExpression<Integer> effectivePrice = new CaseBuilder()
-			.when(discount.discountRate.isNotNull()).then(discount.discountPrice)
+			.when(discount.discountRate.gt(0)).then(discount.discountPrice)
 			.otherwise(product.price);
 
 		switch (criteria) {
@@ -153,7 +153,7 @@ public class CategoryProductCustomRepository extends QuerydslRepositorySupport {
 
 		// 할인가가 존재하는지 체크하고 가격 정렬시 할인가 사용
 		NumberExpression<Integer> effectivePrice = new CaseBuilder()
-			.when(discount.discountRate.isNotNull()).then(discount.discountPrice)
+			.when(discount.discountRate.gt(0)).then(discount.discountPrice)
 			.otherwise(product.price);
 
 		if (minPrc != null && maxPrc != null) {
