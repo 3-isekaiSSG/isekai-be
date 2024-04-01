@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isekai.ssgserver.product.dto.CategoryProductResponseDto;
 import com.isekai.ssgserver.product.dto.DiscountDto;
 import com.isekai.ssgserver.product.dto.ProductDetailDto;
+import com.isekai.ssgserver.product.dto.ProductSortOptionResponseDto;
 import com.isekai.ssgserver.product.dto.ProductSummaryDto;
 import com.isekai.ssgserver.product.dto.ReviewScoreDto;
 import com.isekai.ssgserver.product.service.ProductService;
@@ -81,5 +84,12 @@ public class ProductController {
 
 	}
 
+	@GetMapping("/products/sort")
+	@Operation(summary = "상품 정렬 목록", description = "best: 추천순, prcasc: 가격낮은순, prcdsc: 가격높은순, sale: 판매순, dcrt: 할인율순, regdt: 신상품순, cnt: 리뷰많은순")
+	public ResponseEntity<List<ProductSortOptionResponseDto>> getProductSortOption() {
+
+		List<ProductSortOptionResponseDto> sortOptions = productService.getProductSortOption();
+		return ResponseEntity.ok(sortOptions);
+	}
 }
 
