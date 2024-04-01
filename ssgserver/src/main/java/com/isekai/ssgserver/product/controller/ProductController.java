@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.product.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
 import com.isekai.ssgserver.product.dto.DiscountDto;
 import com.isekai.ssgserver.product.dto.ReviewScoreDto;
@@ -7,10 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.isekai.ssgserver.product.dto.CategoryProductResponseDto;
 
 import com.isekai.ssgserver.product.dto.ProductDetailDto;
 import com.isekai.ssgserver.product.dto.ProductSummaryDto;
+
 import com.isekai.ssgserver.product.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,20 +33,28 @@ public class ProductController {
 
 	private final ProductService productService;
 
-	// 카테고리 중분류 상품 조회
-	// @GetMapping("/medium/{mediumName}")
-	// @Operation(summary = "카테고리 중분류 상품 조회", description = "카테고리 중분류별 상품 데이터 입니다.")
-	// public ResponseEntity<ProductMResponseDto> getCategoryMProduct(@PathVariable String mediumName,
-	// 	@RequestParam(required = false, defaultValue = "0", value = "page") int index,
-	// 	@RequestParam(required = false, value = "sort") String sortCriteria) {
-	//
-	// 	try {
-	// 		ProductMResponseDto productsM = productService.getProductsM(mediumName, index);
-	// 		return new ResponseEntity<>(productsM, HttpStatus.OK);
-	// 	} catch (CustomException exception) {
-	// 		throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
-	// 	}
-	// }
+	// 카테고리 상품 조회
+	@GetMapping
+	@Operation(summary = "카테고리 상품 리스트", description = "카테고리 별 상품 리스트를 내려주고, 정렬과 필터링 가능합니다.")
+	public ResponseEntity<CategoryProductResponseDto> getCategoryProduct(
+		@RequestParam(value = "largeName") String largeName,
+		@RequestParam(value = "mediumName") String mediumName,
+		@RequestParam(value = "smallName", required = false) String smallName,
+		@RequestParam(value = "page", required = false, defaultValue = "0") Integer index,
+		@RequestParam(value = "sort", required = false) String criteria,
+		@RequestParam(value = "brandName", required = false) String brandName,
+		@RequestParam(value = "dType", required = false) String dType,
+		@RequestParam(value = "minPrc", required = false) Integer minPrc,
+		@RequestParam(value = "maxPrc", required = false) Integer maxPrc
+	) {
+
+		String modifiedLargeName = largeName.replace('-', '/');
+		String modifiedMediumName = mediumName.replace('-', '/');
+		String modifiedSmallName = (smallName != null) ? smallName.replace('-', '/') : null;
+
+		CategoryProductResponseDto categoryProductResponse = productService.getCategoryProduct(modifiedLargeName,
+			modifiedMediumName, modifiedSmallName, index, criteria, brandName, dType, minPrc, maxPrc);
+		return ResponseEntity.ok(categoryProductResponse);
 
 	@GetMapping("/{productCode}")
 	@Operation(summary = "상품 데이터 조회 - 카드 형식", description = "홈, 카테고리, 찜 등등 페이지에서 카드 형식의 상품 표시를 위해 사용됩니다.")
@@ -68,5 +82,6 @@ public class ProductController {
 	public ResponseEntity<ReviewScoreDto> getReviewScore(@PathVariable String productCode) {
 		ReviewScoreDto reviewScoreDto = productService.getReviewScoreByProduct(productCode);
 		return ResponseEntity.ok(reviewScoreDto);
+
 	}
 }

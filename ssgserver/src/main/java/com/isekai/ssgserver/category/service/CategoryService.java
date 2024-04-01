@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMList;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
-import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySList;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
 import com.isekai.ssgserver.category.entity.CategoryL;
@@ -31,41 +30,6 @@ public class CategoryService {
 	private final CategoryLRepository categoryLRepository;
 	private final CategoryMRepository categoryMRepository;
 	private final CategorySRepository categorySRepository;
-
-	// 대,중분류
-	public List<CategoryResponseDto> getCategory() {
-
-		List<CategoryL> categoriesL = categoryLRepository.findAll();
-
-		List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
-
-		AtomicInteger responseDtoId = new AtomicInteger(0);
-
-		for (CategoryL cl : categoriesL) {
-			String largeName = cl.getLargeName();
-			AtomicInteger categoryMListId = new AtomicInteger(0);
-
-			List<CategoryM> categoryM = categoryMRepository.findAllByCategoryLLargeName(largeName);
-			List<CategoryMList> categoryMLists = categoryM.stream().map(cm -> CategoryMList.builder()
-					.id(categoryMListId.getAndIncrement())
-					.categoryId(cm.getCategoryMId())
-					.name(cm.getMediumName())
-					.isColored(cm.getIsColored())
-					.img(cm.getMediumImg())
-					.build())
-				.toList();
-
-			categoryResponseDtoList.add(CategoryResponseDto.builder()
-				.id(responseDtoId.getAndIncrement())
-				.categoryLId(cl.getCategoryLId())
-				.largeName(cl.getLargeName())
-				.largeImg(cl.getLargeImg())
-				.categoryMList(categoryMLists)
-				.build()
-			);
-		}
-		return categoryResponseDtoList;
-	}
 
 	// 대분류
 	public List<CategoryLResponseDto> getCategoryL() {
