@@ -1,4 +1,4 @@
-package com.isekai.ssgserver.review.entity;
+package com.isekai.ssgserver.product.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

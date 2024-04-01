@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
-import com.isekai.ssgserver.category.dto.CategoryResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
 import com.isekai.ssgserver.category.service.CategoryService;
 
@@ -27,22 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "Category", description = "각 카테고리 조회 API document")
 public class CategoryController {
 
-	// @Autowired
 	private final CategoryService categoryService;
-
-	// public CategoryController(CategoryService categoryService) {
-	// 	this.categoryService = categoryService;
-	// }
-
-	// 카테고리 대,중분류
-	@GetMapping
-	@Operation(summary = "카테고리 대,중분류 이름", description = "하단 카테고리 클릭시 나오는 대,중분류 이름 데이터를 내려줍니다.")
-	public ResponseEntity<List<CategoryResponseDto>> getCategory() {
-
-		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategory();
-		return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
-
-	}
 
 	// 카테고리 대분류 조회
 	@GetMapping("/large")

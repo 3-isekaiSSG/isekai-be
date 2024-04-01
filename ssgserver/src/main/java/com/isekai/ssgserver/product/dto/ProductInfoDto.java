@@ -7,10 +7,8 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class DiscountDto {
+public class ProductInfoDto {
 
-    private boolean discounted;
-    private int discountRate;
-    private int discountPrice;
-
+	private Integer id;
+	private String code;
 }
