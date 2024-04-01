@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/members/info")
 @Slf4j
-@Tag(name = "MemberInfo", description = "비밀번호 재설정, 아이디 가입시 중복조회")
+@Tag(name = "MemberInfo", description = "비밀번호 재설정, 아이디 찾기")
 public class MemberInfoController {
 
 	private final MemberInfoService memberInfoService;
