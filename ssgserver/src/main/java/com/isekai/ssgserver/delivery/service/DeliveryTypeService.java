@@ -1,6 +1,7 @@
 package com.isekai.ssgserver.delivery.service;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,26 @@ public class DeliveryTypeService {
 
 		return productDeliveryTypeRepository.findByProductCode(productCode)
 			.map(dt -> DeliveryTypeDto.builder()
+				.id(0)
 				.deliveryTypeId(dt.getDeliveryType().getDeliveryTypeId())
 				.name(dt.getDeliveryType().getName())
+				.imageUrl(dt.getDeliveryType().getImageUrl())
+				.selectedImageUrl(dt.getDeliveryType().getSelectedImageUrl())
 				.build())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
 
 	public List<DeliveryTypeDto> getDeliveryTypeList() {
+		AtomicInteger dtId = new AtomicInteger(0);
 
 		return deliveryTypeRepository.findAll()
 			.stream()
 			.map(dt -> DeliveryTypeDto.builder()
+				.id(dtId.getAndIncrement())
 				.deliveryTypeId(dt.getDeliveryTypeId())
 				.name(dt.getName())
+				.imageUrl(dt.getImageUrl())
+				.selectedImageUrl(dt.getSelectedImageUrl())
 				.build())
 			.toList();
 	}
