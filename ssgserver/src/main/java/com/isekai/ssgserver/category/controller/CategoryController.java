@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.category.dto.CategoryLMSDto;
 import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
@@ -59,5 +60,12 @@ public class CategoryController {
 		CategorySResponseDto categorySResponseDto = categoryService.getCategoryS(modifiedMediumName);
 		return new ResponseEntity<>(categorySResponseDto, HttpStatus.OK);
 
+	}
+
+	@GetMapping("/products/{productCode}")
+	@Operation(summary = "카테고리 대,중,소 조회 - 단일 상품", description = "상품 상세페이지 최하단 카테고리 표시")
+	public ResponseEntity<CategoryLMSDto> getCategoryByProduct(@PathVariable String productCode) {
+		CategoryLMSDto categoryLMSDto = categoryService.getCategoryByProduct(productCode);
+		return ResponseEntity.ok(categoryLMSDto);
 	}
 }
