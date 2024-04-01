@@ -157,7 +157,6 @@ public class ProductService {
 			.map(option -> ProductSortOptionResponseDto.builder()
 				.id(option.ordinal()) // Enum의 순서를 ID로 사용
 				.option(option.getDescription())
-				.value(option.getCode())
 				.isInfo(option.getIsInfo())
 				.build())
 			.toList();

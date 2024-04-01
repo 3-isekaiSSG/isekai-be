@@ -9,6 +9,5 @@ public class ProductSortOptionResponseDto {
 
 	private Integer id;
 	private String option;
-	private String value;
 	private Boolean isInfo;
 }
