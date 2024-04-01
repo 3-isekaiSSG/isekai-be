@@ -13,4 +13,7 @@ import com.isekai.ssgserver.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("SELECT m FROM Member m WHERE m.uuid = :uuid")
 	Optional<Member> findByUuid(@Param("uuid") String uuid);
+
+	@Query("SELECT m FROM Member m WHERE m.phone = :phoneNum")
+	Member findByPhone(@Param("phoneNum") String phoneNum);
 }
