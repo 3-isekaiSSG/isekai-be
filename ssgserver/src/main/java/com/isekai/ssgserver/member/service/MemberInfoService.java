@@ -62,6 +62,7 @@ public class MemberInfoService {
 		return messageRe;
 	}
 
+	@Transactional
 	public AccoutIdDto findMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
 		/* 아이디 찾기 로직
 		 *	1. 인증 번호 일치 여부 확인
