@@ -33,7 +33,7 @@ public class DeliveryTypeController {
 	}
 
 	@GetMapping("/products/{productCode}")
-	@Operation(summary = "배송 유형 조회 - 단일 상품", description = "1: 쓱 배송, 2: 일반 택배 배송")
+	@Operation(summary = "배송 유형 조회 - 단일 상품", description = "1: 택배 배송, 2: 쓱 배송")
 	public ResponseEntity<DeliveryTypeDto> getProductDeliveryType(@PathVariable String productCode) {
 		DeliveryTypeDto deliveryTypeDto = deliveryTypeService.getDeliveryTypeIdByProduct(productCode);
 		return ResponseEntity.ok(deliveryTypeDto);
