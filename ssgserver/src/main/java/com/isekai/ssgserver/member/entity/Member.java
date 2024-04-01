@@ -55,5 +55,8 @@ public class Member extends BaseEntity {
 
 	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;
-	
+
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
 }

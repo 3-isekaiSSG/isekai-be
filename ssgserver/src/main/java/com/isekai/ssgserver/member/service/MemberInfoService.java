@@ -1,13 +1,14 @@
 package com.isekai.ssgserver.member.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.member.dto.AccoutIdDto;
 import com.isekai.ssgserver.member.dto.VerificationDto;
 import com.isekai.ssgserver.member.entity.Member;
-import com.isekai.ssgserver.member.repository.MemberInfoRepository;
 import com.isekai.ssgserver.member.repository.MemberRepository;
 import com.isekai.ssgserver.member.repository.VerificationRepository;
 
@@ -19,13 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberInfoService {
-	private final MemberInfoRepository memberInfoRepository;
 	private final MemberRepository memberRepository;
 	private final VerificationService verificationService;
 	private final VerificationRepository verificationRepository;
 
 	@Transactional
-	public void saveByPassword(String uuid, String newPassword) {
+	public String saveByPassword(String uuid, String newPassword) {
 		/* 비밀번호 재설정 로직
 		 * 	1. 기존 비밀번호랑 새번호 일치 여부 조회
 		 * 	2. 비밀번호 재설정
@@ -38,34 +38,28 @@ public class MemberInfoService {
 		// 기존 비밀번호 조회
 		String existPassword = member.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
+		String messageRe = "";
 		// 일치 확인
+		// if (existPassword.equals(newPassword)) {
 		if (encoder.matches(existPassword, newPassword)) {
-			// 일치하는 경우 입력값 같음
+			//* 일치하는 경우 입력값 같음
 			log.info("기존 비밀번호랑 일치함");
-			// '현재 사용 중인 비밀번호와 동일합니다. 다른 비밀번호로 다시 입력해주세요.'
+			messageRe = "현재 사용 중인 비밀번호와 동일합니다. 다른 비밀번호로 다시 입력해주세요.";
 		} else {
-			// 다른 경우 변경
-			// 하단 modelMapper 사용??
+			//* 다른 경우 변경
 			log.info("비밀번호 변경 분기");
-			Member updatedMember = Member.builder()
-				.memberId(member.getMemberId())
-				.uuid(uuid)
-				.accountId(member.getAccountId())
-				.name(member.getName())
-				.password(newPassword)
-				.email(member.getEmail())
-				.phone(member.getPhone())
-				.address(member.getAddress())
-				.gender(member.getGender())
-				.build();
+
+			ModelMapper modelMapper = new ModelMapper();
+			Member updatedMember = modelMapper.map(member, Member.class);
+			updatedMember.setPassword(newPassword);
 
 			memberRepository.save(updatedMember);
-			// '비밀번호를 변경했습니다.'
+			messageRe = "비밀번호를 변경했습니다.";
 		}
+		return messageRe;
 	}
 
-	public String findMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
+	public AccoutIdDto findMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
 		/* 아이디 찾기 로직
 		 *	1. 인증 번호 일치 여부 확인
 		 * 	2. 아이디 해당 회원
@@ -83,7 +77,8 @@ public class MemberInfoService {
 		Member phoneMember = memberRepository.findByPhone(phoneNum);
 
 		String memberAccountIdValue = phoneMember.getAccountId();
-
-		return memberAccountIdValue;
+		AccoutIdDto accoutIdDto = new AccoutIdDto();
+		accoutIdDto.setAccountId(memberAccountIdValue);
+		return accoutIdDto;
 	}
 }
