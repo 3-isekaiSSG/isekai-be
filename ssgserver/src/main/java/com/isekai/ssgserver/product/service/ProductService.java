@@ -79,7 +79,6 @@ public class ProductService {
 
 	/**
 	 * 상품 리스트의 요약된 카드 형식 데이터 조회
-	 *
 	 * @param productCode 상품 코드
 	 * @return
 	 */
@@ -88,8 +87,8 @@ public class ProductService {
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		return ProductSummaryDto.builder()
-			.productCode(product.getCode())
-			.productName(product.getProductName())
+			.code(product.getCode())
+			.name(product.getProductName())
 			.status(product.getStatus())
 			.createdAt(product.getCreatedAt())
 			.originPrice(product.getPrice())
@@ -99,7 +98,6 @@ public class ProductService {
 
 	/**
 	 * 상품 상세 페이지의 상단 ~ 상품 디테일까지 조회
-	 *
 	 * @param productCode 상품 코드
 	 * @return
 	 */
@@ -108,9 +106,9 @@ public class ProductService {
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		return ProductDetailDto.builder()
-			.productCode(product.getCode())
-			.productName(product.getProductName())
-			.productDetail(product.getProductDetail())
+			.code(product.getCode())
+			.name(product.getProductName())
+			.detail(product.getProductDetail())
 			.status(product.getStatus())
 			.createdAt(product.getCreatedAt())
 			.originPrice(product.getPrice())
@@ -120,7 +118,6 @@ public class ProductService {
 
 	/**
 	 * 상품의 할인 정보 조회(할인율, 할인가)
-	 *
 	 * @param productCode
 	 * @return
 	 */
@@ -137,7 +134,6 @@ public class ProductService {
 
 	/**
 	 * 상품의 리뷰 집계 조회 (총 리뷰 개수, 리뷰 평점)
-	 *
 	 * @param productCode
 	 * @return
 	 */
