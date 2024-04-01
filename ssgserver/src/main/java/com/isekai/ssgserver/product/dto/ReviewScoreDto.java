@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class DiscountDto {
+public class ReviewScoreDto {
 
-    private boolean discounted;
-    private int discountRate;
-    private int discountPrice;
+    private Long reviewCount;
+    private Long totalScore;
+    private double avgScore;
 
 }
