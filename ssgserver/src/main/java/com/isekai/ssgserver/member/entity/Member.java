@@ -51,7 +51,7 @@ public class Member extends BaseEntity {
 	private String address;
 
 	@Column(name = "gender")
-	private byte gender;
+	private Integer gender;
 
 	@Column(name = "is_withdraw", nullable = false)
 	private byte isWithdraw;

@@ -12,4 +12,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("SELECT m FROM Member m WHERE m.uuid = :uuid")
 	Optional<Member> findByUuid(@Param("uuid") String uuid);
 	Optional<Member> findByAccountId(String accountId);
+	Optional<Member> findByPhone(String phone);
 }

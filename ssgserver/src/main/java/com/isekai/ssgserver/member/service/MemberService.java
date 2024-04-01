@@ -13,12 +13,14 @@ import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@CrossOrigin(origins = "*")
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -49,7 +51,6 @@ public class MemberService {
         }
 
         JwtToken jwtToken = jwtProvider.createToken(member.getAccountId());
-
         return new JwtToken(jwtToken.getAccessToken(), jwtToken.getRefreshToken());
     }
 }

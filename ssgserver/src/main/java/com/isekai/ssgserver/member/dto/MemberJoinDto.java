@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,17 +26,19 @@ public class MemberJoinDto {
     private String email;
     private String phone;
     private String address;
-    private byte gender;
+    private Integer gender;
 
     public Member toEntity(String encodedPassword) {
         return Member.builder()
+            .uuid(String.valueOf(UUID.randomUUID()))
             .accountId(this.accountId)
             .name(this.name)
             .password(encodedPassword)
             .email(this.email)
             .phone(this.phone)
-            .address(this.address)
+            .address(this.address == null ? "" : this.address)
             .gender(this.gender)
+            .isWithdraw((byte)0)
             .build();
     }
 }
