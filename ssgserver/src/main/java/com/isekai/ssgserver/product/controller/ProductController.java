@@ -2,21 +2,16 @@ package com.isekai.ssgserver.product.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.isekai.ssgserver.delivery.dto.DeliveryTypeDto;
-import com.isekai.ssgserver.product.dto.DiscountDto;
-import com.isekai.ssgserver.product.dto.ReviewScoreDto;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.product.dto.CategoryProductResponseDto;
-
+import com.isekai.ssgserver.product.dto.DiscountDto;
 import com.isekai.ssgserver.product.dto.ProductDetailDto;
 import com.isekai.ssgserver.product.dto.ProductSummaryDto;
-
+import com.isekai.ssgserver.product.dto.ReviewScoreDto;
 import com.isekai.ssgserver.product.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,6 +50,7 @@ public class ProductController {
 		CategoryProductResponseDto categoryProductResponse = productService.getCategoryProduct(modifiedLargeName,
 			modifiedMediumName, modifiedSmallName, index, criteria, brandName, dType, minPrc, maxPrc);
 		return ResponseEntity.ok(categoryProductResponse);
+	}
 
 	@GetMapping("/{productCode}")
 	@Operation(summary = "상품 데이터 조회 - 카드 형식", description = "홈, 카테고리, 찜 등등 페이지에서 카드 형식의 상품 표시를 위해 사용됩니다.")
@@ -84,4 +80,6 @@ public class ProductController {
 		return ResponseEntity.ok(reviewScoreDto);
 
 	}
+
 }
+
