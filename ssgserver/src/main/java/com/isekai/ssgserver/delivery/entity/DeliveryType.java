@@ -30,9 +30,6 @@ public class DeliveryType {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "image_url")
-	private String imageUrl;
-
-	@Column(name = "selected_image_url")
-	private String selectedImageUrl;
+	@Column(name = "eng_name")
+	private String engName;
 }

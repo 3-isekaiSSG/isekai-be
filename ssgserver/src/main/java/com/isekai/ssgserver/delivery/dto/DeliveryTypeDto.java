@@ -12,7 +12,6 @@ public class DeliveryTypeDto {
 	private int id;
 	private Long deliveryTypeId;
 	private String name;
-	private String imageUrl;
-	private String selectedImageUrl;
+	private String engName;
 
 }

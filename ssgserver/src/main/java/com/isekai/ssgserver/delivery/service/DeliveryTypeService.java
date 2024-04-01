@@ -29,8 +29,7 @@ public class DeliveryTypeService {
 				.id(0)
 				.deliveryTypeId(dt.getDeliveryType().getDeliveryTypeId())
 				.name(dt.getDeliveryType().getName())
-				.imageUrl(dt.getDeliveryType().getImageUrl())
-				.selectedImageUrl(dt.getDeliveryType().getSelectedImageUrl())
+				.engName(dt.getDeliveryType().getEngName())
 				.build())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
@@ -44,8 +43,7 @@ public class DeliveryTypeService {
 				.id(dtId.getAndIncrement())
 				.deliveryTypeId(dt.getDeliveryTypeId())
 				.name(dt.getName())
-				.imageUrl(dt.getImageUrl())
-				.selectedImageUrl(dt.getSelectedImageUrl())
+				.engName(dt.getEngName())
 				.build())
 			.toList();
 	}
