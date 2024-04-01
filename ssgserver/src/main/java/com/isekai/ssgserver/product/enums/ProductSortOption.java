@@ -1,5 +1,10 @@
 package com.isekai.ssgserver.product.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum ProductSortOption {
 
 	best("best", "추천순", true),
@@ -14,22 +19,4 @@ public enum ProductSortOption {
 	private final String description;
 	private final Boolean isInfo;
 
-	ProductSortOption(String code, String description, Boolean isInfo) {
-
-		this.code = code;
-		this.description = description;
-		this.isInfo = isInfo;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public boolean isInfo() {
-		return isInfo;
-	}
 }

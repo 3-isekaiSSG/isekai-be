@@ -86,7 +86,7 @@ public class ProductController {
 
 	@GetMapping("/products/sort")
 	@Operation(summary = "상품 정렬 목록", description = "best: 추천순, prcasc: 가격낮은순, prcdsc: 가격높은순, sale: 판매순, dcrt: 할인율순, regdt: 신상품순, cnt: 리뷰많은순")
-	public ResponseEntity<?> getProductSortOption() {
+	public ResponseEntity<List<ProductSortOptionResponseDto>> getProductSortOption() {
 
 		List<ProductSortOptionResponseDto> sortOptions = productService.getProductSortOption();
 		return ResponseEntity.ok(sortOptions);

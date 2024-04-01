@@ -79,6 +79,7 @@ public class ProductService {
 
 	/**
 	 * 상품 리스트의 요약된 카드 형식 데이터 조회
+	 *
 	 * @param productCode 상품 코드
 	 * @return
 	 */
@@ -98,6 +99,7 @@ public class ProductService {
 
 	/**
 	 * 상품 상세 페이지의 상단 ~ 상품 디테일까지 조회
+	 *
 	 * @param productCode 상품 코드
 	 * @return
 	 */
@@ -118,6 +120,7 @@ public class ProductService {
 
 	/**
 	 * 상품의 할인 정보 조회(할인율, 할인가)
+	 *
 	 * @param productCode
 	 * @return
 	 */
@@ -134,6 +137,7 @@ public class ProductService {
 
 	/**
 	 * 상품의 리뷰 집계 조회 (총 리뷰 개수, 리뷰 평점)
+	 *
 	 * @param productCode
 	 * @return
 	 */
@@ -153,7 +157,7 @@ public class ProductService {
 			.map(option -> ProductSortOptionResponseDto.builder()
 				.id(option.ordinal()) // Enum의 순서를 ID로 사용
 				.option(option.getDescription())
-				.isInfo(option.isInfo())
+				.isInfo(option.getIsInfo())
 				.build())
 			.toList();
 	}
