@@ -26,7 +26,7 @@ public class DeliveryTypeController {
 	private final DeliveryTypeService deliveryTypeService;
 
 	@GetMapping("/")
-	@Operation(summary = "배송 유형 조회 - 단일 상품", description = "1: 쓱 배송, 2: 일반 택배 배송")
+	@Operation(summary = "배송 유형 목록 조회")
 	public ResponseEntity<List<DeliveryTypeDto>> getDeliveryTypeList() {
 		List<DeliveryTypeDto> deliveryTypeDtoList = deliveryTypeService.getDeliveryTypeList();
 		return ResponseEntity.ok(deliveryTypeDtoList);
