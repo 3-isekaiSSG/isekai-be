@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.AccoutIdDto;
+import com.isekai.ssgserver.member.dto.InfoPasswordDto;
 import com.isekai.ssgserver.member.dto.VerificationDto;
 import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.repository.MemberRepository;
@@ -25,7 +26,7 @@ public class MemberInfoService {
 	private final VerificationRepository verificationRepository;
 
 	@Transactional
-	public String saveByPassword(String uuid, String newPassword) {
+	public String saveByPassword(InfoPasswordDto infoPasswordDto) {
 		/* 비밀번호 재설정 로직
 		 * 	1. 기존 비밀번호랑 새번호 일치 여부 조회
 		 * 	2. 비밀번호 재설정
@@ -33,6 +34,8 @@ public class MemberInfoService {
 		 */
 
 		//* 기존 password랑 일치하는지 확인
+		String uuid = infoPasswordDto.getUuid();
+		String newPassword = infoPasswordDto.getNewPassword();
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 		// 기존 비밀번호 조회

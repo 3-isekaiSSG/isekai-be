@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.member.controller;
 
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.isekai.ssgserver.member.dto.AccoutIdDto;
+import com.isekai.ssgserver.member.dto.InfoPasswordDto;
 import com.isekai.ssgserver.member.dto.VerificationDto;
 import com.isekai.ssgserver.member.service.MemberInfoService;
 import com.isekai.ssgserver.util.MessageResponse;
@@ -32,12 +31,13 @@ public class MemberInfoController {
 	@PutMapping("/password")
 	@Operation(summary = "회원 비밀번호 재설정", description = "회원 비밀번호 입력한 값으로 변경")
 	public ResponseEntity<?> updatePassword(
-		@RequestBody Map<String, String> requestBody) {
-		String uuid = requestBody.get("uuid");
-		String newPassword = requestBody.get("newPassword");
+		// @RequestBody Map<String, String> requestBody
+		@RequestBody InfoPasswordDto infoPasswordDto) {
+		// String uuid = requestBody.get("uuid");
+		// String newPassword = requestBody.get("newPassword");
 		log.info("MemberInfoController.updatePassword");
-		log.info("newPassword = " + newPassword);
-		String resopseMessage = memberInfoService.saveByPassword(uuid, newPassword);
+		log.info("infoPasswordDto = " + infoPasswordDto);
+		String resopseMessage = memberInfoService.saveByPassword(infoPasswordDto);
 		return new ResponseEntity<>(new MessageResponse(resopseMessage), HttpStatus.OK);
 	}
 

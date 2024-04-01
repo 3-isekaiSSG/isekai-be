@@ -59,4 +59,8 @@ public class Member extends BaseEntity {
 	public void setPassword(String newPassword) {
 		this.password = newPassword;
 	}
+
+	public void setIsWithdraw(byte b) {
+		this.isWithdraw = b;
+	}
 }
