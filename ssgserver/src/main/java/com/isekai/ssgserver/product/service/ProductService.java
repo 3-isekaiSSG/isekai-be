@@ -1,6 +1,5 @@
 package com.isekai.ssgserver.product.service;
 
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,25 +9,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
-import com.isekai.ssgserver.product.dto.CategoryProductResponseDto;
-import com.isekai.ssgserver.product.dto.ProductInfoDto;
-import com.isekai.ssgserver.product.entity.Product;
-
-import com.isekai.ssgserver.product.dto.DiscountDto;
-import com.isekai.ssgserver.product.dto.ReviewScoreDto;
-import com.isekai.ssgserver.product.repository.ReviewScoreRepository;
-import org.springframework.stereotype.Service;
-
-import com.isekai.ssgserver.category.repository.CategoryProductCustomRepository;
 import com.isekai.ssgserver.delivery.repository.ProductDeliveryTypeRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.image.repository.ImageRepository;
+import com.isekai.ssgserver.product.dto.CategoryProductResponseDto;
+import com.isekai.ssgserver.product.dto.DiscountDto;
 import com.isekai.ssgserver.product.dto.ProductDetailDto;
+import com.isekai.ssgserver.product.dto.ProductInfoDto;
 import com.isekai.ssgserver.product.dto.ProductSummaryDto;
+import com.isekai.ssgserver.product.dto.ReviewScoreDto;
 import com.isekai.ssgserver.product.entity.Product;
 import com.isekai.ssgserver.product.repository.DiscountRepository;
 import com.isekai.ssgserver.product.repository.ProductRepository;
+import com.isekai.ssgserver.product.repository.ReviewScoreRepository;
 import com.isekai.ssgserver.seller.repository.SellerProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -79,7 +73,7 @@ public class ProductService {
 			.products(productInfoDtos)
 			.build();
 	}
-	
+
 	/**
 	 * 상품 리스트의 요약된 카드 형식 데이터 조회
 	 * @param productCode 상품 코드
@@ -87,16 +81,16 @@ public class ProductService {
 	 */
 	public ProductSummaryDto getProductInfo(String productCode) {
 		Product product = productRepository.findByCode(productCode)
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		return ProductSummaryDto.builder()
-				.productCode(product.getCode())
-				.productName(product.getProductName())
-				.status(product.getStatus())
-				.createdAt(product.getCreatedAt())
-				.originPrice(product.getPrice())
-				.adultSales(product.getAdultSales())
-				.build();
+			.code(product.getCode())
+			.name(product.getProductName())
+			.status(product.getStatus())
+			.createdAt(product.getCreatedAt())
+			.originPrice(product.getPrice())
+			.adultSales(product.getAdultSales())
+			.build();
 	}
 
 	/**
@@ -106,17 +100,17 @@ public class ProductService {
 	 */
 	public ProductDetailDto getProductDetail(String productCode) {
 		Product product = productRepository.findByCode(productCode)
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		return ProductDetailDto.builder()
-				.productCode(product.getCode())
-				.productName(product.getProductName())
-				.productDetail(product.getProductDetail())
-				.status(product.getStatus())
-				.createdAt(product.getCreatedAt())
-				.originPrice(product.getPrice())
-				.adultSales(product.getAdultSales())
-				.build();
+			.code(product.getCode())
+			.name(product.getProductName())
+			.detail(product.getProductDetail())
+			.status(product.getStatus())
+			.createdAt(product.getCreatedAt())
+			.originPrice(product.getPrice())
+			.adultSales(product.getAdultSales())
+			.build();
 	}
 
 	/**
@@ -127,12 +121,12 @@ public class ProductService {
 	public DiscountDto getDiscountByProduct(String productCode) {
 
 		return discountRepository.findByProductCode(productCode)
-				.map(d -> DiscountDto.builder()
-						.discounted(d.getDiscountRate() == 0 ? false : true)
-						.discountRate(d.getDiscountRate())
-						.discountPrice(d.getDiscountPrice())
-						.build())
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			.map(d -> DiscountDto.builder()
+				.discounted(d.getDiscountRate() == 0 ? false : true)
+				.discountRate(d.getDiscountRate())
+				.discountPrice(d.getDiscountPrice())
+				.build())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
 
 	/**
@@ -143,13 +137,12 @@ public class ProductService {
 	public ReviewScoreDto getReviewScoreByProduct(String productCode) {
 
 		return reviewScoreRepository.findByProductCode(productCode)
-				.map(rs -> ReviewScoreDto.builder()
-						.reviewCount(rs.getReviewCount())
-						.totalScore(rs.getTotalScore())
-						.avgScore(rs.getAvgScore())
-						.build())
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+			.map(rs -> ReviewScoreDto.builder()
+				.reviewCount(rs.getReviewCount())
+				.totalScore(rs.getTotalScore())
+				.avgScore(rs.getAvgScore())
+				.build())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 	}
-
 
 }

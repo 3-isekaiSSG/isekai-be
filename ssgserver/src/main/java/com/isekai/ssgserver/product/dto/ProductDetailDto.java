@@ -11,11 +11,11 @@ import lombok.ToString;
 @ToString
 public class ProductDetailDto {
 	// 상품코드
-	private String productCode;
+	private String code;
 	// 	상품 이름 (outer)
-	private String productName;
+	private String name;
 	// 상품 디테일
-	private String productDetail;
+	private String detail;
 	// 상품 상태
 	private int status;
 	// 생성일자
