@@ -1,6 +1,6 @@
 package com.isekai.ssgserver.member.entity;
 
-import java.time.LocalDateTime;
+import com.isekai.ssgserver.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,11 +18,10 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString
 @Getter
 @Table(name = "favorite")
-public class Favorite {
+public class Favorite extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +34,13 @@ public class Favorite {
 	@Column(name = "division", nullable = false)
 	private byte division;
 
-	@Column(name = "product_id", nullable = false)
-	private Long productId;
+	@Column(name = "identifier", nullable = false)
+	private Long identifier;
 
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
-
+	@Builder
+	public Favorite(String uuid, byte division, Long identifier) {
+		this.uuid = uuid;
+		this.division = division;
+		this.identifier = identifier;
+	}
 }
