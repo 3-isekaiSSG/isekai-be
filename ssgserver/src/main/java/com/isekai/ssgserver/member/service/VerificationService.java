@@ -19,7 +19,6 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class VerificationService {
 
 	private final PhoneVerificationUtil phoneVerificationUtil;

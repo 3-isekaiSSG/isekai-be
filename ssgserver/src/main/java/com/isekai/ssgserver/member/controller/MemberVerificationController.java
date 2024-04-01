@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping("/members/phone-verification")
 @Tag(name = "Phone Verification")
 public class MemberVerificationController {
