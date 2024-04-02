@@ -43,8 +43,6 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
 			// .addFilter(corsFilter)
-			.cors().configurationSource(corsConfig.corsFilter())
-			.and()
 			.csrf().disable()
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -57,6 +55,7 @@ public class SecurityConfig {
 			.and()
 			// jwt 인증 필터 추가
 			.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilter(corsConfig.corsFilter())
 			.build();
 	}
 
