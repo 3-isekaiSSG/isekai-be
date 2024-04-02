@@ -78,7 +78,8 @@ public class MemberInfoService {
 		String phoneNum = smsVerificationRequest.getPhone();
 
 		//* 아이디 해당 회원 조회
-		Member phoneMember = memberRepository.findByPhone(phoneNum);
+		Member phoneMember = memberRepository.findByPhone(phoneNum)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		String memberAccountIdValue = phoneMember.getAccountId();
 		AccoutIdDto accoutIdDto = new AccoutIdDto();
