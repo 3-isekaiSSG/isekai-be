@@ -1,6 +1,8 @@
 package com.isekai.ssgserver.seller.repository;
 
 import static com.isekai.ssgserver.category.entity.QCategoryProduct.*;
+import static com.isekai.ssgserver.product.entity.QProduct.*;
+import static com.isekai.ssgserver.seller.entity.QSellerProduct.*;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import com.isekai.ssgserver.product.entity.Product;
 import com.isekai.ssgserver.product.entity.QProduct;
 import com.isekai.ssgserver.seller.dto.BrandNameResponseDto;
 import com.isekai.ssgserver.seller.entity.QSellerProduct;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +30,12 @@ public class BrandNameCustomRepository extends QuerydslRepositorySupport {
 	}
 
 	public List<BrandNameResponseDto> findBrandProductCountByCategory(String largeName, String mediumName,
-		String smallName) {
+		String smallName, String criteria) {
+
+		if (criteria == null) {
+			criteria = "best";
+		}
+		OrderSpecifier orderSpecifier = createOrderSpecifier(criteria);
 
 		QProduct product = QProduct.product;
 		QCategoryProduct categoryProduct = QCategoryProduct.categoryProduct;
@@ -46,9 +54,22 @@ public class BrandNameCustomRepository extends QuerydslRepositorySupport {
 				smallNameEq(smallName)
 			)
 			.groupBy(sellerProduct.seller.name)
+			.orderBy(orderSpecifier)
 			.fetch();
 
 		return results;
+	}
+
+	private OrderSpecifier<?> createOrderSpecifier(String criteria) {
+
+		switch (criteria) {
+			case "best":  // 인기순(상푼순)
+				return product.count().desc();
+			case "abc":  // 가나다순
+				return sellerProduct.seller.name.asc();
+			default:
+				return product.count().desc();
+		}
 	}
 
 	private BooleanExpression largeNameEq(String largeName) {

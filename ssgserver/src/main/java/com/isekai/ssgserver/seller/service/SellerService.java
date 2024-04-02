@@ -33,10 +33,11 @@ public class SellerService {
 
 	}
 
-	public List<BrandNameResponseDto> getSellerByProduct(String largeName, String mediumName, String smallName) {
+	public List<BrandNameResponseDto> getSellerByProduct(String largeName, String mediumName, String smallName,
+		String criteria) {
 
 		List<BrandNameResponseDto> results = brandNameCustomRepository.findBrandProductCountByCategory(
-			largeName, mediumName, smallName);
+			largeName, mediumName, smallName, criteria);
 		AtomicInteger responseId = new AtomicInteger(0);
 
 		List<BrandNameResponseDto> brandNameResponse = results.stream()

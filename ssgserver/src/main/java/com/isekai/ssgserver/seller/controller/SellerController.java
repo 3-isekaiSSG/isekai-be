@@ -40,14 +40,15 @@ public class SellerController {
 	public ResponseEntity<List<BrandNameResponseDto>> getBrandNameForFilter(
 		@RequestParam(value = "largeName") String largeName,
 		@RequestParam(value = "mediumName") String mediumName,
-		@RequestParam(value = "smallName", required = false) String smallName) {
+		@RequestParam(value = "smallName", required = false) String smallName,
+		@RequestParam(value = "sort", required = false) String criteria) {
 
 		String modifiedLargeName = largeName.replace('-', '/');
 		String modifiedMediumName = mediumName.replace('-', '/');
 		String modifiedSmallName = (smallName != null) ? smallName.replace('-', '/') : null;
 
 		List<BrandNameResponseDto> brandNameResponse = sellerService.getSellerByProduct(modifiedLargeName,
-			modifiedMediumName, modifiedSmallName);
+			modifiedMediumName, modifiedSmallName, criteria);
 
 		return ResponseEntity.ok(brandNameResponse);
 	}
