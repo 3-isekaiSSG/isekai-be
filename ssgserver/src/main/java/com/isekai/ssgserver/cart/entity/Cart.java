@@ -33,8 +33,12 @@ public class Cart {
 	@Column(name = "cart_id")
 	private Long cartId;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String uuid;
+
+	// 비회원 장바구니 쿠키 value
+	@Column(nullable = true)
+	private String value;
 
 	@Column(nullable = false)
 	private int count;
