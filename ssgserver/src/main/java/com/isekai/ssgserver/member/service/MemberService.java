@@ -9,11 +9,9 @@ import com.isekai.ssgserver.member.repository.MemberRepository;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
 import com.isekai.ssgserver.util.jwt.JwtToken;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Optional;
 
