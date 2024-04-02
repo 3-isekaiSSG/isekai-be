@@ -35,7 +35,7 @@ public class OptionController {
 	}
 
 	@GetMapping("/detail/products/{productCode}")
-	@Operation(summary = "옵션 category 전체 조회 - 단일상품", description = "상품에 종속된 옵션의 모든 계층 이름만 조회합니다. ex)사이즈, 색상 ..")
+	@Operation(summary = "옵션 상세 리스트 조회 - 단일상품", description = "상위 계층 선택에 따라, option list 구성해서 반환합니다.")
 	public ResponseEntity<List<OptionDetailDto>> getOptionDetailByProduct(
 		@PathVariable String productCode,
 		@RequestParam(required = false) Long parentId) {
