@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.seller.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.seller.dto.BrandNameResponseDto;
+import com.isekai.ssgserver.seller.dto.BrandSortOptionResponseDto;
 import com.isekai.ssgserver.seller.dto.SellerDto;
+import com.isekai.ssgserver.seller.enums.BrandNameSortOption;
 import com.isekai.ssgserver.seller.repository.BrandNameCustomRepository;
 import com.isekai.ssgserver.seller.repository.SellerProductRepository;
 
@@ -33,6 +36,7 @@ public class SellerService {
 
 	}
 
+	// 브랜드 이름 목록
 	public List<BrandNameResponseDto> getSellerByProduct(String largeName, String mediumName, String smallName,
 		String criteria) {
 
@@ -50,4 +54,17 @@ public class SellerService {
 
 		return brandNameResponse;
 	}
+
+	// 브랜드 정렬 목록
+	public List<BrandSortOptionResponseDto> getBrandSortOption() {
+
+		return Arrays.stream(BrandNameSortOption.values())
+			.map(option -> BrandSortOptionResponseDto.builder()
+				.id(option.ordinal()) // Enum의 순서를 ID로 사용
+				.option(option.getDescription())
+				.value(option.getCode())
+				.build())
+			.toList();
+	}
+
 }

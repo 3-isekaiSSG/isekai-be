@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.seller.dto.BrandNameResponseDto;
+import com.isekai.ssgserver.seller.dto.BrandSortOptionResponseDto;
 import com.isekai.ssgserver.seller.dto.SellerDto;
 import com.isekai.ssgserver.seller.service.SellerService;
 
@@ -51,5 +52,14 @@ public class SellerController {
 			modifiedMediumName, modifiedSmallName, criteria);
 
 		return ResponseEntity.ok(brandNameResponse);
+	}
+
+	// 필터링 브랜드 이름 정렬
+	@GetMapping("/sort")
+	@Operation(summary = "브랜드 이름 정렬 목록", description = "브랜드 이름 필터링 정렬 목록")
+	public ResponseEntity<List<BrandSortOptionResponseDto>> getBrandSortOption() {
+
+		List<BrandSortOptionResponseDto> brandSortOptionResponse = sellerService.getBrandSortOption();
+		return ResponseEntity.ok(brandSortOptionResponse);
 	}
 }
