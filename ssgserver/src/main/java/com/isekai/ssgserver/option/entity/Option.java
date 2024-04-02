@@ -2,9 +2,12 @@ package com.isekai.ssgserver.option.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,25 +29,26 @@ public class Option {
 	@Column(name = "options_id")
 	private Long optionsId;
 
+	@Column
+	private String category;
+
 	@Column(name = "value")
 	private String value;
 
 	@Column(name = "stock", nullable = false)
 	private int stock;
 
-	@Column(name = "orders_limit")
-	private int ordersLimit;
+	@Column(name = "order_limit")
+	private int orderLimit;
 
 	@Column(name = "product_code")
 	private String productCode;
 
-	@Column(name = "option_first_id")
-	private Long optionFirstId;
+	@Column
+	private int depth;
 
-	@Column(name = "option_second_id")
-	private Long optionSecondId;
-
-	@Column(name = "option_third_id")
-	private Long optionThirdId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	private Option parent;
 
 }

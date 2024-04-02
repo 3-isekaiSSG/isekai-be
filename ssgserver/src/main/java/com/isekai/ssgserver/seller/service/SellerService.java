@@ -6,8 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
-import com.isekai.ssgserver.exception.common.CustomException;
-import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.seller.dto.BrandNameResponseDto;
 import com.isekai.ssgserver.seller.dto.BrandSortOptionResponseDto;
 import com.isekai.ssgserver.seller.dto.SellerDto;
@@ -32,8 +30,7 @@ public class SellerService {
 				.sellerId(s.getSeller().getSellerId())
 				.name(s.getSeller().getName())
 				.build())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
-
+			.orElse(SellerDto.builder().build());
 	}
 
 	// 브랜드 이름 목록
