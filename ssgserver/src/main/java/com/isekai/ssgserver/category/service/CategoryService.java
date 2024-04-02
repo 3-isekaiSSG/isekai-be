@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.category.dto.CategoryCommonDto;
+import com.isekai.ssgserver.category.dto.CategoryLMSDto;
 import com.isekai.ssgserver.category.dto.CategoryLResponseDto;
 import com.isekai.ssgserver.category.dto.CategoryMList;
 import com.isekai.ssgserver.category.dto.CategoryMResponseDto;
@@ -14,10 +16,14 @@ import com.isekai.ssgserver.category.dto.CategorySList;
 import com.isekai.ssgserver.category.dto.CategorySResponseDto;
 import com.isekai.ssgserver.category.entity.CategoryL;
 import com.isekai.ssgserver.category.entity.CategoryM;
+import com.isekai.ssgserver.category.entity.CategoryProduct;
 import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.category.repository.CategoryLRepository;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
+import com.isekai.ssgserver.category.repository.CategoryProductRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +36,7 @@ public class CategoryService {
 	private final CategoryLRepository categoryLRepository;
 	private final CategoryMRepository categoryMRepository;
 	private final CategorySRepository categorySRepository;
+	private final CategoryProductRepository categoryProductRepository;
 
 	// 대분류
 	public List<CategoryLResponseDto> getCategoryL() {
@@ -109,4 +116,28 @@ public class CategoryService {
 
 	}
 
+	public CategoryLMSDto getCategoryByProduct(String productCode) {
+
+		CategoryProduct categoryProduct = categoryProductRepository.findByProductCode(productCode)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		CategoryCommonDto categoryL = CategoryCommonDto.builder()
+			.categoryId(categoryProduct.getCategoryL().getCategoryLId())
+			.name(categoryProduct.getCategoryL().getLargeName())
+			.build();
+		CategoryCommonDto categoryM = CategoryCommonDto.builder()
+			.categoryId(categoryProduct.getCategoryM().getCategoryMId())
+			.name(categoryProduct.getCategoryM().getMediumName())
+			.build();
+		CategoryCommonDto categoryS = CategoryCommonDto.builder()
+			.categoryId(categoryProduct.getCategoryS().getCategorySId())
+			.name(categoryProduct.getCategoryS().getSmallName())
+			.build();
+
+		return CategoryLMSDto.builder()
+			.largeName(categoryL)
+			.mediumName(categoryM)
+			.smallName(categoryS)
+			.build();
+	}
 }

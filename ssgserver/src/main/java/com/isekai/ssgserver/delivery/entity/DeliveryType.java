@@ -29,4 +29,7 @@ public class DeliveryType {
 
 	@Column(name = "name", nullable = false)
 	private String name;
+
+	@Column(name = "eng_name")
+	private String engName;
 }
