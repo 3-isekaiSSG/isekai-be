@@ -12,9 +12,10 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 public interface OptionRepository extends JpaRepository<Option, Long> {
 
-	// List<Option> findAllByProductCodeandDepth(String productCode, int depth);
-
 	@Query("SELECT new com.isekai.ssgserver.option.dto.OptionDepthDto(o.depth, o.category) FROM Option o WHERE o.productCode = :productCode GROUP BY o.depth, o.category")
 	List<OptionDepthDto> findCategoriesByProductCodeGroupedByDepth(@Param("productCode") String productCode);
 
+	List<Option> findAllByProductCodeAndDepth(String productCode, int depth);
+
+	List<Option> findAllByProductCodeAndParentOptionsId(String productCode, Long parentId);
 }
