@@ -1,10 +1,15 @@
 package com.isekai.ssgserver.member.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
 import com.isekai.ssgserver.member.dto.CategoryMReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
 import com.isekai.ssgserver.member.entity.Favorite;
@@ -99,5 +104,25 @@ public class MemberFavoriteService {
 			.build();
 
 		memberFavoriteRepository.save(favorite);
+	}
+
+	public void deleteFavoriteOne(FavoriteDelReqDto favoriteDelReqDto) {
+		Long favoriteId = favoriteDelReqDto.getFavorite_id();
+		Favorite favoriteOptional = memberFavoriteRepository.findById(favoriteId)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		memberFavoriteRepository.deleteById(favoriteId);
+	}
+
+	public void deleteFavorites(List<Long> favoriteIds) {
+		for (Long favoriteId : favoriteIds) {
+			memberFavoriteRepository.findById(favoriteId)
+				.ifPresentOrElse(
+					favorite -> memberFavoriteRepository.deleteById(favoriteId),
+					() -> {
+						throw new CustomException(ErrorCode.NOT_FOUND_ENTITY);
+					}
+				);
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.member.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
 import com.isekai.ssgserver.member.dto.CategoryMReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
 import com.isekai.ssgserver.member.service.MemberFavoriteService;
@@ -106,33 +109,52 @@ public class MemberFavoriteController {
 	}
 
 	// 찜 목록 조회
+	// 동적 - 쿼리dsl로
+	// --> 상품전체 / 브랜드&스토어 / 카테고리 /
+	// 30개씩 페이지네이션
 	@GetMapping("/list")
+	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회합니다.")
 	public ResponseEntity<?> getFavoriteList() {
 		return null;
 	}
 
 	// 찜인지
+	// 해당 아이템이 찜인지 T/F 반환
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getIsFavorite() {
 		return null;
 	}
 
 	// 찜 갯수 조회
+	// 상품 찜, 카테고리 찜, 브랜드 & 스토어 찜 개수
 	@GetMapping("/number")
 	public ResponseEntity<?> getCountFavorite() {
 		return null;
 	}
 
-	// 찜 선택 삭제
+	// 찜 선택들 삭제
 	@DeleteMapping("/selects")
-	public ResponseEntity<?> deleteFavoriteList() {
-		return null;
+	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
+	public ResponseEntity<?> deleteFavoriteList(
+		@RequestBody List<Long> favorieIds) {
+		log.info("MemberFavoriteController.deleteFavoriteList");
+		log.info("favorieIds = " + favorieIds);
+
+		memberFavoriteService.deleteFavorites(favorieIds);
+		return ResponseEntity.ok().build();
 	}
 
 	// 찜 1개 삭제
 	@DeleteMapping("/{favorite_id}")
-	public ResponseEntity<?> deleteFavoriteSeelct() {
-		return null;
+	@Operation(summary = "찜 하나 삭제", description = "찜 하나를 삭제합니다.")
+	public ResponseEntity<?> deleteFavoriteSeelct(
+		@RequestBody FavoriteDelReqDto favoriteDelReqDto
+	) {
+		log.info("MemberFavoriteController.deleteFavoriteSeelct");
+		log.info("favoriteDelReqDto = " + favoriteDelReqDto);
+
+		memberFavoriteService.deleteFavoriteOne(favoriteDelReqDto);
+		return ResponseEntity.ok().build();
 	}
 
 }
