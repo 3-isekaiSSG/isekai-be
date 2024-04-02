@@ -8,6 +8,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CategoryMReqDto {
-	private Long category_m_id;
+	private String mediumName;
 	private String uuid;
 }

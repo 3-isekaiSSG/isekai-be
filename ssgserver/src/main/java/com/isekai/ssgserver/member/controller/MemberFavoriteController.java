@@ -14,6 +14,7 @@ import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
 import com.isekai.ssgserver.member.dto.CategoryMReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
+import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
 import com.isekai.ssgserver.member.service.MemberFavoriteService;
@@ -30,6 +31,21 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "favorite", description = "회원 상품 좋아요 API document")
 public class MemberFavoriteController {
 	private final MemberFavoriteService memberFavoriteService;
+
+	/*  뭐든 찜하기
+	 *	identifier
+	 * */
+	@PutMapping("")
+	@Operation(summary = "뭐든 상품 찜하기", description = "회원이 찜한 것을 저장합니다.")
+	public ResponseEntity<?> putFavoriteTotal(
+		@RequestBody FavoritePutReqDto favoritePutReqDto) {
+		log.info("MemberFavoriteController.putFavoriteTotal");
+		log.info("MemberFavoriteController.putFavoriteTotal");
+
+		memberFavoriteService.putFavoriteTotal(favoritePutReqDto);
+
+		return ResponseEntity.ok().build();
+	}
 
 	/* 단일상품찜하기
 	 *	product_id
@@ -127,6 +143,7 @@ public class MemberFavoriteController {
 
 	// 찜 갯수 조회
 	// 상품 찜, 카테고리 찜, 브랜드 & 스토어 찜 개수
+	// 동적?? or 각각 개수 조회 API 따로 만들까?
 	@GetMapping("/number")
 	public ResponseEntity<?> getCountFavorite() {
 		return null;
