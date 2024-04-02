@@ -2,7 +2,6 @@ package com.isekai.ssgserver.member.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members/phone-verification")
-@CrossOrigin(origins = "*")
 @Tag(name = "Phone Verification")
 public class MemberVerificationController {
 
