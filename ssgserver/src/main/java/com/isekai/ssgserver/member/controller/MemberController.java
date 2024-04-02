@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    @Value("${jwt.token.refresh-expire-time}")
+    private long refreshExpireTime;
 
     @PostMapping("/join")
     @Operation(summary = "회원가입")
@@ -39,6 +44,22 @@ public class MemberController {
     @Operation(summary = "로그인")
     public ResponseEntity<JwtToken> login(@Valid @RequestBody MemberLoginDto loginDto) {
         JwtToken tokens = memberService.login(loginDto);
-        return ResponseEntity.ok(tokens);
+        // access token -> header - Authorization
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", tokens.getAccessToken());
+
+        // refresh token -> header -> set Cookie
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokens.getRefreshToken())
+            .httpOnly(true)
+            .secure(true) // HTTPS 환경에서만 사용할 경우 true로 설정
+            .sameSite("Lax")  // 같은 사이트 내의 요청에서만 쿠키를 전송
+            .path("/")
+            .maxAge(refreshExpireTime) // 쿠키의 유효 기간 설정
+            .build();
+        headers.set(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return ResponseEntity.ok()
+            .headers(headers)
+            .build();
     }
 }

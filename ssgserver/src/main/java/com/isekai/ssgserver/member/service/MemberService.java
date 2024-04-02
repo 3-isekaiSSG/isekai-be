@@ -49,7 +49,6 @@ public class MemberService {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 
-        JwtToken jwtToken = jwtProvider.createToken(member.getAccountId());
-        return new JwtToken(jwtToken.getAccessToken(), jwtToken.getRefreshToken());
+        return jwtProvider.createToken(member.getUuid());
     }
 }
