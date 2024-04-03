@@ -92,7 +92,7 @@ public class MemberFavoriteService {
 	@Transactional
 	public void postSingleProduct(SingleProductReqDto singleProductReqDto) {
 		String uuid = singleProductReqDto.getUuid();
-		Long identifier = singleProductReqDto.getProduct_id();
+		Long identifier = singleProductReqDto.getProductId();
 		FavoriteDivision singleProduct = FavoriteDivision.SINGLE_PRODUCT;
 		byte division = singleProduct.getCode();
 
@@ -108,7 +108,7 @@ public class MemberFavoriteService {
 	@Transactional
 	public void postBundleProduct(BundleProductReqDto bundleProductReqDto) {
 		String uuid = bundleProductReqDto.getUuid();
-		Long identifier = bundleProductReqDto.getBundel_id();
+		Long identifier = bundleProductReqDto.getBundelId();
 		FavoriteDivision bundleProduct = FavoriteDivision.BUNDLE_PRODUCT;
 		byte division = bundleProduct.getCode();
 
@@ -162,7 +162,7 @@ public class MemberFavoriteService {
 	@Transactional
 	public void postSeller(SellerReqDto sellerReqDto) {
 		String uuid = sellerReqDto.getUuid();
-		Long identifier = sellerReqDto.getSeller_id();
+		Long identifier = sellerReqDto.getSellerId();
 		FavoriteDivision seller = FavoriteDivision.BRAND;
 		byte division = seller.getCode();
 
@@ -177,7 +177,7 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public void deleteFavoriteOne(FavoriteDelReqDto favoriteDelReqDto) {
-		Long favoriteId = favoriteDelReqDto.getFavorite_id();
+		Long favoriteId = favoriteDelReqDto.getFavoriteId();
 		Favorite favoriteOptional = memberFavoriteRepository.findById(favoriteId)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
