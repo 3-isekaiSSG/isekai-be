@@ -153,11 +153,11 @@ public class MemberFavoriteController {
 	@DeleteMapping("/selects")
 	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
 	public ResponseEntity<?> deleteFavoriteList(
-		@RequestBody List<Long> favorieIds) {
+		@RequestBody List<Long> favoriteIds) {
 		log.info("MemberFavoriteController.deleteFavoriteList");
-		log.info("favorieIds = " + favorieIds);
+		log.info("favorieIds = " + favoriteIds);
 
-		memberFavoriteService.deleteFavorites(favorieIds);
+		memberFavoriteService.deleteFavorites(favoriteIds);
 		return ResponseEntity.ok().build();
 	}
 
