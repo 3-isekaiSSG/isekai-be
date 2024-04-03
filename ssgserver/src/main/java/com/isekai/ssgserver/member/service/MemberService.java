@@ -10,8 +10,11 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
+import com.isekai.ssgserver.member.dto.SocialMemberDto;
 import com.isekai.ssgserver.member.entity.Member;
+import com.isekai.ssgserver.member.entity.MemberSocial;
 import com.isekai.ssgserver.member.repository.MemberRepository;
+import com.isekai.ssgserver.member.repository.SocialRepository;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
 import com.isekai.ssgserver.util.jwt.JwtToken;
 
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class MemberService {
 	private final MemberRepository memberRepository;
+	private final SocialRepository socialRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final JwtProvider jwtProvider;
 
@@ -47,6 +51,16 @@ public class MemberService {
 		if (!passwordEncoder.matches(loginDto.getPassword(), member.getPassword())) {
 			throw new CustomException(ErrorCode.PASSWORD_ERROR);
 		}
+
+		return jwtProvider.createToken(member.getUuid());
+	}
+
+	public JwtToken socialLogin(SocialMemberDto isMemberDto) {
+		MemberSocial social = socialRepository.findByMemberSocialCode(isMemberDto.getSocialCode())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+		Member member = memberRepository.findByUuid(social.getUuid())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		return jwtProvider.createToken(member.getUuid());
 	}
