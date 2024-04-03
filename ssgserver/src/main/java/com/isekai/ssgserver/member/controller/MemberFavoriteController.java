@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,14 +35,14 @@ public class MemberFavoriteController {
 	/*  뭐든 찜하기
 	 *	identifier
 	 * */
-	@PutMapping("")
+	@PostMapping("")
 	@Operation(summary = "뭐든 상품 찜하기", description = "회원이 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putFavoriteTotal(
 		@RequestBody FavoritePutReqDto favoritePutReqDto) {
 		log.info("MemberFavoriteController.putFavoriteTotal");
 		log.info("MemberFavoriteController.putFavoriteTotal");
 
-		memberFavoriteService.putFavoriteTotal(favoritePutReqDto);
+		memberFavoriteService.postFavoriteTotal(favoritePutReqDto);
 
 		return ResponseEntity.ok().build();
 	}
@@ -51,7 +51,7 @@ public class MemberFavoriteController {
 	 *	product_id
 	 * 	division = 0
 	 * */
-	@PutMapping("/singleProduct")
+	@PostMapping("/singleProduct")
 	@Operation(summary = "단일 상품 찜하기", description = "회원이 단일 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putSingleProduct(
 		@RequestBody SingleProductReqDto singleProductReqDto) {
@@ -59,7 +59,7 @@ public class MemberFavoriteController {
 		log.info("MemberFavoriteController.putSingleProduct");
 		log.info("singleProductReqDto = " + singleProductReqDto);
 
-		memberFavoriteService.putSingleProduct(singleProductReqDto);
+		memberFavoriteService.postSingleProduct(singleProductReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -67,7 +67,7 @@ public class MemberFavoriteController {
 	 *	bundel_id
 	 * 	division = 1
 	 * */
-	@PutMapping("/bundleProduct")
+	@PostMapping("/bundleProduct")
 	@Operation(summary = "묶음 상품 찜하기", description = "회원이 묶음 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putBundleProduct(
 		@RequestBody BundleProductReqDto bundleProductReqDto) {
@@ -75,7 +75,7 @@ public class MemberFavoriteController {
 		log.info("MemberFavoriteController.putBundleProduct");
 		log.info("bundleProductReqDto = " + bundleProductReqDto);
 
-		memberFavoriteService.putBundleProduct(bundleProductReqDto);
+		memberFavoriteService.postBundleProduct(bundleProductReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -83,14 +83,14 @@ public class MemberFavoriteController {
 	 *	category_l_id
 	 * 	division = 2
 	 * */
-	@PutMapping("/categoryL")
+	@PostMapping("/categoryL")
 	@Operation(summary = "대 카테고리 찜하기", description = "회원이 대 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putCategoryL(
 		@RequestBody CategoryLReqDto categoryLReqDto) {
 		log.info("MemberFavoriteController.putCategoryL");
 		log.info("categoryLReqDto = " + categoryLReqDto);
 
-		memberFavoriteService.putCategoryL(categoryLReqDto);
+		memberFavoriteService.postCategoryL(categoryLReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -98,14 +98,14 @@ public class MemberFavoriteController {
 	 *	category_m_id
 	 * 	division = 3
 	 * */
-	@PutMapping("/categoryM")
+	@PostMapping("/categoryM")
 	@Operation(summary = "중 카테고리 찜하기", description = "회원이 중 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putCategoryM(
 		@RequestBody CategoryMReqDto categoryMReqDto) {
 		log.info("MemberFavoriteController.putCategoryM");
 		log.info("categoryMReqDto = " + categoryMReqDto);
 
-		memberFavoriteService.putCategoryM(categoryMReqDto);
+		memberFavoriteService.postCategoryM(categoryMReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -113,14 +113,14 @@ public class MemberFavoriteController {
 	 *	category_m_id
 	 * 	division = 4
 	 * */
-	@PutMapping("/seller")
+	@PostMapping("/seller")
 	@Operation(summary = "브랜드 찜하기", description = "회원이 브랜드 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putSeller(
 		@RequestBody SellerReqDto sellerReqDto) {
 		log.info("MemberFavoriteController.putSeller");
 		log.info("sellerReqDto = " + sellerReqDto);
 
-		memberFavoriteService.putSeller(sellerReqDto);
+		memberFavoriteService.postSeller(sellerReqDto);
 		return ResponseEntity.ok().build();
 	}
 

@@ -36,7 +36,7 @@ public class MemberFavoriteService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public void putFavoriteTotal(FavoritePutReqDto favoritePutReqDto) {
+	public void postFavoriteTotal(FavoritePutReqDto favoritePutReqDto) {
 		byte division = favoritePutReqDto.getDivision().getCode();
 
 		if (division == 2) {
@@ -90,7 +90,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void putSingleProduct(SingleProductReqDto singleProductReqDto) {
+	public void postSingleProduct(SingleProductReqDto singleProductReqDto) {
 		String uuid = singleProductReqDto.getUuid();
 		Long identifier = singleProductReqDto.getProduct_id();
 		FavoriteDivision singleProduct = FavoriteDivision.SINGLE_PRODUCT;
@@ -106,7 +106,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void putBundleProduct(BundleProductReqDto bundleProductReqDto) {
+	public void postBundleProduct(BundleProductReqDto bundleProductReqDto) {
 		String uuid = bundleProductReqDto.getUuid();
 		Long identifier = bundleProductReqDto.getBundel_id();
 		FavoriteDivision bundleProduct = FavoriteDivision.BUNDLE_PRODUCT;
@@ -122,7 +122,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void putCategoryL(CategoryLReqDto categoryLReqDto) {
+	public void postCategoryL(CategoryLReqDto categoryLReqDto) {
 		String uuid = categoryLReqDto.getUuid();
 		String largeName = categoryLReqDto.getLargeName();
 		String modifiedLargeName = largeName.replace('-', '/');
@@ -141,7 +141,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void putCategoryM(CategoryMReqDto categoryMReqDto) {
+	public void postCategoryM(CategoryMReqDto categoryMReqDto) {
 		String uuid = categoryMReqDto.getUuid();
 		String medinumName = categoryMReqDto.getMediumName();
 		String modifiedMediumName = medinumName.replace('-', '/');
@@ -160,7 +160,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void putSeller(SellerReqDto sellerReqDto) {
+	public void postSeller(SellerReqDto sellerReqDto) {
 		String uuid = sellerReqDto.getUuid();
 		Long identifier = sellerReqDto.getSeller_id();
 		FavoriteDivision seller = FavoriteDivision.BRAND;
