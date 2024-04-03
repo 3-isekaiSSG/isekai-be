@@ -8,5 +8,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FavoriteDelReqDto {
-	private Long favorite_id;
+	private Long favoriteId;
 }

@@ -8,6 +8,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class SingleProductReqDto {
-	private Long product_id;
+	private Long productId;
 	private String uuid;
 }

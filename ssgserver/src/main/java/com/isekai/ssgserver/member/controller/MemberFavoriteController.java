@@ -51,7 +51,7 @@ public class MemberFavoriteController {
 	 *	product_id
 	 * 	division = 0
 	 * */
-	@PostMapping("/singleProduct")
+	@PostMapping("/single-product")
 	@Operation(summary = "단일 상품 찜하기", description = "회원이 단일 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putSingleProduct(
 		@RequestBody SingleProductReqDto singleProductReqDto) {
@@ -67,7 +67,7 @@ public class MemberFavoriteController {
 	 *	bundel_id
 	 * 	division = 1
 	 * */
-	@PostMapping("/bundleProduct")
+	@PostMapping("/bundle-product")
 	@Operation(summary = "묶음 상품 찜하기", description = "회원이 묶음 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<?> putBundleProduct(
 		@RequestBody BundleProductReqDto bundleProductReqDto) {
