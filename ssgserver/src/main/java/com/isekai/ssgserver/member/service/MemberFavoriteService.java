@@ -15,6 +15,7 @@ import com.isekai.ssgserver.member.dto.CategoryMReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
@@ -179,8 +180,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void deleteFavoriteOne(FavoriteDelReqDto favoriteDelReqDto) {
-		Long favoriteId = favoriteDelReqDto.getFavoriteId();
+	public void deleteFavoriteOne(Long favoriteId) {
 		Favorite favoriteOptional = memberFavoriteRepository.findById(favoriteId)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
@@ -188,8 +188,11 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void deleteFavorites(List<Long> favoriteIds) {
-		for (Long favoriteId : favoriteIds) {
+	public void deleteFavorites(FavoriteDelRequestDto favoriteDelRequestDto) {
+		List<FavoriteDelReqDto> favoriteDelList = favoriteDelRequestDto.getFavoriteDelList();
+
+		for (FavoriteDelReqDto favoriteDelReqDto : favoriteDelList) {
+			Long favoriteId = favoriteDelReqDto.getFavoriteId();
 			memberFavoriteRepository.findById(favoriteId)
 				.ifPresentOrElse(
 					favorite -> memberFavoriteRepository.deleteById(favoriteId),

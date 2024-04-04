@@ -1,7 +1,5 @@
 package com.isekai.ssgserver.member.controller;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +13,7 @@ import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
 import com.isekai.ssgserver.member.dto.CategoryMReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
-import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
@@ -144,7 +142,7 @@ public class MemberFavoriteController {
 
 	// 찜인지
 	// 해당 아이템이 찜인지 T/F 반환
-	@GetMapping("/{id}")
+	@GetMapping("/{identifier}/{division}")
 	public ResponseEntity<?> getIsFavorite() {
 		return null;
 	}
@@ -165,11 +163,11 @@ public class MemberFavoriteController {
 	@DeleteMapping("/selects")
 	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
 	public ResponseEntity<Void> deleteFavoriteList(
-		@RequestBody List<Long> favoriteIds) {
+		@RequestBody FavoriteDelRequestDto favoriteDelRequestDto) {
 		log.info("MemberFavoriteController.deleteFavoriteList");
-		log.info("favorieIds = " + favoriteIds);
+		log.info("favoriteDelRequestDto = " + favoriteDelRequestDto);
 
-		memberFavoriteService.deleteFavorites(favoriteIds);
+		memberFavoriteService.deleteFavorites(favoriteDelRequestDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -177,12 +175,11 @@ public class MemberFavoriteController {
 	@DeleteMapping("/{favorite_id}")
 	@Operation(summary = "찜 하나 삭제", description = "찜 하나를 삭제합니다.")
 	public ResponseEntity<Void> deleteFavoriteSeelct(
-		@RequestBody FavoriteDelReqDto favoriteDelReqDto
-	) {
+		@PathVariable Long favoriteId) {
 		log.info("MemberFavoriteController.deleteFavoriteSeelct");
-		log.info("favoriteDelReqDto = " + favoriteDelReqDto);
+		log.info("favoriteId = " + favoriteId);
 
-		memberFavoriteService.deleteFavoriteOne(favoriteDelReqDto);
+		memberFavoriteService.deleteFavoriteOne(favoriteId);
 		return ResponseEntity.ok().build();
 	}
 
