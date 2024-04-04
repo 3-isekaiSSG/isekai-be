@@ -25,7 +25,7 @@ public class MemberWithdrawController {
 
 	@PostMapping("")
 	@Operation(summary = "회원 탈퇴로 변경", description = "해당 하는 회원 상태값을 탈퇴로 변경합니다.")
-	public ResponseEntity<?> withdrawUpdate(
+	public ResponseEntity<Void> withdrawUpdate(
 		@RequestBody UuidDto uuidDto) {
 		log.info("MemberWithdrawController.withdrawUpdate");
 		log.info("uuidDto = " + uuidDto);
@@ -35,7 +35,7 @@ public class MemberWithdrawController {
 
 	@PostMapping("/reasons")
 	@Operation(summary = "탈퇴 사유 저장", description = "탈퇴 사유 데이터를 저장합니다.")
-	public ResponseEntity<Object> withdrawInfoSave(@RequestBody WithdrawInfoDto withdrawInfoDto) {
+	public ResponseEntity<Void> withdrawInfoSave(@RequestBody WithdrawInfoDto withdrawInfoDto) {
 		log.info("MemberWithdrawController.withdrawInfoSave");
 		log.info("withdrawInfo = {}", withdrawInfoDto);
 		withdrawService.reasonsSave(withdrawInfoDto);

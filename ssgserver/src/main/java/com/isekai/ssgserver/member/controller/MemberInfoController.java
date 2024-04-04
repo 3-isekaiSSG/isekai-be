@@ -30,7 +30,7 @@ public class MemberInfoController {
 
 	@PutMapping("/password")
 	@Operation(summary = "회원 비밀번호 재설정", description = "회원 비밀번호 입력한 값으로 변경")
-	public ResponseEntity<?> updatePassword(
+	public ResponseEntity<MessageResponse> updatePassword(
 		@RequestBody InfoPasswordDto infoPasswordDto) {
 
 		log.info("MemberInfoController.updatePassword");
@@ -41,14 +41,14 @@ public class MemberInfoController {
 
 	@PostMapping("/Id")
 	@Operation(summary = "회원 아이디 찾기", description = "인증번호 확인 후 회원 아이디 알려주기")
-	public ResponseEntity<?> findMemeberId(
+	public ResponseEntity<AccoutIdDto> findMemeberId(
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest
 	) {
 		log.info("MemberInfoController.findMemeberId");
 		log.info("smsVerificationRequest = " + smsVerificationRequest);
-		AccoutIdDto accountId = memberInfoService.findMemberId(smsVerificationRequest);
+		AccoutIdDto accountIdDto = memberInfoService.findMemberId(smsVerificationRequest);
 
-		return ResponseEntity.ok(accountId);
+		return ResponseEntity.ok(accountIdDto);
 
 	}
 
