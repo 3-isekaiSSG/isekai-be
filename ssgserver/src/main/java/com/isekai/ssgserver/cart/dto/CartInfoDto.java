@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class CartInfoDto {
 
-	private Long id;
+	private Integer id;
 	private String code;
 	private Integer count;
 	private byte checked;

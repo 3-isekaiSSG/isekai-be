@@ -10,7 +10,7 @@ import com.isekai.ssgserver.cart.entity.Cart;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-	List<Cart> findByUuid(String uuid);
+	List<Cart> findByUuidOrderByCreatedAtDesc(String uuid);
 
-	List<Cart> findByCartValue(String cartValue);
+	List<Cart> findByCartValueOrderByCreatedAtDesc(String cartValue);
 }
