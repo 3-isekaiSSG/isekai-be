@@ -34,9 +34,9 @@ public class MemberInfoService {
 		 */
 
 		//* 기존 password랑 일치하는지 확인
-		String uuid = infoPasswordDto.getUuid();
+		String accountId = infoPasswordDto.getAccountId();
 		String newPassword = infoPasswordDto.getNewPassword();
-		Member member = memberRepository.findByUuid(uuid)
+		Member member = memberRepository.findByAccountId(accountId)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 		// 기존 비밀번호 조회
 		String existPassword = member.getPassword();

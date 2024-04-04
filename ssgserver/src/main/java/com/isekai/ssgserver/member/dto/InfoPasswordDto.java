@@ -8,6 +8,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class InfoPasswordDto {
-	private String uuid;
+	private String accountId;
 	private String newPassword;
 }
