@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.member.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
 import com.isekai.ssgserver.member.dto.CategoryMReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteCountDto;
+import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.SellerReqDto;
@@ -197,4 +200,21 @@ public class MemberFavoriteService {
 		}
 	}
 
+	@Transactional
+	public FavoriteCountResponseDto countFavorites() {
+		// 상품 전체 및 묶음상품 갯수
+		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
+		// 브랜드 갯수
+		byte brandCount = memberFavoriteRepository.countByDivision((byte)4);
+		// 카테고리 L, M 갯수
+		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)2, (byte)3);
+
+		return FavoriteCountResponseDto.builder()
+			.favoriteCountList(new ArrayList<FavoriteCountDto>() {{
+				add(new FavoriteCountDto((byte)1, totalCount));
+				add(new FavoriteCountDto((byte)2, (long)brandCount));
+				add(new FavoriteCountDto((byte)3, categoryCount));
+			}})
+			.build();
+	}
 }
