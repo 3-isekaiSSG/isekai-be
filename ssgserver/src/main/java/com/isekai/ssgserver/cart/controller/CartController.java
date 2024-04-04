@@ -7,10 +7,13 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
+import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
 import com.isekai.ssgserver.cart.service.CartService;
 import com.isekai.ssgserver.util.jwt.AuthDto;
@@ -46,14 +49,41 @@ public class CartController {
 			String uuid = authDto.getId();
 
 			// 회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getCart(uuid);
+			CartResponseDto cartDto = cartService.getMemberCart(uuid);
 			return ResponseEntity.ok(cartDto);
 		} else {
 			// 비회원의 경우, 쿠키를 사용하여 장바구니 식별
 			String cartValue = getOrCreateCartValue(request, response);
 			// 비회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getCart(cartValue);
+			CartResponseDto cartDto = cartService.getNonMemberCart(cartValue);
 			return ResponseEntity.ok(cartDto);
+		}
+
+	}
+
+	// @GetMapping("/options/{optionId}")
+	// @Operation(summary = "장바구니 상품 옵션값", description = "optionId를 통해 해당 상품의 옵션값을 내려줍니다.")
+	// public ResponseEntity<CartOptionDto> getCartOption(@PathVariable Long optionId) {
+	//
+	// }
+
+	@PostMapping
+	@Operation(summary = "장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
+	public ResponseEntity<?> addCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
+		HttpServletResponse response) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()
+			&& !(authentication instanceof AnonymousAuthenticationToken)) {
+			AuthDto authDto = (AuthDto)authentication.getPrincipal();
+			String uuid = authDto.getId();
+
+			return cartService.addMemberCartProduct(cartRequestDto, uuid);
+		} else {
+			String cartValue = getOrCreateCartValue(request, response);
+
+			return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
 		}
 
 	}

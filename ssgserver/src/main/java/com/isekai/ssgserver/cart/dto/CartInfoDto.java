@@ -8,6 +8,7 @@ import lombok.Getter;
 public class CartInfoDto {
 
 	private Integer id;
+	private Long cartId;
 	private String code;
 	private Integer count;
 	private byte checked;

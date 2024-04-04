@@ -40,10 +40,10 @@ public class Delivery {
 
 	private String seller;
 
-	@Column(name = "delivery_company", nullable = false)
+	@Column(name = "delivery_company", nullable = true)
 	private byte deliveryCompany;
 
-	@Column(name = "delivery_code", nullable = false)
+	@Column(name = "delivery_code", nullable = true)
 	private String deliveryCode;
 
 	@Column(name = "delivery_message")
