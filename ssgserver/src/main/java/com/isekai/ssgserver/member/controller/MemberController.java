@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
+import com.isekai.ssgserver.member.dto.SocialMemberDto;
 import com.isekai.ssgserver.member.service.MemberService;
 import com.isekai.ssgserver.util.MessageResponse;
 import com.isekai.ssgserver.util.jwt.JwtToken;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,7 +33,7 @@ public class MemberController {
 
 	@PostMapping("/join")
 	@Operation(summary = "회원가입")
-	public ResponseEntity<MessageResponse> join(@Valid @RequestBody MemberJoinDto joinDto) {
+	public ResponseEntity<MessageResponse> join(@RequestBody MemberJoinDto joinDto) {
 		memberService.join(joinDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("회원가입에 성공하셨습니다."));
 	}
@@ -47,8 +47,15 @@ public class MemberController {
 
 	@PostMapping("/login")
 	@Operation(summary = "로그인")
-	public ResponseEntity<JwtToken> login(@Valid @RequestBody MemberLoginDto loginDto) {
+	public ResponseEntity<JwtToken> login(@RequestBody MemberLoginDto loginDto) {
 		JwtToken tokens = memberService.login(loginDto);
+		return ResponseEntity.ok(tokens);
+	}
+
+	@PostMapping("/social-login")
+	@Operation(summary = "소셜 회원 확인", description = "소셜로 가입된 유저인지 아닌지 확인해서 맞다면 login 시키고, 아니라면 간편회원가입 페이지로 리다이렉트")
+	public ResponseEntity<JwtToken> socialMember(@RequestBody SocialMemberDto socialMemberDto) {
+		JwtToken tokens = memberService.socialLogin(socialMemberDto);
 		return ResponseEntity.ok(tokens);
 	}
 }
