@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
+import com.isekai.ssgserver.cart.dto.CartAddDropDto;
 import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
@@ -118,14 +119,14 @@ public class CartController {
 
 	@PatchMapping("/one-add/{cartId}")
 	@Operation(summary = "상품 개수 추가", description = "장바구니 + 버튼 누를시 상품 개수가 추가됩니다.")
-	public ResponseEntity<?> addCountOne(@PathVariable Long cartId) {
+	public CartAddDropDto addCountOne(@PathVariable Long cartId) {
 
 		return cartUpdateService.addCountOne(cartId);
 	}
 
 	@PatchMapping("/one-drop/{cartId}")
 	@Operation(summary = "상품 개수 차감", description = "장바구니 - 버튼 누를시 상품 개수가 차감됩니다.")
-	public ResponseEntity<?> dropCountOne(@PathVariable Long cartId) {
+	public CartAddDropDto dropCountOne(@PathVariable Long cartId) {
 
 		return cartUpdateService.dropCountOne(cartId);
 	}
