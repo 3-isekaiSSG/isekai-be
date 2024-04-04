@@ -35,7 +35,7 @@ public class CartController {
 	// 장바구니 조회
 	@GetMapping
 	@Operation(summary = "장바구니 조회", description = "회원, 비회원 장바구니 조회")
-	public ResponseEntity<?> getCart(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<CartResponseDto> getCart(HttpServletRequest request, HttpServletResponse response) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -46,13 +46,13 @@ public class CartController {
 			String uuid = authDto.getId();
 
 			// 회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getMemberCart(uuid);
+			CartResponseDto cartDto = cartService.getCart(uuid);
 			return ResponseEntity.ok(cartDto);
 		} else {
 			// 비회원의 경우, 쿠키를 사용하여 장바구니 식별
 			String cartValue = getOrCreateCartValue(request, response);
 			// 비회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getNonMemberCart(cartValue);
+			CartResponseDto cartDto = cartService.getCart(cartValue);
 			return ResponseEntity.ok(cartDto);
 		}
 
