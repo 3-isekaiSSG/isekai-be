@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.order.entity;
 
+import com.isekai.ssgserver.common.BaseCreateTimeEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +18,10 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString
 @Getter
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseCreateTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "orders_id")
@@ -35,17 +36,17 @@ public class Order {
 	@Column(name = "member_coupon_id")
 	private Long memberCouponId;
 
-	@Column(name = "regular_price", nullable = false)
-	private int regularPrice;
+	@Column(name = "origin_price", nullable = false)
+	private int originPrice;
 
 	@Column(name = "discount_price", nullable = false)
 	private int discountPrice;
 
-	@Column(name = "delivery_price", nullable = false)
-	private int deliveryPrice;
+	@Column(name = "delivery_fee", nullable = false)
+	private int deliveryFee;
 
-	@Column(name = "pay_price", nullable = false)
-	private int payPrice;
+	@Column(name = "buy_price", nullable = false)
+	private int buyPrice;
 
 	@Column(name = "orders_name", nullable = false)
 	private String ordersName;
@@ -56,4 +57,18 @@ public class Order {
 	@Column(name = "orders_email", nullable = false)
 	private String ordersEmail;
 
+	@Builder
+	public Order(Long memberId, String code, Long memberCouponId, int originPrice, int discountPrice, int deliveryFee,
+		int buyPrice, String ordersName, String ordersPhone, String ordersEmail) {
+		this.memberId = memberId;
+		this.code = code;
+		this.memberCouponId = memberCouponId;
+		this.originPrice = originPrice;
+		this.discountPrice = discountPrice;
+		this.deliveryFee = deliveryFee;
+		this.buyPrice = buyPrice;
+		this.ordersName = ordersName;
+		this.ordersPhone = ordersPhone;
+		this.ordersEmail = ordersEmail;
+	}
 }

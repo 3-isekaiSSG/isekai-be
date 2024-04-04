@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.order.dto.NonMemberOrderDto;
+import com.isekai.ssgserver.order.dto.NonMemberOrderResponseDto;
 import com.isekai.ssgserver.order.service.OrderService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,8 +23,11 @@ public class OrderController {
 
 	private final OrderService orderService;
 
-	@PostMapping("")
-	public ResponseEntity<?> createOrder(@RequestBody NonMemberOrderDto nonMemberOrderDto) {
-		return ResponseEntity.ok().build();
+	@PostMapping("/non-member")
+	public ResponseEntity<NonMemberOrderResponseDto> createNonMemberOrder(
+		@RequestBody NonMemberOrderDto nonMemberOrderDto) {
+
+		NonMemberOrderResponseDto nonMemberOrderResponseDto = orderService.createNonMemberOrder(nonMemberOrderDto);
+		return ResponseEntity.ok(nonMemberOrderResponseDto);
 	}
 }

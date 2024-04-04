@@ -11,11 +11,10 @@ import lombok.ToString;
 @ToString
 public class OrderProductDto {
 
-	private String sellerName;
 	private String productCode;
-	// 옵션
-	private List<OrderOptionDto> orderOptionList;
 	private int originPrice;
 	private int buyPrice;
 	private int count;
+	// 옵션
+	private List<OrderOptionDto> orderOptionList;
 }

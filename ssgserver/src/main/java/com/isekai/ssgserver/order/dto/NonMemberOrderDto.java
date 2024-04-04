@@ -22,5 +22,9 @@ public class NonMemberOrderDto {
 	private String card;
 	private int installment;
 
-	private List<OrderProductDto> orderProductList;
+	private int originPrice;
+	private int deliveryFee;
+	private int buyPrice;
+
+	private List<OrderSellerProductDto> orderSellerProductDtoList;
 }
