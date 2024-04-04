@@ -7,7 +7,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class NonMemberOrderResponseDto {
+public class OrderResponseDto {
 
 	private String orderCode;
 }

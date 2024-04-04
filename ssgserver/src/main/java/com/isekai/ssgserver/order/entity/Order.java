@@ -27,8 +27,8 @@ public class Order extends BaseCreateTimeEntity {
 	@Column(name = "orders_id")
 	private Long ordersId;
 
-	@Column(name = "member_id", nullable = false)
-	private Long memberId;
+	@Column(name = "uuid", nullable = false)
+	private String uuid;
 
 	@Column(name = "code", nullable = false)
 	private String code;
@@ -58,9 +58,9 @@ public class Order extends BaseCreateTimeEntity {
 	private String ordersEmail;
 
 	@Builder
-	public Order(Long memberId, String code, Long memberCouponId, int originPrice, int discountPrice, int deliveryFee,
+	public Order(String uuid, String code, Long memberCouponId, int originPrice, int discountPrice, int deliveryFee,
 		int buyPrice, String ordersName, String ordersPhone, String ordersEmail) {
-		this.memberId = memberId;
+		this.uuid = uuid;
 		this.code = code;
 		this.memberCouponId = memberCouponId;
 		this.originPrice = originPrice;
