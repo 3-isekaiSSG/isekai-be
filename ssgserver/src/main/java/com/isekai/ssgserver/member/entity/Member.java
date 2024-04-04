@@ -47,10 +47,13 @@ public class Member extends BaseEntity {
 	@Column(name = "phone", nullable = false)
 	private String phone;
 
+	@Column(name = "zipcode")
+	private String zipcode;
+
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "gender")
+	@Column(name = "gender", nullable = false)
 	private Integer gender;
 
 	@Column(name = "is_withdraw", nullable = false)
