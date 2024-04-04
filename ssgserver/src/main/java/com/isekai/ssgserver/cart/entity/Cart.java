@@ -36,8 +36,8 @@ public class Cart extends BaseEntity {
 	private String uuid;
 
 	// 비회원 장바구니 쿠키 value
-	@Column(nullable = true)
-	private String value;
+	@Column(name = "cart_value", nullable = true)
+	private String cartValue;
 
 	@Column(nullable = false)
 	private int count;
