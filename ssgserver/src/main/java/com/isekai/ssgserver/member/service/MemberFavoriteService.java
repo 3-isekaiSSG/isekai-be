@@ -220,4 +220,20 @@ public class MemberFavoriteService {
 			}})
 			.build();
 	}
+
+	public boolean checkFavoriteExists(String uuid, byte division, String identifier) {
+		Long identifierModify;
+
+		if (division == 2) {
+			String modifiedLargeName = identifier.replace('-', '/');
+			identifierModify = categoryLRepository.findByLargeName(modifiedLargeName);
+		} else if (division == 3) {
+			String modifiedMediumName = identifier.replace('-', '/');
+			identifierModify = categoryMRepository.findByMediumName(modifiedMediumName);
+		} else {
+			identifierModify = Long.parseLong(identifier);
+		}
+
+		return memberFavoriteRepository.existsByUuidAndDivisionAndIdentifier(uuid, division, identifierModify);
+	}
 }

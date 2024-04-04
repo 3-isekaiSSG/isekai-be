@@ -15,4 +15,6 @@ public interface MemberFavoriteRepository extends JpaRepository<Favorite, Long> 
 	Long countByDivisionIn(@Param("division1") byte division1, @Param("division2") byte division2);
 
 	Long countByDivisionEqualsOrDivisionEquals(byte division1, byte division2);
+
+	boolean existsByUuidAndDivisionAndIdentifier(String uuid, byte division, Long identifier);
 }

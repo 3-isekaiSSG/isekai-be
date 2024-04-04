@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.isekai.ssgserver.member.dto.BundleProductReqDto;
 import com.isekai.ssgserver.member.dto.CategoryLReqDto;
@@ -142,9 +143,18 @@ public class MemberFavoriteController {
 
 	// 찜인지
 	// 해당 아이템이 찜인지 T/F 반환
-	@GetMapping("/{identifier}/{division}")
-	public ResponseEntity<?> getIsFavorite() {
-		return null;
+	@GetMapping("/check")
+	@Operation(summary = "찜인지 여부", description = "찜인지 여부를 조회합니다.")
+	public ResponseEntity<Boolean> getIsFavorite(
+		@RequestParam(value = "uuid") String uuid,
+		@RequestParam(value = "division") byte division,
+		@RequestParam(value = "identifier") String identifier
+	) {
+		log.info("MemberFavoriteController.getIsFavorite");
+
+		boolean result = memberFavoriteService.checkFavoriteExists(uuid, division, identifier);
+
+		return ResponseEntity.ok(result);
 	}
 
 	// 찜 갯수 조회
@@ -153,7 +163,7 @@ public class MemberFavoriteController {
 	@GetMapping("/number")
 	@Operation(summary = "찜 갯수", description = "찜 상품, 브랜드, 카테고리 갯수를 구합니다.")
 	public ResponseEntity<FavoriteCountResponseDto> getCountFavorite() {
-		System.out.println("MemberFavoriteController.getCountFavorite");
+		log.info("MemberFavoriteController.getCountFavorite");
 		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.countFavorites();
 
 		return ResponseEntity.ok(favoriteCountResponseDto);
