@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartInfoDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
@@ -171,4 +172,26 @@ public class CartService {
 		return ResponseEntity.ok("Ok");
 	}
 
+	// 장바구니 총 개수
+	// 회원
+	public CartCountResponseDto getMemberCartCount(String uuid) {
+
+		Integer cnt = cartRepository.countByUuid(uuid);
+
+		return CartCountResponseDto.builder()
+			.id(0)
+			.cnt(cnt)
+			.build();
+	}
+
+	// 비회원
+	public CartCountResponseDto getNonMemberCartCount(String cartValue) {
+
+		Integer cnt = cartRepository.countByCartValue(cartValue);
+
+		return CartCountResponseDto.builder()
+			.id(0)
+			.cnt(cnt)
+			.build();
+	}
 }

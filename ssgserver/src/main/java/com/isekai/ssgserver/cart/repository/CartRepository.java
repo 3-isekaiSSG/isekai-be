@@ -17,4 +17,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 	List<Cart> findByUuidOrderByCreatedAtDesc(String uuid);
 
 	List<Cart> findByCartValueOrderByCreatedAtDesc(String cartValue);
+
+	Integer countByUuid(String uuid);
+
+	Integer countByCartValue(String cartValue);
 }

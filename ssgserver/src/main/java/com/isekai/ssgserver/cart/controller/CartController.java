@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
+import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
 import com.isekai.ssgserver.cart.service.CartService;
@@ -88,6 +89,29 @@ public class CartController {
 
 	}
 
+	@GetMapping("/count")
+	@Operation(summary = "장바구니 총 개수", description = "장바구니에 담겨있는 상품 종류의 개수입니다.")
+	public ResponseEntity<?> getCartCount(HttpServletRequest request, HttpServletResponse response) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()
+			&& !(authentication instanceof AnonymousAuthenticationToken)) {
+			AuthDto authDto = (AuthDto)authentication.getPrincipal();
+			String uuid = authDto.getId();
+
+			CartCountResponseDto cartCountResponse = cartService.getMemberCartCount(uuid);
+
+			return ResponseEntity.ok(cartCountResponse);
+		} else {
+			String cartValue = getOrCreateCartValue(request, response);
+
+			CartCountResponseDto cartCountResponse = cartService.getNonMemberCartCount(cartValue);
+
+			return ResponseEntity.ok(cartCountResponse);
+		}
+	}
+
 	private String getOrCreateCartValue(HttpServletRequest request, HttpServletResponse response) {
 
 		// 쿠키에서 장바구니 value를 찾음
@@ -105,4 +129,5 @@ public class CartController {
 			return newCartValue;
 		}
 	}
+
 }
