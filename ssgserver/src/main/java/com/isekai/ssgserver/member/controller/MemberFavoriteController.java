@@ -101,7 +101,7 @@ public class MemberFavoriteController {
 	 *	category_l_id
 	 * 	division = 2
 	 * */
-	@PostMapping("/categoryL")
+	@PostMapping("/categoryl")
 	@Operation(summary = "대 카테고리 찜하기", description = "회원이 대 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> FavoriteCategoryLAdd(
 		@RequestHeader("Authorization") String token,
@@ -119,7 +119,7 @@ public class MemberFavoriteController {
 	 *	category_m_id
 	 * 	division = 3
 	 * */
-	@PostMapping("/categoryM")
+	@PostMapping("/categorym")
 	@Operation(summary = "중 카테고리 찜하기", description = "회원이 중 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> FavoriteCategoryMAdd(
 		@RequestHeader("Authorization") String token,
@@ -204,7 +204,7 @@ public class MemberFavoriteController {
 	}
 
 	// 찜 1개 삭제
-	@DeleteMapping("/{favorite_id}")
+	@DeleteMapping("/{favoriteId}")
 	@Operation(summary = "찜 하나 삭제", description = "찜 하나를 삭제합니다.")
 	public ResponseEntity<Void> FavoriteRemove(
 		@PathVariable Long favoriteId) {
