@@ -7,7 +7,9 @@ import lombok.Getter;
 @Builder
 public class CartOptionDto {
 
-	private Integer depth;
-	private String category;
+	private Integer id;
+	private Long optionsId;
 	private String value;
+	private String category;
+	private Integer depth;
 }

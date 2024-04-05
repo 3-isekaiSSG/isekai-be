@@ -175,24 +175,12 @@ public class CartService {
 	}
 
 	// 장바구니 상품 옵션
-	public List<CartOptionDto> getCartProductOption(Long optionsId, Long parentId) {
+	public List<CartOptionDto> getCartProductOption(Long optionsId) {
+		List<CartOptionDto> cartOptionDtos = new ArrayList<>();
+		AtomicInteger id = new AtomicInteger(0);
 
-		List<Option> options;
-		if (parentId == null) {
-			options = optionRepository.findAllByOptionsIdAndDepth(optionsId, 1);
-		} else {
-			options = optionRepository.findAllByOptionsIdAndParentOptionsId(optionsId, parentId);
-		}
-		AtomicInteger responseId = new AtomicInteger(0);
-
-		return options.stream()
-			.map(o -> CartOptionDto.builder()
-				.id(responseId.getAndIncrement())
-				.optionsId(o.getOptionsId())
-				.value(o.getValue())
-				.build())
-			.toList();
-
+		findOptionsRecursively(optionsId, cartOptionDtos, id);
+		return cartOptionDtos;
 	}
 
 	// 장바구니 총 개수
@@ -235,6 +223,25 @@ public class CartService {
 		cartRepository.deleteAllById(cartIds);
 
 		return ResponseEntity.ok(new MessageResponse("삭제되었습니다."));
+	}
+
+	private void findOptionsRecursively(Long optionsId, List<CartOptionDto> cartOptionDtos, AtomicInteger id) {
+		Option option = optionRepository.findById(optionsId)
+			.orElseThrow(() -> new RuntimeException("Option not found with id: " + optionsId));
+
+		CartOptionDto cartOptionDto = CartOptionDto.builder()
+			.id(id.getAndIncrement())
+			.optionsId(option.getOptionsId())
+			.value(option.getValue())
+			.category(option.getCategory())
+			.depth(option.getDepth())
+			.build();
+		cartOptionDtos.add(cartOptionDto);
+
+		// 부모 옵션이 존재하는 경우 재귀적으로 탐색
+		if (option.getParent() != null) {
+			findOptionsRecursively(option.getParent().getOptionsId(), cartOptionDtos, id);
+		}
 	}
 
 }

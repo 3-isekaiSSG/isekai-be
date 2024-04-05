@@ -95,10 +95,9 @@ public class CartController {
 
 	@GetMapping("/options/{optionsId}")
 	@Operation(summary = "장바구니 상품 옵션값", description = "optionId를 통해 해당 상품의 옵션값을 내려줍니다.")
-	public ResponseEntity<List<CartOptionDto>> getCartProductOption(@PathVariable Long optionsId,
-		@RequestParam(required = false) Long parentId) {
+	public ResponseEntity<List<CartOptionDto>> getCartProductOption(@PathVariable Long optionsId) {
 
-		List<CartOptionDto> cartOption = cartService.getCartProductOption(optionsId, parentId);
+		List<CartOptionDto> cartOption = cartService.getCartProductOption(optionsId);
 
 		return ResponseEntity.ok(cartOption);
 	}
