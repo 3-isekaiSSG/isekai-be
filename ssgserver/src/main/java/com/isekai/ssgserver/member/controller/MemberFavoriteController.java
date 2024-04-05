@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +21,7 @@ import com.isekai.ssgserver.member.dto.SellerReqDto;
 import com.isekai.ssgserver.member.dto.SingleProductReqDto;
 import com.isekai.ssgserver.member.enums.FavoriteDivision;
 import com.isekai.ssgserver.member.service.MemberFavoriteService;
+import com.isekai.ssgserver.util.jwt.JwtProvider;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,23 +35,27 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "favorite", description = "회원 상품 좋아요 API document")
 public class MemberFavoriteController {
 	private final MemberFavoriteService memberFavoriteService;
+	private final JwtProvider jwtProvider;
 
 	/*  뭐든 찜하기
 	 *	identifier
 	 * */
-	// @PostMapping("/{identifier}/{division}")
-	@PostMapping("")
+	@PostMapping("/{identifier}/{division}")
 	@Operation(summary = "뭐든 상품 찜하기", description = "회원이 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putFavoriteTotal(
-		@RequestBody FavoritePutReqDto favoritePutReqDto1,
+		@RequestHeader("Authorization") String token,
 		@PathVariable String identifier,
 		@PathVariable FavoriteDivision division) {
 		log.info("MemberFavoriteController.putFavoriteTotal");
-		log.info("MemberFavoriteController.putFavoriteTotal");
-		FavoritePutReqDto favoritePutReqDto = new FavoritePutReqDto();
+		log.info("token = " + token + ", identifier = " + identifier + ", division = " + division);
+		String uuid = jwtProvider.getUuid(token);
 
+		FavoritePutReqDto favoritePutReqDto = FavoritePutReqDto.builder()
+			.uuid(uuid)
+			.division(division)
+			.identifier(identifier)
+			.build();
 		memberFavoriteService.postFavoriteTotal(favoritePutReqDto);
-		// memberFavoriteService.postFavoriteTotal(favoritePutReqDto1, identifier, division);
 
 		return ResponseEntity.ok().build();
 	}
@@ -61,12 +67,14 @@ public class MemberFavoriteController {
 	@PostMapping("/single-product")
 	@Operation(summary = "단일 상품 찜하기", description = "회원이 단일 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putSingleProduct(
+		@RequestHeader("Authorization") String token,
 		@RequestBody SingleProductReqDto singleProductReqDto) {
 
 		log.info("MemberFavoriteController.putSingleProduct");
 		log.info("singleProductReqDto = " + singleProductReqDto);
 
-		memberFavoriteService.postSingleProduct(singleProductReqDto);
+		String uuid = jwtProvider.getUuid(token);
+		memberFavoriteService.postSingleProduct(uuid, singleProductReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -77,12 +85,15 @@ public class MemberFavoriteController {
 	@PostMapping("/bundle-product")
 	@Operation(summary = "묶음 상품 찜하기", description = "회원이 묶음 상품 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putBundleProduct(
+		@RequestHeader("Authorization") String token,
 		@RequestBody BundleProductReqDto bundleProductReqDto) {
 
 		log.info("MemberFavoriteController.putBundleProduct");
 		log.info("bundleProductReqDto = " + bundleProductReqDto);
 
-		memberFavoriteService.postBundleProduct(bundleProductReqDto);
+		String uuid = jwtProvider.getUuid(token);
+
+		memberFavoriteService.postBundleProduct(uuid, bundleProductReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -93,11 +104,14 @@ public class MemberFavoriteController {
 	@PostMapping("/categoryL")
 	@Operation(summary = "대 카테고리 찜하기", description = "회원이 대 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putCategoryL(
+		@RequestHeader("Authorization") String token,
 		@RequestBody CategoryLReqDto categoryLReqDto) {
 		log.info("MemberFavoriteController.putCategoryL");
 		log.info("categoryLReqDto = " + categoryLReqDto);
 
-		memberFavoriteService.postCategoryL(categoryLReqDto);
+		String uuid = jwtProvider.getUuid(token);
+
+		memberFavoriteService.postCategoryL(uuid, categoryLReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -108,11 +122,14 @@ public class MemberFavoriteController {
 	@PostMapping("/categoryM")
 	@Operation(summary = "중 카테고리 찜하기", description = "회원이 중 카테고리 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putCategoryM(
+		@RequestHeader("Authorization") String token,
 		@RequestBody CategoryMReqDto categoryMReqDto) {
 		log.info("MemberFavoriteController.putCategoryM");
 		log.info("categoryMReqDto = " + categoryMReqDto);
 
-		memberFavoriteService.postCategoryM(categoryMReqDto);
+		String uuid = jwtProvider.getUuid(token);
+
+		memberFavoriteService.postCategoryM(uuid, categoryMReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -123,11 +140,14 @@ public class MemberFavoriteController {
 	@PostMapping("/seller")
 	@Operation(summary = "브랜드 찜하기", description = "회원이 브랜드 찜한 것을 저장합니다.")
 	public ResponseEntity<Void> putSeller(
+		@RequestHeader("Authorization") String token,
 		@RequestBody SellerReqDto sellerReqDto) {
 		log.info("MemberFavoriteController.putSeller");
 		log.info("sellerReqDto = " + sellerReqDto);
 
-		memberFavoriteService.postSeller(sellerReqDto);
+		String uuid = jwtProvider.getUuid(token);
+
+		memberFavoriteService.postSeller(uuid, sellerReqDto);
 		return ResponseEntity.ok().build();
 	}
 
@@ -146,11 +166,13 @@ public class MemberFavoriteController {
 	@GetMapping("/check")
 	@Operation(summary = "찜인지 여부", description = "찜인지 여부를 조회합니다.")
 	public ResponseEntity<Boolean> getIsFavorite(
-		@RequestParam(value = "uuid") String uuid,
+		@RequestHeader("Authorization") String token,
 		@RequestParam(value = "division") byte division,
 		@RequestParam(value = "identifier") String identifier
 	) {
 		log.info("MemberFavoriteController.getIsFavorite");
+		log.info("token = " + token + ", division = " + division + ", identifier = " + identifier);
+		String uuid = jwtProvider.getUuid(token);
 
 		boolean result = memberFavoriteService.checkFavoriteExists(uuid, division, identifier);
 

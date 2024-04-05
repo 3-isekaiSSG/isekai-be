@@ -94,8 +94,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postSingleProduct(SingleProductReqDto singleProductReqDto) {
-		String uuid = singleProductReqDto.getUuid();
+	public void postSingleProduct(String uuid, SingleProductReqDto singleProductReqDto) {
 		Long identifier = singleProductReqDto.getProductId();
 		FavoriteDivision singleProduct = FavoriteDivision.SINGLE_PRODUCT;
 		byte division = singleProduct.getCode();
@@ -110,8 +109,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postBundleProduct(BundleProductReqDto bundleProductReqDto) {
-		String uuid = bundleProductReqDto.getUuid();
+	public void postBundleProduct(String uuid, BundleProductReqDto bundleProductReqDto) {
 		Long identifier = bundleProductReqDto.getBundelId();
 		FavoriteDivision bundleProduct = FavoriteDivision.BUNDLE_PRODUCT;
 		byte division = bundleProduct.getCode();
@@ -126,8 +124,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postCategoryL(CategoryLReqDto categoryLReqDto) {
-		String uuid = categoryLReqDto.getUuid();
+	public void postCategoryL(String uuid, CategoryLReqDto categoryLReqDto) {
 		String largeName = categoryLReqDto.getLargeName();
 		String modifiedLargeName = largeName.replace('-', '/');
 		Long identifier = categoryLRepository.findByLargeName(modifiedLargeName);
@@ -145,8 +142,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postCategoryM(CategoryMReqDto categoryMReqDto) {
-		String uuid = categoryMReqDto.getUuid();
+	public void postCategoryM(String uuid, CategoryMReqDto categoryMReqDto) {
 		String medinumName = categoryMReqDto.getMediumName();
 		String modifiedMediumName = medinumName.replace('-', '/');
 		Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
@@ -164,8 +160,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postSeller(SellerReqDto sellerReqDto) {
-		String uuid = sellerReqDto.getUuid();
+	public void postSeller(String uuid, SellerReqDto sellerReqDto) {
 		Long identifier = sellerReqDto.getSellerId();
 		FavoriteDivision seller = FavoriteDivision.BRAND;
 		byte division = seller.getCode();

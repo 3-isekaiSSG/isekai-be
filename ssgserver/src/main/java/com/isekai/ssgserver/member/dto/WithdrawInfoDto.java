@@ -9,6 +9,5 @@ import lombok.ToString;
 @ToString
 public class WithdrawInfoDto {
 	private Long withdrawInfoId;
-	private String uuid;
 	private String reason;
 }

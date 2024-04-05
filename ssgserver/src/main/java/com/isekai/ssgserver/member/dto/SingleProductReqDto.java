@@ -9,5 +9,4 @@ import lombok.ToString;
 @ToString
 public class SingleProductReqDto {
 	private Long productId;
-	private String uuid;
 }

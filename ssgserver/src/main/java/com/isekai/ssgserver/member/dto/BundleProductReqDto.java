@@ -9,5 +9,4 @@ import lombok.ToString;
 @ToString
 public class BundleProductReqDto {
 	private Long bundelId;
-	private String uuid;
 }
