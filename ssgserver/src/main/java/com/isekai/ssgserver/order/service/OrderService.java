@@ -93,6 +93,7 @@ public class OrderService {
 			// 배송(판매자별) DB 저장
 			Delivery sellerDelivery = Delivery.builder()
 				.status(0)
+				.uuid("NONMEMBER")
 				.deliveryType(orderSellerProductDto.getDelivertType())
 				.seller(orderSellerProductDto.getSellerName())
 				.buyPrice(sellerBuyPrice)
@@ -179,6 +180,7 @@ public class OrderService {
 			// 배송(판매자별) DB 저장
 			Delivery sellerDelivery = Delivery.builder()
 				.status(0)
+				.uuid(uuid)
 				.deliveryType(orderSellerProductDto.getDelivertType())
 				.seller(orderSellerProductDto.getSellerName())
 				.buyPrice(sellerBuyPrice)

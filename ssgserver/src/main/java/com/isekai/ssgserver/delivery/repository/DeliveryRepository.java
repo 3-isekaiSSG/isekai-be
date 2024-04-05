@@ -7,4 +7,6 @@ import com.isekai.ssgserver.delivery.entity.Delivery;
 
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
+
+	long countByUuidAndStatus(String uuid, int status);
 }
