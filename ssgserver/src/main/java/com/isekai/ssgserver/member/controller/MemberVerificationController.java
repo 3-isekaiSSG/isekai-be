@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.member.dto.VerificationDto;
-import com.isekai.ssgserver.member.service.MemberService;
 import com.isekai.ssgserver.member.service.VerificationService;
 import com.isekai.ssgserver.util.MessageResponse;
 
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberVerificationController {
 
-	private final MemberService memberService;
 	private final VerificationService verificationService;
 
 	@PostMapping("/send")
