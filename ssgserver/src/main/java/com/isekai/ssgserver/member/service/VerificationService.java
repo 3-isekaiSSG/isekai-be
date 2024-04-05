@@ -54,14 +54,14 @@ public class VerificationService {
 	public void findSms(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
 		String to = smsVerificationRequest.getPhone();
 
-		Optional<Member> existingUser = memberRepository.findByPhone(to);
-		if (existingUser.isEmpty()) {
-			throw new CustomException(ErrorCode.NOT_FOUND_USER);
-		}
+		Member existingUser = memberRepository.findByPhone(to)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		int randomNumber = (int)(Math.random() * 1000000); // 0부터 999999까지의 6자리 숫자
 		String verificationNumber = String.format("%06d", randomNumber); // 6자리 숫자로 포맷
 		phoneVerificationUtil.sendSms(to, verificationNumber);
+
+		verificationRepository.createSmsVerification(to, verificationNumber);
 	}
 
 	public void verifySms(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
