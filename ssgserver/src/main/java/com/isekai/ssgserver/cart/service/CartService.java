@@ -18,6 +18,7 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.option.entity.Option;
 import com.isekai.ssgserver.option.repository.OptionRepository;
+import com.isekai.ssgserver.util.MessageResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -194,4 +195,24 @@ public class CartService {
 			.cnt(cnt)
 			.build();
 	}
+
+	// 장바구니 한개 삭제
+	public ResponseEntity<MessageResponse> deleteOneProduct(Long cartId) {
+
+		Cart cart = cartRepository.findById(cartId)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		cartRepository.delete(cart);
+
+		return ResponseEntity.ok(new MessageResponse("삭제되었습니다."));
+	}
+
+	// 장바구니 선택 삭제
+	public ResponseEntity<MessageResponse> deleteSelectProduct(List<Long> cartIds) {
+
+		cartRepository.deleteAllById(cartIds);
+
+		return ResponseEntity.ok(new MessageResponse("삭제되었습니다."));
+	}
+
 }
