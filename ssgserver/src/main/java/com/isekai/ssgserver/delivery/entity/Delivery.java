@@ -61,9 +61,6 @@ public class Delivery extends BaseEntity {
 	@Column(name = "delivery_message")
 	private String deliveryMessage;
 
-	@Column(name = "delivery_fee", nullable = false)
-	private int deliveryFee;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orders_id", nullable = false)
 	private Order order;

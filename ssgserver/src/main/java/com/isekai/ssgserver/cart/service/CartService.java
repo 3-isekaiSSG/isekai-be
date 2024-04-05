@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartInfoDto;
@@ -19,7 +20,6 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.option.entity.Option;
 import com.isekai.ssgserver.option.repository.OptionRepository;
-import com.isekai.ssgserver.util.MessageResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ public class CartService {
 
 	// 장바구니 조회
 	// 회원
+	@Transactional
 	public CartResponseDto getMemberCart(String uuid) {
 
 		List<Cart> carts = cartRepository.findByUuidOrderByCreatedAtDesc(uuid);
@@ -76,6 +77,7 @@ public class CartService {
 	}
 
 	// 비회원
+	@Transactional
 	public CartResponseDto getNonMemberCart(String cartValue) {
 
 		List<Cart> carts = cartRepository.findByCartValueOrderByCreatedAtDesc(cartValue);
@@ -119,7 +121,8 @@ public class CartService {
 
 	// 장바구니 담기
 	// 회원
-	public ResponseEntity<?> addMemberCartProduct(CartRequestDto cartRequestDto, String uuid) {
+	@Transactional
+	public ResponseEntity<Void> addMemberCartProduct(CartRequestDto cartRequestDto, String uuid) {
 
 		List<Cart> carts = cartRepository.findByUuid(uuid);
 		Option option = optionRepository.findById(cartRequestDto.getOptionsId())
@@ -131,11 +134,12 @@ public class CartService {
 				cartRepository.save(Cart.builder()
 					.cartId(cart.getCartId())
 					.uuid(uuid)
+					.cartValue(cart.getCartValue())
 					.option(option)
 					.count(cart.getCount() + cartRequestDto.getCount())
 					.checked(cart.getChecked())
 					.build());
-				return ResponseEntity.ok("Ok");
+				return ResponseEntity.ok().build();
 			}
 		}
 		// 새롭게 담는 상품
@@ -145,11 +149,12 @@ public class CartService {
 			.count(cartRequestDto.getCount())
 			.checked((byte)0)
 			.build());
-		return ResponseEntity.ok("Ok");
+		return ResponseEntity.ok().build();
 	}
 
 	// 비회원
-	public ResponseEntity<?> addNonMemberCartProduct(CartRequestDto cartRequestDto, String cartValue) {
+	@Transactional
+	public ResponseEntity<Void> addNonMemberCartProduct(CartRequestDto cartRequestDto, String cartValue) {
 
 		List<Cart> carts = cartRepository.findByCartValue(cartValue);
 		Option option = optionRepository.findById(cartRequestDto.getOptionsId())
@@ -160,22 +165,24 @@ public class CartService {
 			if (cart.getOption().getOptionsId().equals(cartRequestDto.getOptionsId())) {
 				cartRepository.save(Cart.builder()
 					.cartId(cart.getCartId())
+					.uuid("-1")
 					.cartValue(cartValue)
 					.option(option)
 					.count(cart.getCount() + cartRequestDto.getCount())
 					.checked(cart.getChecked())
 					.build());
-				return ResponseEntity.ok("Ok");
+				return ResponseEntity.ok().build();
 			}
 		}
 		// 새롭게 담는 상품
 		cartRepository.save(Cart.builder()
+			.uuid("-1")
 			.cartValue(cartValue)
 			.option(option)
 			.count(cartRequestDto.getCount())
 			.checked((byte)0)
 			.build());
-		return ResponseEntity.ok("Ok");
+		return ResponseEntity.ok().build();
 	}
 
 	// 장바구니 상품 옵션
@@ -194,7 +201,6 @@ public class CartService {
 		Integer cnt = cartRepository.countByUuid(uuid);
 
 		return CartCountResponseDto.builder()
-			.id(0)
 			.cnt(cnt)
 			.build();
 	}
@@ -205,30 +211,30 @@ public class CartService {
 		Integer cnt = cartRepository.countByCartValue(cartValue);
 
 		return CartCountResponseDto.builder()
-			.id(0)
 			.cnt(cnt)
 			.build();
 	}
 
 	// 장바구니 한개 삭제
-	public ResponseEntity<MessageResponse> deleteOneProduct(Long cartId) {
+	public ResponseEntity<Void> deleteOneProduct(Long cartId) {
 
 		Cart cart = cartRepository.findById(cartId)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		cartRepository.delete(cart);
 
-		return ResponseEntity.ok(new MessageResponse("삭제되었습니다."));
+		return ResponseEntity.ok().build();
 	}
 
 	// 장바구니 선택 삭제
-	public ResponseEntity<MessageResponse> deleteSelectProduct(List<Long> cartIds) {
+	public ResponseEntity<Void> deleteSelectProduct(List<Long> cartIds) {
 
 		cartRepository.deleteAllById(cartIds);
 
-		return ResponseEntity.ok(new MessageResponse("삭제되었습니다."));
+		return ResponseEntity.ok().build();
 	}
 
+	// 옵션 조회
 	private void findOptionsRecursively(Long optionsId, List<CartOptionDto> cartOptionDtos, AtomicInteger id) {
 		Option option = optionRepository.findById(optionsId)
 			.orElseThrow(() -> new RuntimeException("Option not found with id: " + optionsId));

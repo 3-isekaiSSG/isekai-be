@@ -7,6 +7,5 @@ import lombok.Getter;
 @Builder
 public class CartCountResponseDto {
 
-	private Integer id;
 	private Integer cnt;
 }
