@@ -28,7 +28,7 @@ public class MemberInfoService {
 
 	@Transactional
 	public String modifyByPassword(String uuid, InfoPasswordDto infoPasswordDto) {
-		/* 비밀번호 재설정 로직
+		/** 비밀번호 재설정 로직
 		 * 	1. 기존 비밀번호랑 새번호 일치 여부 조회
 		 * 	2. 비밀번호 재설정
 		 * 		필요데이터 : 기존 비밀번호, 변경 비밀번호
@@ -66,7 +66,7 @@ public class MemberInfoService {
 
 	@Transactional
 	public AccoutIdDto findMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
-		/* 아이디 찾기 로직
+		/** 아이디 찾기 로직
 		 *	1. 인증 번호 일치 여부 확인
 		 * 	2. 아이디 해당 회원
 		 */

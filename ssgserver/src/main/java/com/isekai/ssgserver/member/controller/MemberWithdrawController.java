@@ -30,8 +30,6 @@ public class MemberWithdrawController {
 	@Operation(summary = "회원 탈퇴로 변경", description = "해당 하는 회원 상태값을 탈퇴로 변경합니다.")
 	public ResponseEntity<Void> withdrawModify(
 		@RequestHeader("Authorization") String token) {
-		log.info("MemberWithdrawController.withdrawUpdate");
-		log.info("token = " + token);
 		String uuid = jwtProvider.getUuid(token);
 		withdrawService.modifyWithdraw(uuid);
 		return ResponseEntity.ok().build();
@@ -42,8 +40,6 @@ public class MemberWithdrawController {
 	public ResponseEntity<Void> withdrawInfoAdd(
 		@RequestHeader("Authorization") String token,
 		@RequestBody WithdrawInfoDto withdrawInfoDto) {
-		log.info("MemberWithdrawController.withdrawInfoSave");
-		log.info("token = " + token + ", withdrawInfoDto = " + withdrawInfoDto);
 		String uuid = jwtProvider.getUuid(token);
 		withdrawService.addReasons(uuid, withdrawInfoDto);
 		return ResponseEntity.ok().build();

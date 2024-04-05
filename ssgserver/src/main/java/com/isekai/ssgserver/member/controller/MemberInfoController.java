@@ -37,8 +37,6 @@ public class MemberInfoController {
 		@RequestHeader("Authorization") String token,
 		@RequestBody InfoPasswordDto infoPasswordDto) {
 
-		log.info("MemberInfoController.updatePassword");
-		log.info("token = " + token + ", infoPasswordDto = " + infoPasswordDto);
 		String uuid = jwtProvider.getUuid(token);
 		String resopseMessage = memberInfoService.modifyByPassword(uuid, infoPasswordDto);
 		return new ResponseEntity<>(new MessageResponse(resopseMessage), HttpStatus.OK);
@@ -49,8 +47,6 @@ public class MemberInfoController {
 	public ResponseEntity<AccoutIdDto> MemeberIdDetails(
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest
 	) {
-		log.info("MemberInfoController.findMemeberId");
-		log.info("smsVerificationRequest = " + smsVerificationRequest);
 		AccoutIdDto accountIdDto = memberInfoService.findMemberId(smsVerificationRequest);
 
 		return ResponseEntity.ok(accountIdDto);
