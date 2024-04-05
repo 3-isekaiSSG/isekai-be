@@ -1,7 +1,11 @@
 package com.isekai.ssgserver.delivery.service;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryListDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryStatusCountDto;
 import com.isekai.ssgserver.delivery.enums.DeliveryStatusCode;
 import com.isekai.ssgserver.delivery.repository.DeliveryRepository;
@@ -33,5 +37,17 @@ public class DeliveryService {
 			.count((int)deliveryRepository.countByUuidAndStatus(uuid, status))
 			.build();
 
+	}
+
+	public List<DeliveryListDto> getDeliveryListByOrderId(Long orderId) {
+		AtomicInteger id = new AtomicInteger(0);
+
+		return deliveryRepository.findAllByOrderOrdersId(orderId)
+			.stream()
+			.map(d -> DeliveryListDto.builder()
+				.id(id.getAndIncrement())
+				.deliveryId(d.getDeliveryId())
+				.build())
+			.toList();
 	}
 }

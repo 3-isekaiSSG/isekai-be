@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.delivery.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryListDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryStatusCountDto;
 import com.isekai.ssgserver.delivery.service.DeliveryService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
@@ -38,4 +41,13 @@ public class DeliveryController {
 		DeliveryStatusCountDto deliveryStatusCountDto = deliveryService.getOrderCountByStatus(uuid, status);
 		return ResponseEntity.ok(deliveryStatusCountDto);
 	}
+
+	@GetMapping("/orders/{orderId}")
+	@Operation(summary = "주문번호로 배송(판매자별 주문) 리스트 조회")
+	public ResponseEntity<List<DeliveryListDto>> getDeliveryListByOrderId(@PathVariable Long orderId) {
+
+		List<DeliveryListDto> deliveryListDtoList = deliveryService.getDeliveryListByOrderId(orderId);
+		return ResponseEntity.ok(deliveryListDtoList);
+	}
+
 }
