@@ -42,7 +42,7 @@ public class MemberFavoriteController {
 	 */
 	@PostMapping("/{identifier}/{division}")
 	@Operation(summary = "뭐든 상품 찜하기", description = "회원이 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavoriteTotalAdd(
+	public ResponseEntity<Void> addFavoriteTotal(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String identifier,
 		@PathVariable FavoriteDivision division) {
@@ -64,7 +64,7 @@ public class MemberFavoriteController {
 	 */
 	@PostMapping("/single-product")
 	@Operation(summary = "단일 상품 찜하기", description = "회원이 단일 상품 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavoriteSingleProductAdd(
+	public ResponseEntity<Void> addSingleProduct(
 		@RequestHeader("Authorization") String token,
 		@RequestBody SingleProductReqDto singleProductReqDto) {
 
@@ -79,7 +79,7 @@ public class MemberFavoriteController {
 	 */
 	@PostMapping("/bundle-product")
 	@Operation(summary = "묶음 상품 찜하기", description = "회원이 묶음 상품 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavrotieBundleProductAdd(
+	public ResponseEntity<Void> addBundleProduct(
 		@RequestHeader("Authorization") String token,
 		@RequestBody BundleProductReqDto bundleProductReqDto) {
 
@@ -95,7 +95,7 @@ public class MemberFavoriteController {
 	 * */
 	@PostMapping("/categoryl")
 	@Operation(summary = "대 카테고리 찜하기", description = "회원이 대 카테고리 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavoriteCategoryLAdd(
+	public ResponseEntity<Void> addCategoryL(
 		@RequestHeader("Authorization") String token,
 		@RequestBody CategoryLReqDto categoryLReqDto) {
 
@@ -111,7 +111,7 @@ public class MemberFavoriteController {
 	 * */
 	@PostMapping("/categorym")
 	@Operation(summary = "중 카테고리 찜하기", description = "회원이 중 카테고리 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavoriteCategoryMAdd(
+	public ResponseEntity<Void> addCategoryM(
 		@RequestHeader("Authorization") String token,
 		@RequestBody CategoryMReqDto categoryMReqDto) {
 
@@ -127,7 +127,7 @@ public class MemberFavoriteController {
 	 */
 	@PostMapping("/seller")
 	@Operation(summary = "브랜드 찜하기", description = "회원이 브랜드 찜한 것을 저장합니다.")
-	public ResponseEntity<Void> FavoriteSellerAdd(
+	public ResponseEntity<Void> addSeller(
 		@RequestHeader("Authorization") String token,
 		@RequestBody SellerReqDto sellerReqDto) {
 
@@ -144,44 +144,44 @@ public class MemberFavoriteController {
 	 */
 	@GetMapping("/list")
 	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회합니다.")
-	public ResponseEntity<?> FavoriteList() {
+	public ResponseEntity<?> getFavoriteList() {
 		return null;
 	}
 
 	@GetMapping("/check")
 	@Operation(summary = "찜인지 여부", description = "찜인지 여부를 조회합니다.")
-	public ResponseEntity<Boolean> FavoriteIsDetails(
+	public ResponseEntity<Boolean> getFavoriteIsDetails(
 		@RequestHeader("Authorization") String token,
 		@RequestParam(value = "division") byte division,
 		@RequestParam(value = "identifier") String identifier
 	) {
 		String uuid = jwtProvider.getUuid(token);
 
-		boolean result = memberFavoriteService.checkFavoriteExists(uuid, division, identifier);
+		boolean result = memberFavoriteService.getFavoriteIsDetails(uuid, division, identifier);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/number")
 	@Operation(summary = "찜 갯수", description = "찜 상품, 브랜드, 카테고리 갯수를 구합니다.")
-	public ResponseEntity<FavoriteCountResponseDto> FavoriteCountList() {
-		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.countFavorites();
+	public ResponseEntity<FavoriteCountResponseDto> getFavoriteCountList() {
+		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.getFavoriteCountList();
 
 		return ResponseEntity.ok(favoriteCountResponseDto);
 	}
 
 	@DeleteMapping("/selects")
 	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
-	public ResponseEntity<Void> FavoriteListRemove(
+	public ResponseEntity<Void> removeFavoriteList(
 		@RequestBody FavoriteDelRequestDto favoriteDelRequestDto) {
 
-		memberFavoriteService.removeFavorites(favoriteDelRequestDto);
+		memberFavoriteService.removeFavoriteList(favoriteDelRequestDto);
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{favoriteId}")
 	@Operation(summary = "찜 하나 삭제", description = "찜 하나를 삭제합니다.")
-	public ResponseEntity<Void> FavoriteRemove(
+	public ResponseEntity<Void> removeFavoriteOne(
 		@PathVariable Long favoriteId) {
 
 		memberFavoriteService.removeFavoriteOne(favoriteId);

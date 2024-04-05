@@ -183,7 +183,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void removeFavorites(FavoriteDelRequestDto favoriteDelRequestDto) {
+	public void removeFavoriteList(FavoriteDelRequestDto favoriteDelRequestDto) {
 		List<FavoriteDelReqDto> favoriteDelList = favoriteDelRequestDto.getFavoriteDelList();
 
 		for (FavoriteDelReqDto favoriteDelReqDto : favoriteDelList) {
@@ -199,7 +199,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteCountResponseDto countFavorites() {
+	public FavoriteCountResponseDto getFavoriteCountList() {
 		// 상품 전체 및 묶음상품 갯수
 		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
 		// 브랜드 갯수
@@ -216,7 +216,7 @@ public class MemberFavoriteService {
 			.build();
 	}
 
-	public boolean checkFavoriteExists(String uuid, byte division, String identifier) {
+	public boolean getFavoriteIsDetails(String uuid, byte division, String identifier) {
 		Long identifierModify;
 
 		if (division == 2) {

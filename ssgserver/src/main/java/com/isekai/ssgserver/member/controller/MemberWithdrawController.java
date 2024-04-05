@@ -28,20 +28,20 @@ public class MemberWithdrawController {
 
 	@PutMapping("")
 	@Operation(summary = "회원 탈퇴로 변경", description = "해당 하는 회원 상태값을 탈퇴로 변경합니다.")
-	public ResponseEntity<Void> withdrawModify(
+	public ResponseEntity<Void> updateWithdraw(
 		@RequestHeader("Authorization") String token) {
 		String uuid = jwtProvider.getUuid(token);
-		withdrawService.modifyWithdraw(uuid);
+		withdrawService.updateWithdraw(uuid);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/reasons")
 	@Operation(summary = "탈퇴 사유 저장", description = "탈퇴 사유 데이터를 저장합니다.")
-	public ResponseEntity<Void> withdrawInfoAdd(
+	public ResponseEntity<Void> addWithdrawInfo(
 		@RequestHeader("Authorization") String token,
 		@RequestBody WithdrawInfoDto withdrawInfoDto) {
 		String uuid = jwtProvider.getUuid(token);
-		withdrawService.addReasons(uuid, withdrawInfoDto);
+		withdrawService.addWithdrawReasons(uuid, withdrawInfoDto);
 		return ResponseEntity.ok().build();
 	}
 }

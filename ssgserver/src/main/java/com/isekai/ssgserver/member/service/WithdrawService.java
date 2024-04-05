@@ -28,7 +28,7 @@ public class WithdrawService {
 	 *  - is_withdraw, withdraw_at, updated_at
 	 */
 	@Transactional
-	public void modifyWithdraw(String uuid) {
+	public void updateWithdraw(String uuid) {
 
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
@@ -41,7 +41,7 @@ public class WithdrawService {
 	}
 
 	@Transactional
-	public void addReasons(String uuid, WithdrawInfoDto withdrawInfoDto) {
+	public void addWithdrawReasons(String uuid, WithdrawInfoDto withdrawInfoDto) {
 		WithdrawInfo withdrawInfo = WithdrawInfo.builder()
 			.uuid(uuid)
 			.withdrawInfoId(withdrawInfoDto.getWithdrawInfoId())

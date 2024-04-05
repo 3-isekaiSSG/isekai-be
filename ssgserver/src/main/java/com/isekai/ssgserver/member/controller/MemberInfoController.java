@@ -3,7 +3,7 @@ package com.isekai.ssgserver.member.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,7 +33,7 @@ public class MemberInfoController {
 
 	@PutMapping("/password")
 	@Operation(summary = "회원 비밀번호 재설정", description = "회원 비밀번호 입력한 값으로 변경")
-	public ResponseEntity<MessageResponse> memberPasswordModify(
+	public ResponseEntity<MessageResponse> updateMemberPassword(
 		@RequestHeader("Authorization") String token,
 		@RequestBody InfoPasswordDto infoPasswordDto) {
 
@@ -42,9 +42,9 @@ public class MemberInfoController {
 		return new ResponseEntity<>(new MessageResponse(resopseMessage), HttpStatus.OK);
 	}
 
-	@PostMapping("/id")
+	@GetMapping("/id")
 	@Operation(summary = "회원 아이디 찾기", description = "인증번호 확인 후 회원 아이디 알려주기")
-	public ResponseEntity<AccoutIdDto> memberIdDetails(
+	public ResponseEntity<AccoutIdDto> addMemberIdDetails(
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest
 	) {
 		AccoutIdDto accountIdDto = memberInfoService.findMemberId(smsVerificationRequest);
