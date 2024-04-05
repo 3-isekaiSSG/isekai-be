@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
-import com.isekai.ssgserver.cart.dto.CartAddDropDto;
 import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
+import com.isekai.ssgserver.cart.dto.CartUpdateDto;
 import com.isekai.ssgserver.cart.service.CartService;
 import com.isekai.ssgserver.cart.service.CartUpdateService;
 import com.isekai.ssgserver.util.jwt.AuthDto;
@@ -119,18 +119,31 @@ public class CartController {
 
 	@PatchMapping("/one-add/{cartId}")
 	@Operation(summary = "상품 개수 추가", description = "장바구니 + 버튼 누를시 상품 개수가 추가됩니다.")
-	public CartAddDropDto addCountOne(@PathVariable Long cartId) {
+	public CartUpdateDto addCountOne(@PathVariable Long cartId) {
 
 		return cartUpdateService.addCountOne(cartId);
 	}
 
 	@PatchMapping("/one-drop/{cartId}")
 	@Operation(summary = "상품 개수 차감", description = "장바구니 - 버튼 누를시 상품 개수가 차감됩니다.")
-	public CartAddDropDto dropCountOne(@PathVariable Long cartId) {
+	public CartUpdateDto dropCountOne(@PathVariable Long cartId) {
 
 		return cartUpdateService.dropCountOne(cartId);
 	}
 
+	@PatchMapping("/checked/{cartId}")
+	@Operation(summary = "체크하기", description = "장바구니 체크하면 계속 유지되게 합니다.")
+	public CartUpdateDto updateCheck(@PathVariable Long cartId) {
+
+		return cartUpdateService.updateCheck(cartId);
+	}
+
+	@PatchMapping("/unchecked/{cartId}")
+	@Operation(summary = "체크 취소하기", description = "장바구니에 체크되어 있던 것을 취소합니다.")
+	public CartUpdateDto updateUncheck(@PathVariable Long cartId) {
+
+		return cartUpdateService.updateUncheck(cartId);
+	}
 
 	private String getOrCreateCartValue(HttpServletRequest request, HttpServletResponse response) {
 

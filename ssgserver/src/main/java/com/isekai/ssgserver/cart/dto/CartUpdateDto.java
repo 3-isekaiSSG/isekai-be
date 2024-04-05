@@ -2,13 +2,12 @@ package com.isekai.ssgserver.cart.dto;
 
 import com.isekai.ssgserver.cart.entity.Cart;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CartAddDropDto {
+public class CartUpdateDto {
 
 	private Long cartId;
 	private String uuid;
@@ -17,7 +16,7 @@ public class CartAddDropDto {
 	private Integer count;
 	private byte checked;
 
-	public CartAddDropDto(Cart cart) {
+	public CartUpdateDto(Cart cart) {
 
 		this.cartId = cart.getCartId();
 		this.uuid = cart.getUuid();

@@ -2,7 +2,7 @@ package com.isekai.ssgserver.cart.service;
 
 import org.springframework.stereotype.Service;
 
-import com.isekai.ssgserver.cart.dto.CartAddDropDto;
+import com.isekai.ssgserver.cart.dto.CartUpdateDto;
 import com.isekai.ssgserver.cart.entity.Cart;
 import com.isekai.ssgserver.cart.repository.CartRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
@@ -18,7 +18,7 @@ public class CartUpdateService {
 
 	private final CartRepository cartRepository;
 
-	public CartAddDropDto addCountOne(Long cartId) {
+	public CartUpdateDto addCountOne(Long cartId) {
 
 		Cart cart = getCart(cartId);
 
@@ -31,10 +31,10 @@ public class CartUpdateService {
 			.checked(cart.getChecked())
 			.build());
 
-		return new CartAddDropDto(cart);
+		return new CartUpdateDto(cart);
 	}
 
-	public CartAddDropDto dropCountOne(Long cartId) {
+	public CartUpdateDto dropCountOne(Long cartId) {
 
 		Cart cart = getCart(cartId);
 
@@ -47,7 +47,39 @@ public class CartUpdateService {
 			.checked(cart.getChecked())
 			.build());
 
-		return new CartAddDropDto(cart);
+		return new CartUpdateDto(cart);
+	}
+
+	public CartUpdateDto updateCheck(Long cartId) {
+
+		Cart cart = getCart(cartId);
+
+		cartRepository.save(Cart.builder()
+			.cartId(cartId)
+			.uuid(cart.getUuid())
+			.cartValue(cart.getCartValue())
+			.option(cart.getOption())
+			.count(cart.getCount())
+			.checked((byte)1)
+			.build());
+
+		return new CartUpdateDto(cart);
+	}
+
+	public CartUpdateDto updateUncheck(Long cartId) {
+
+		Cart cart = getCart(cartId);
+
+		cartRepository.save(Cart.builder()
+			.cartId(cartId)
+			.uuid(cart.getUuid())
+			.cartValue(cart.getCartValue())
+			.option(cart.getOption())
+			.count(cart.getCount())
+			.checked((byte)0)
+			.build());
+
+		return new CartUpdateDto(cart);
 	}
 
 	private Cart getCart(Long cartId) {
