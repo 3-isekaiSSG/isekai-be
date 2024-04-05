@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.deliveryAddress.entity;
 
+import com.isekai.ssgserver.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +18,10 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString
 @Getter
 @Table(name = "delivery_address")
-public class DeliveryAddress {
+public class DeliveryAddress extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,34 +40,37 @@ public class DeliveryAddress {
 	@Column(name = "cellphone", nullable = false)
 	private String cellphone;
 
-	@Column(name = "telephone", nullable = true)
+	@Column(name = "telephone")
 	private String telephone;
 
-	@Column(name = "zip_code", nullable = false)
-	private String zipCode;
+	@Column(name = "zipcode", nullable = false)
+	private String zipcode;
 
-	@Column(name = "street_address", nullable = false)
-	private String streetAddress;
-
-	@Column(name = "lot_address", nullable = false)
-	private String lotAddress;
-
-	@Column(name = "detail_addres", nullable = false)
-	private String detailAddress;
+	@Column(name = "address", nullable = false)
+	private String address;
 
 	@Column(name = "is_default", nullable = false)
-	private byte isDefault;
+	private boolean isDefault;
 
 	@Column(name = "is_deleted", nullable = false)
-	private byte isDeleted;
+	private boolean isDeleted;
 
 	@Column(name = "order_history", nullable = false)
-	private byte orderHistory;
+	private boolean orderHistory;
 
-	//    기본값 설정
-	// @PrePersist
-	// public void prePersist() {
-	// 	this.isDefault = false;
-	// 	this.isDeleted = false;
-	// }
+	@Builder
+	public DeliveryAddress(Long memberId, String nickname, String name, String cellphone, String telephone,
+		String zipcode,
+		String address, boolean isDefault, boolean isDeleted, boolean orderHistory) {
+		this.memberId = memberId;
+		this.nickname = nickname;
+		this.name = name;
+		this.cellphone = cellphone;
+		this.telephone = telephone;
+		this.zipcode = zipcode;
+		this.address = address;
+		this.isDefault = isDefault;
+		this.isDeleted = isDeleted;
+		this.orderHistory = orderHistory;
+	}
 }

@@ -31,10 +31,8 @@ public class MemberInfoController {
 	@PutMapping("/password")
 	@Operation(summary = "회원 비밀번호 재설정", description = "회원 비밀번호 입력한 값으로 변경")
 	public ResponseEntity<?> updatePassword(
-		// @RequestBody Map<String, String> requestBody
 		@RequestBody InfoPasswordDto infoPasswordDto) {
-		// String uuid = requestBody.get("uuid");
-		// String newPassword = requestBody.get("newPassword");
+
 		log.info("MemberInfoController.updatePassword");
 		log.info("infoPasswordDto = " + infoPasswordDto);
 		String resopseMessage = memberInfoService.saveByPassword(infoPasswordDto);
