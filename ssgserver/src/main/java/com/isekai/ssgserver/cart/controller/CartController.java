@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +24,7 @@ import com.isekai.ssgserver.cart.dto.CartUpdateDto;
 import com.isekai.ssgserver.cart.service.CartService;
 import com.isekai.ssgserver.cart.service.CartUpdateService;
 import com.isekai.ssgserver.util.MessageResponse;
-import com.isekai.ssgserver.util.jwt.AuthDto;
+import com.isekai.ssgserver.util.jwt.JwtProvider;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,54 +41,53 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "Cart", description = "장바구니 관련 API document")
 public class CartController {
 
+	private final JwtProvider jwtProvider;
 	private final CartService cartService;
 	private final CartUpdateService cartUpdateService;
 
 	// 장바구니 조회
-	@GetMapping
-	@Operation(summary = "장바구니 조회", description = "회원, 비회원 장바구니 조회")
-	public ResponseEntity<CartResponseDto> getCart(HttpServletRequest request, HttpServletResponse response) {
+	@GetMapping("/member")
+	@Operation(summary = "회원 장바구니 조회", description = "헤더에 토큰 필요 회원 장바구니 조회")
+	public ResponseEntity<CartResponseDto> getMemberCart(@RequestHeader("Authorization") String token) {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String uuid = jwtProvider.getUuid(token);
 
-		// 인증된 사용자인 경우
-		if (authentication != null && authentication.isAuthenticated()
-			&& !(authentication instanceof AnonymousAuthenticationToken)) {
-			AuthDto authDto = (AuthDto)authentication.getPrincipal();
-			String uuid = authDto.getId();
+		CartResponseDto cartDto = cartService.getMemberCart(uuid);
 
-			// 회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getMemberCart(uuid);
-			return ResponseEntity.ok(cartDto);
-		} else {
-			// 비회원의 경우, 쿠키를 사용하여 장바구니 식별
-			String cartValue = getOrCreateCartValue(request, response);
-			// 비회원 장바구니 조회 로직 수행
-			CartResponseDto cartDto = cartService.getNonMemberCart(cartValue);
-			return ResponseEntity.ok(cartDto);
-		}
+		return ResponseEntity.ok(cartDto);
 
 	}
 
-	@PostMapping
-	@Operation(summary = "장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
-	public ResponseEntity<?> addCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
-		HttpServletResponse response) {
+	@GetMapping("/non-member")
+	@Operation(summary = "비회원 장바구니 조회", description = "헤더에 토큰 필요 회원 장바구니 조회")
+	public ResponseEntity<CartResponseDto> getNonMemberCart(HttpServletRequest request, HttpServletResponse response) {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		// 비회원의 경우, 쿠키를 사용하여 장바구니 식별
+		String cartValue = getOrCreateCartValue(request, response);
+		// 비회원 장바구니 조회 로직 수행
+		CartResponseDto cartDto = cartService.getNonMemberCart(cartValue);
+		return ResponseEntity.ok(cartDto);
+	}
 
-		if (authentication != null && authentication.isAuthenticated()
-			&& !(authentication instanceof AnonymousAuthenticationToken)) {
-			AuthDto authDto = (AuthDto)authentication.getPrincipal();
-			String uuid = authDto.getId();
+	@PostMapping("/member")
+	@Operation(summary = "회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
+	public ResponseEntity<?> addMemberCart(@RequestBody CartRequestDto cartRequestDto,
+		@RequestHeader("Authorization") String token) {
 
-			return cartService.addMemberCartProduct(cartRequestDto, uuid);
-		} else {
-			String cartValue = getOrCreateCartValue(request, response);
+		String uuid = jwtProvider.getUuid(token);
 
-			return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
-		}
+		return cartService.addMemberCartProduct(cartRequestDto, uuid);
+	}
 
+	@PostMapping("/non-member")
+	@Operation(summary = "비회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
+	public ResponseEntity<?> addNonMemberCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
+		HttpServletResponse response
+	) {
+
+		String cartValue = getOrCreateCartValue(request, response);
+
+		return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
 	}
 
 	@GetMapping("/options/{optionsId}")
@@ -102,27 +99,26 @@ public class CartController {
 		return ResponseEntity.ok(cartOption);
 	}
 
-	@GetMapping("/count")
-	@Operation(summary = "장바구니 총 개수", description = "장바구니에 담겨있는 상품 종류의 개수입니다.")
-	public ResponseEntity<?> getCartCount(HttpServletRequest request, HttpServletResponse response) {
+	@GetMapping("/member/count")
+	@Operation(summary = "(회원 장바구니 총 개수", description = "장바구니에 담겨있는 상품 종류의 개수입니다.")
+	public ResponseEntity<?> getCartMemberCount(@RequestHeader("Authorization") String token) {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String uuid = jwtProvider.getUuid(token);
 
-		if (authentication != null && authentication.isAuthenticated()
-			&& !(authentication instanceof AnonymousAuthenticationToken)) {
-			AuthDto authDto = (AuthDto)authentication.getPrincipal();
-			String uuid = authDto.getId();
+		CartCountResponseDto cartCountResponse = cartService.getMemberCartCount(uuid);
 
-			CartCountResponseDto cartCountResponse = cartService.getMemberCartCount(uuid);
+		return ResponseEntity.ok(cartCountResponse);
+	}
 
-			return ResponseEntity.ok(cartCountResponse);
-		} else {
-			String cartValue = getOrCreateCartValue(request, response);
+	@GetMapping("/non-member/count")
+	@Operation(summary = "비회원 장바구니 총 개수", description = "장바구니에 담겨있는 상품 종류의 개수입니다.")
+	public ResponseEntity<?> getCartNonMemberCount(HttpServletRequest request, HttpServletResponse response) {
 
-			CartCountResponseDto cartCountResponse = cartService.getNonMemberCartCount(cartValue);
+		String cartValue = getOrCreateCartValue(request, response);
 
-			return ResponseEntity.ok(cartCountResponse);
-		}
+		CartCountResponseDto cartCountResponse = cartService.getNonMemberCartCount(cartValue);
+
+		return ResponseEntity.ok(cartCountResponse);
 	}
 
 	@PatchMapping("/options/{cartId}")
@@ -181,6 +177,7 @@ public class CartController {
 		// 쿠키에서 장바구니 value를 찾음
 		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
 		if (cartCookie != null) {
+			cartCookie.setMaxAge(24 * 60 * 60 * 2);
 			return cartCookie.getValue();
 		} else {
 			// 쿠키가 없는 경우, 새 장바구니 ID 생성 및 쿠키에 저장
@@ -188,7 +185,7 @@ public class CartController {
 			Cookie newCookie = new Cookie("CART_VALUE", newCartValue);
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
-			newCookie.setMaxAge(24 * 60 * 60); // 쿠키 유효기간 1일 설정
+			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
 			response.addCookie(newCookie);
 			return newCartValue;
 		}
