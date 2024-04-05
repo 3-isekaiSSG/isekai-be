@@ -13,6 +13,7 @@ import com.isekai.ssgserver.order.dto.OrderResponseDto;
 import com.isekai.ssgserver.order.service.OrderService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class OrderController {
 	private final JwtProvider jwtProvider;
 
 	@PostMapping("")
+	@Operation(summary = "회원 주문 생성", description = "토큰 필요")
 	public ResponseEntity<OrderResponseDto> createMemberOrder(
 		@RequestHeader("Authorization") String token,
 		@RequestBody MemberOrderDto memberOrderDto
@@ -40,6 +42,7 @@ public class OrderController {
 	}
 
 	@PostMapping("/non-member")
+	@Operation(summary = "비회원 주문 생성")
 	public ResponseEntity<OrderResponseDto> createNonMemberOrder(
 		@RequestBody NonMemberOrderDto nonMemberOrderDto) {
 
