@@ -43,14 +43,19 @@ public class OrderProduct {
 	@Column(name = "product_code")
 	private String productCode;
 
+	@Column(name = "origin_price")
+	private int originPrice;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "delivery_id", nullable = false)
 	private Delivery delivery;
 
 	@Builder
-	public OrderProduct(int count, int buyPrice, boolean is_confirm, String productCode, Delivery delivery) {
+	public OrderProduct(int count, int buyPrice, int originPrice, boolean is_confirm, String productCode,
+		Delivery delivery) {
 		this.count = count;
 		this.buyPrice = buyPrice;
+		this.originPrice = originPrice;
 		this.is_confirm = is_confirm;
 		this.productCode = productCode;
 		this.delivery = delivery;

@@ -17,6 +17,7 @@ import com.isekai.ssgserver.order.dto.NonMemberOrderDto;
 import com.isekai.ssgserver.order.dto.OrderProductDto;
 import com.isekai.ssgserver.order.dto.OrderResponseDto;
 import com.isekai.ssgserver.order.dto.OrderSellerProductDto;
+import com.isekai.ssgserver.order.dto.OrderSummaryDto;
 import com.isekai.ssgserver.order.entity.Order;
 import com.isekai.ssgserver.order.entity.OrderProduct;
 import com.isekai.ssgserver.order.repository.OrderProductRepository;
@@ -93,6 +94,7 @@ public class OrderService {
 			// 배송(판매자별) DB 저장
 			Delivery sellerDelivery = Delivery.builder()
 				.status(0)
+				.uuid("NONMEMBER")
 				.deliveryType(orderSellerProductDto.getDelivertType())
 				.seller(orderSellerProductDto.getSellerName())
 				.buyPrice(sellerBuyPrice)
@@ -114,6 +116,7 @@ public class OrderService {
 					OrderProduct orderProduct = OrderProduct.builder()
 						.count(opd.getCount())
 						.buyPrice(opd.getBuyPrice())
+						.originPrice(opd.getOriginPrice())
 						.is_confirm(false)
 						.productCode(opd.getProductCode())
 						.delivery(savedSellerDelivery)
@@ -179,6 +182,7 @@ public class OrderService {
 			// 배송(판매자별) DB 저장
 			Delivery sellerDelivery = Delivery.builder()
 				.status(0)
+				.uuid(uuid)
 				.deliveryType(orderSellerProductDto.getDelivertType())
 				.seller(orderSellerProductDto.getSellerName())
 				.buyPrice(sellerBuyPrice)
@@ -200,6 +204,7 @@ public class OrderService {
 					OrderProduct orderProduct = OrderProduct.builder()
 						.count(opd.getCount())
 						.buyPrice(opd.getBuyPrice())
+						.originPrice(opd.getOriginPrice())
 						.is_confirm(false)
 						.productCode(opd.getProductCode())
 						.delivery(savedSellerDelivery)
@@ -227,4 +232,15 @@ public class OrderService {
 		return date + "-" + sequence;
 	}
 
+	public OrderSummaryDto getOrderSummary(String orderCode) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+		return orderRepository.findByCode(orderCode)
+			.map(o -> OrderSummaryDto.builder()
+				.date(o.getCreatedAt().format(formatter))
+				.orderId(o.getOrdersId())
+				.buyPrice(o.getBuyPrice())
+				.build())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+	}
 }

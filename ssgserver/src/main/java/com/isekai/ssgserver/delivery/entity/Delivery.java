@@ -33,6 +33,8 @@ public class Delivery extends BaseEntity {
 	@Column(name = "delivery_id")
 	private Long deliveryId;
 
+	private String uuid;
+
 	private int status;
 
 	@Column(name = "deliveryType")
@@ -67,10 +69,12 @@ public class Delivery extends BaseEntity {
 	private DeliveryAddress deliveryAddress;
 
 	@Builder
-	public Delivery(int status, byte deliveryType, String seller, int buyPrice, int originPrice, int deliveryFee,
+	public Delivery(int status, String uuid, byte deliveryType, String seller, int buyPrice, int originPrice,
+		int deliveryFee,
 		String deliveryCompany,
 		String deliveryCode, String deliveryMessage, Order order, DeliveryAddress deliveryAddress) {
 		this.status = status;
+		this.uuid = uuid;
 		this.deliveryType = deliveryType;
 		this.seller = seller;
 		this.buyPrice = buyPrice;
