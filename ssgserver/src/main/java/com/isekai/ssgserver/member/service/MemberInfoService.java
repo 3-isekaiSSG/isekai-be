@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.member.dto.AccoutIdDto;
+import com.isekai.ssgserver.member.dto.AccountIdDto;
 import com.isekai.ssgserver.member.dto.InfoPasswordDto;
 import com.isekai.ssgserver.member.dto.VerificationDto;
 import com.isekai.ssgserver.member.entity.Member;
@@ -65,7 +65,7 @@ public class MemberInfoService {
 	}
 
 	@Transactional
-	public AccoutIdDto getMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
+	public AccountIdDto getMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
 		/** 아이디 찾기 로직
 		 *	1. 인증 번호 일치 여부 확인
 		 * 	2. 아이디 해당 회원
@@ -84,9 +84,9 @@ public class MemberInfoService {
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 			String memberAccountIdValue = phoneMember.getAccountId();
-			AccoutIdDto accoutIdDto = new AccoutIdDto();
-			accoutIdDto.setAccountId(memberAccountIdValue);
-			return accoutIdDto;
+			AccountIdDto accountIdDto = new AccountIdDto();
+			accountIdDto.setAccountId(memberAccountIdValue);
+			return accountIdDto;
 		}
 	}
 }

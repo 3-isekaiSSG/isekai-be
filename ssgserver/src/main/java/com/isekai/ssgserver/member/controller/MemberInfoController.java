@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.isekai.ssgserver.member.dto.AccoutIdDto;
+import com.isekai.ssgserver.member.dto.AccountIdDto;
 import com.isekai.ssgserver.member.dto.InfoPasswordDto;
 import com.isekai.ssgserver.member.dto.VerificationDto;
 import com.isekai.ssgserver.member.service.MemberInfoService;
@@ -44,10 +44,10 @@ public class MemberInfoController {
 
 	@GetMapping("/id")
 	@Operation(summary = "회원 아이디 찾기", description = "인증번호 확인 후 회원 아이디 알려주기")
-	public ResponseEntity<AccoutIdDto> getMemberIdDetails(
+	public ResponseEntity<AccountIdDto> getMemberIdDetails(
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest
 	) {
-		AccoutIdDto accountIdDto = memberInfoService.getMemberId(smsVerificationRequest);
+		AccountIdDto accountIdDto = memberInfoService.getMemberId(smsVerificationRequest);
 
 		return ResponseEntity.ok(accountIdDto);
 
