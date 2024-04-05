@@ -38,16 +38,16 @@ public class MemberInfoController {
 		@RequestBody InfoPasswordDto infoPasswordDto) {
 
 		String uuid = jwtProvider.getUuid(token);
-		String resopseMessage = memberInfoService.modifyByPassword(uuid, infoPasswordDto);
+		String resopseMessage = memberInfoService.updateByPassword(uuid, infoPasswordDto);
 		return new ResponseEntity<>(new MessageResponse(resopseMessage), HttpStatus.OK);
 	}
 
 	@GetMapping("/id")
 	@Operation(summary = "회원 아이디 찾기", description = "인증번호 확인 후 회원 아이디 알려주기")
-	public ResponseEntity<AccoutIdDto> addMemberIdDetails(
+	public ResponseEntity<AccoutIdDto> getMemberIdDetails(
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest
 	) {
-		AccoutIdDto accountIdDto = memberInfoService.findMemberId(smsVerificationRequest);
+		AccoutIdDto accountIdDto = memberInfoService.getMemberId(smsVerificationRequest);
 
 		return ResponseEntity.ok(accountIdDto);
 

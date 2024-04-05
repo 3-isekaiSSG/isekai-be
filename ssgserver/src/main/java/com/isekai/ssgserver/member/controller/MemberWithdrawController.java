@@ -37,7 +37,7 @@ public class MemberWithdrawController {
 
 	@PostMapping("/reasons")
 	@Operation(summary = "탈퇴 사유 저장", description = "탈퇴 사유 데이터를 저장합니다.")
-	public ResponseEntity<Void> addWithdrawInfo(
+	public ResponseEntity<Void> getWithdrawInfo(
 		@RequestHeader("Authorization") String token,
 		@RequestBody WithdrawInfoDto withdrawInfoDto) {
 		String uuid = jwtProvider.getUuid(token);
