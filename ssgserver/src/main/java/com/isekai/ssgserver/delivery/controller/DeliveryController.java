@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryDetailDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryListDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryStatusCountDto;
 import com.isekai.ssgserver.delivery.service.DeliveryService;
@@ -48,6 +49,14 @@ public class DeliveryController {
 
 		List<DeliveryListDto> deliveryListDtoList = deliveryService.getDeliveryListByOrderId(orderId);
 		return ResponseEntity.ok(deliveryListDtoList);
+	}
+
+	@GetMapping("/{deliveryId}/detail")
+	@Operation(summary = "delivery 상세 조회")
+	public ResponseEntity<DeliveryDetailDto> getDeliveryDetail(@PathVariable Long deliveryId) {
+
+		DeliveryDetailDto deliveryDetailDto = deliveryService.getDeliveryDetail(deliveryId);
+		return ResponseEntity.ok(deliveryDetailDto);
 	}
 
 }

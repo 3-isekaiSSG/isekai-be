@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.delivery.dto.DeliveryDetailDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryListDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryStatusCountDto;
 import com.isekai.ssgserver.delivery.enums.DeliveryStatusCode;
@@ -49,5 +50,24 @@ public class DeliveryService {
 				.deliveryId(d.getDeliveryId())
 				.build())
 			.toList();
+	}
+
+	public DeliveryDetailDto getDeliveryDetail(Long deliveryId) {
+
+		return deliveryRepository.findById(deliveryId)
+			.map(d -> DeliveryDetailDto.builder()
+				.statusCode(d.getStatus())
+				.statusName(DeliveryStatusCode.getNameByCode(d.getStatus()))
+				.deliveryType(d.getDeliveryType())
+				.seller(d.getSeller())
+				.originPrice(d.getOriginPrice())
+				.buyPrice(d.getBuyPrice())
+				.deliveryFee(d.getDeliveryFee())
+				.deliveryCompany(d.getDeliveryCompany())
+				.deliveryMessage(d.getDeliveryMessage())
+				.deliveryAddressId(d.getDeliveryAddress().getDeliveryAddressId())
+				.build())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
 	}
 }
