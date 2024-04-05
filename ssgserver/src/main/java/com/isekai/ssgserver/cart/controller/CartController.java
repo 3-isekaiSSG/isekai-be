@@ -125,6 +125,13 @@ public class CartController {
 		}
 	}
 
+	@PatchMapping("/options/{cartId}")
+	@Operation(summary = "장바구니 상품 옵션 수정", description = "장바구니에 있는 상품의 옵션을 수정합니다.")
+	public CartUpdateDto updateCartProductOption(@PathVariable Long cartId, @RequestParam Long optionsId) {
+
+		return cartUpdateService.updateCartProductOption(cartId, optionsId);
+	}
+
 	@PatchMapping("/one-add/{cartId}")
 	@Operation(summary = "상품 개수 추가", description = "장바구니 + 버튼 누를시 상품 개수가 추가됩니다.")
 	public CartUpdateDto addCountOne(@PathVariable Long cartId) {
