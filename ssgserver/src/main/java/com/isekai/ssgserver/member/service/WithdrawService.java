@@ -23,7 +23,7 @@ public class WithdrawService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public void withdrawUpdate(String uuid) {
+	public void modifyWithdraw(String uuid) {
 		/*
 		 * 1. 회원 찾기
 		 * 2. 탈퇴여부 0 -> 1로 수정, 탈퇴일시, 수정일자 업데이트
@@ -40,7 +40,7 @@ public class WithdrawService {
 	}
 
 	@Transactional
-	public void reasonsSave(String uuid, WithdrawInfoDto withdrawInfoDto) {
+	public void addReasons(String uuid, WithdrawInfoDto withdrawInfoDto) {
 		WithdrawInfo withdrawInfo = WithdrawInfo.builder()
 			.uuid(uuid)
 			.withdrawInfoId(withdrawInfoDto.getWithdrawInfoId())

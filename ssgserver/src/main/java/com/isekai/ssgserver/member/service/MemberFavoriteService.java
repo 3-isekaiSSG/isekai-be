@@ -40,7 +40,7 @@ public class MemberFavoriteService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public void postFavoriteTotal(FavoritePutReqDto favoritePutReqDto) {
+	public void addFavoriteTotal(FavoritePutReqDto favoritePutReqDto) {
 		byte division = favoritePutReqDto.getDivision().getCode();
 
 		if (division == 2) {
@@ -94,7 +94,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postSingleProduct(String uuid, SingleProductReqDto singleProductReqDto) {
+	public void addSingleProduct(String uuid, SingleProductReqDto singleProductReqDto) {
 		Long identifier = singleProductReqDto.getProductId();
 		FavoriteDivision singleProduct = FavoriteDivision.SINGLE_PRODUCT;
 		byte division = singleProduct.getCode();
@@ -109,7 +109,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postBundleProduct(String uuid, BundleProductReqDto bundleProductReqDto) {
+	public void addBundleProduct(String uuid, BundleProductReqDto bundleProductReqDto) {
 		Long identifier = bundleProductReqDto.getBundelId();
 		FavoriteDivision bundleProduct = FavoriteDivision.BUNDLE_PRODUCT;
 		byte division = bundleProduct.getCode();
@@ -124,7 +124,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postCategoryL(String uuid, CategoryLReqDto categoryLReqDto) {
+	public void addCategoryL(String uuid, CategoryLReqDto categoryLReqDto) {
 		String largeName = categoryLReqDto.getLargeName();
 		String modifiedLargeName = largeName.replace('-', '/');
 		Long identifier = categoryLRepository.findByLargeName(modifiedLargeName);
@@ -142,7 +142,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postCategoryM(String uuid, CategoryMReqDto categoryMReqDto) {
+	public void addCategoryM(String uuid, CategoryMReqDto categoryMReqDto) {
 		String medinumName = categoryMReqDto.getMediumName();
 		String modifiedMediumName = medinumName.replace('-', '/');
 		Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
@@ -160,7 +160,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void postSeller(String uuid, SellerReqDto sellerReqDto) {
+	public void addSeller(String uuid, SellerReqDto sellerReqDto) {
 		Long identifier = sellerReqDto.getSellerId();
 		FavoriteDivision seller = FavoriteDivision.BRAND;
 		byte division = seller.getCode();
@@ -175,7 +175,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void deleteFavoriteOne(Long favoriteId) {
+	public void removeFavoriteOne(Long favoriteId) {
 		Favorite favoriteOptional = memberFavoriteRepository.findById(favoriteId)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
@@ -183,7 +183,7 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void deleteFavorites(FavoriteDelRequestDto favoriteDelRequestDto) {
+	public void removeFavorites(FavoriteDelRequestDto favoriteDelRequestDto) {
 		List<FavoriteDelReqDto> favoriteDelList = favoriteDelRequestDto.getFavoriteDelList();
 
 		for (FavoriteDelReqDto favoriteDelReqDto : favoriteDelList) {

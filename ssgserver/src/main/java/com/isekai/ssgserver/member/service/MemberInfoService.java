@@ -27,7 +27,7 @@ public class MemberInfoService {
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Transactional
-	public String saveByPassword(String uuid, InfoPasswordDto infoPasswordDto) {
+	public String modifyByPassword(String uuid, InfoPasswordDto infoPasswordDto) {
 		/* 비밀번호 재설정 로직
 		 * 	1. 기존 비밀번호랑 새번호 일치 여부 조회
 		 * 	2. 비밀번호 재설정
