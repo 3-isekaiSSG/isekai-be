@@ -59,7 +59,7 @@ public class CartController {
 	}
 
 	@GetMapping("/non-member")
-	@Operation(summary = "비회원 장바구니 조회", description = "헤더에 토큰 필요 회원 장바구니 조회")
+	@Operation(summary = "비회원 장바구니 조회", description = "비회원 장바구니 조회")
 	public ResponseEntity<CartResponseDto> getNonMemberCart(HttpServletRequest request, HttpServletResponse response) {
 
 		// 비회원의 경우, 쿠키를 사용하여 장바구니 식별

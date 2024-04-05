@@ -10,6 +10,7 @@ import lombok.Getter;
 public class CartResponseDto {
 
 	private Integer id;
+	private Integer cnt;
 	private List<CartInfoDto> post;
 	private List<CartInfoDto> ssg;
 

@@ -38,6 +38,7 @@ public class CartService {
 	public CartResponseDto getMemberCart(String uuid) {
 
 		List<Cart> carts = cartRepository.findByUuidOrderByCreatedAtDesc(uuid);
+		Integer cnt = cartRepository.countByUuid(uuid);
 		List<CartInfoDto> postItems = new ArrayList<>();
 		List<CartInfoDto> ssgItems = new ArrayList<>();
 
@@ -67,6 +68,7 @@ public class CartService {
 
 		CartResponseDto cartResponse = CartResponseDto.builder()
 			.id(0)
+			.cnt(cnt)
 			.post(postItems)
 			.ssg(ssgItems)
 			.build();
@@ -77,6 +79,7 @@ public class CartService {
 	public CartResponseDto getNonMemberCart(String cartValue) {
 
 		List<Cart> carts = cartRepository.findByCartValueOrderByCreatedAtDesc(cartValue);
+		Integer cnt = cartRepository.countByCartValue(cartValue);
 		List<CartInfoDto> postItems = new ArrayList<>();
 		List<CartInfoDto> ssgItems = new ArrayList<>();
 
@@ -107,6 +110,7 @@ public class CartService {
 
 		CartResponseDto cartResponse = CartResponseDto.builder()
 			.id(0)
+			.cnt(cnt)
 			.post(postItems)
 			.ssg(ssgItems)
 			.build();
