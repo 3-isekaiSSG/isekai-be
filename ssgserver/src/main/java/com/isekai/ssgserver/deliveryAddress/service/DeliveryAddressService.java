@@ -1,8 +1,12 @@
 package com.isekai.ssgserver.deliveryAddress.service;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.deliveryAddress.controller.DeliveryAddressInfoDto;
+import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressListDto;
 import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressNicknameDto;
 import com.isekai.ssgserver.deliveryAddress.entity.DeliveryAddress;
 import com.isekai.ssgserver.deliveryAddress.repository.DeliveryAddressRepository;
@@ -56,6 +60,24 @@ public class DeliveryAddressService {
 			.isDeleted(deliveryAddress.isDeleted())
 			.orderHistory(deliveryAddress.isOrderHistory())
 			.build();
+
+	}
+
+	public List<DeliveryAddressListDto> getMembersDeliveryAddressList(String uuid) {
+
+		AtomicInteger id = new AtomicInteger(0);
+
+		Long memberId = memberRepository.findByUuidAndIsWithdraw(uuid, (byte)0)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))
+			.getMemberId();
+
+		return deliveryAddressRepository.findAllByMemberId(memberId)
+			.stream()
+			.map(da -> DeliveryAddressListDto.builder()
+				.id(id.getAndIncrement())
+				.deliveryAddressId(da.getDeliveryAddressId())
+				.build())
+			.toList();
 
 	}
 }

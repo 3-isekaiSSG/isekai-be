@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.deliveryAddress.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressListDto;
 import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressNicknameDto;
 import com.isekai.ssgserver.deliveryAddress.service.DeliveryAddressService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
@@ -46,5 +49,17 @@ public class DeliveryAddressController {
 			deliveryAddressId);
 		return ResponseEntity.ok(deliveryAddressInfoDto);
 	}
-	
+
+	@GetMapping("/members")
+	@Operation(summary = "회원 배송지 리스트 조회", description = "회원 - 관리하고 있는 배송지 리스트 조회")
+	public ResponseEntity<List<DeliveryAddressListDto>> getMembersDeliveryAddressList(
+		@RequestHeader(value = "Authorization") String token
+	) {
+
+		String uuid = jwtProvider.getUuid(token);
+
+		List<DeliveryAddressListDto> addressList = deliveryAddressService.getMembersDeliveryAddressList(uuid);
+		return ResponseEntity.ok(addressList);
+	}
+
 }
