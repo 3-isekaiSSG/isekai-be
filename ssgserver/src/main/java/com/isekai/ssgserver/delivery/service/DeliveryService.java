@@ -9,6 +9,7 @@ import com.isekai.ssgserver.delivery.dto.DeliveryDetailDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryListDto;
 import com.isekai.ssgserver.delivery.dto.DeliveryStatusCountDto;
 import com.isekai.ssgserver.delivery.enums.DeliveryStatusCode;
+import com.isekai.ssgserver.delivery.enums.DeliveryTypeCode;
 import com.isekai.ssgserver.delivery.repository.DeliveryRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
@@ -59,6 +60,7 @@ public class DeliveryService {
 				.statusCode(d.getStatus())
 				.statusName(DeliveryStatusCode.getNameByCode(d.getStatus()))
 				.deliveryType(d.getDeliveryType())
+				.deliveryTypeName(DeliveryTypeCode.getNameByCode(d.getDeliveryType()))
 				.seller(d.getSeller())
 				.originPrice(d.getOriginPrice())
 				.buyPrice(d.getBuyPrice())

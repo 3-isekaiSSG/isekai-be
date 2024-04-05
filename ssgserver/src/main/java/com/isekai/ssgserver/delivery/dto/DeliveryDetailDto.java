@@ -11,6 +11,7 @@ public class DeliveryDetailDto {
 	private int statusCode;
 	private String statusName;
 	private byte deliveryType;
+	private String deliveryTypeName;
 	private String seller;
 	private int originPrice;
 	private int buyPrice;
