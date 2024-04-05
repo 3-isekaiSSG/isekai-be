@@ -43,7 +43,7 @@ public class DeliveryController {
 	}
 
 	@GetMapping("/orders/{orderId}")
-	@Operation(summary = "주문번호로 배송(판매자별 주문) 리스트 조회")
+	@Operation(summary = "주문pk로 배송(판매자별 주문) 리스트 조회")
 	public ResponseEntity<List<DeliveryListDto>> getDeliveryListByOrderId(@PathVariable Long orderId) {
 
 		List<DeliveryListDto> deliveryListDtoList = deliveryService.getDeliveryListByOrderId(orderId);
