@@ -133,10 +133,19 @@ public class JwtProvider {
 	 * @return 계정 id
 	 */
 	public String getUuid(String token) {
-		return Jwts.parserBuilder().setSigningKey(secretKey).build()
-			.parseClaimsJws(token)
-			.getBody()
-			.getSubject();
+		try {
+			return Jwts.parserBuilder().setSigningKey(secretKey).build()
+				.parseClaimsJws(token)
+				.getBody()
+				.getSubject();
+		} catch (ExpiredJwtException e) {
+			log.info("만료됨");
+			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+		} catch (Exception e) {
+			// 토큰 파싱 과정에서 어떠한 예외라도 발생한다면, 토큰 유효하지 않은 것으로 상정
+			log.info("예외발생");
+			throw new CustomException(ErrorCode.NO_AUTHORITY);
+		}
 	}
 
 	/**

@@ -14,4 +14,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Optional<Member> findByAccountId(String accountId);
 
 	Optional<Member> findByPhone(String phone);
+
+	Optional<Member> findByUuidAndIsWithdraw(String uuid, byte isWithdraw);
+
+	boolean existsByUuidAndIsWithdraw(String uuid, byte isWithdraw);
 }
