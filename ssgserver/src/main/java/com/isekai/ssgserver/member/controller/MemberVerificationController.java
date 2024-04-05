@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.member.dto.VerificationDto;
+import com.isekai.ssgserver.member.service.MemberService;
 import com.isekai.ssgserver.member.service.VerificationService;
 import com.isekai.ssgserver.util.MessageResponse;
 
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberVerificationController {
 
+	private final MemberService memberService;
 	private final VerificationService verificationService;
 
 	@PostMapping("/send")
@@ -31,6 +33,15 @@ public class MemberVerificationController {
 		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest) {
 		log.info("controller 접근");
 		verificationService.sendSms(smsVerificationRequest);
+		return new ResponseEntity<>(new MessageResponse("인증 번호가 발송되었습니다."),
+			HttpStatus.OK);
+	}
+
+	@PostMapping("/find")
+	@Operation(summary = "아이디/비번 찾기 휴대폰인증 문자 발송", description = "아이디 비밀번호 찾기 휴대폰 인증 번호를 발송할 수 있다. 회원이 아닌 경우, 문자 발송이 되지 않습니다.")
+	public ResponseEntity<MessageResponse> findSms(
+		@RequestBody VerificationDto.SmsVerificationRequest smsVerificationRequest) {
+		verificationService.findSms(smsVerificationRequest);
 		return new ResponseEntity<>(new MessageResponse("인증 번호가 발송되었습니다."),
 			HttpStatus.OK);
 	}
