@@ -24,7 +24,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-@Table(name = "reivew")
+@Table(name = "review")
 public class Review {
 
 	@Id
@@ -41,7 +41,7 @@ public class Review {
 	@Column(name = "score", nullable = false)
 	private String score;
 
-	@Column(name = "reivew_content", nullable = false)
+	@Column(name = "review_content", nullable = false)
 	private String reviewContent;
 
 	@Column(name = "review_image")

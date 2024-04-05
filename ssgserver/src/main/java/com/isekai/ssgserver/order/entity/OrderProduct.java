@@ -21,7 +21,6 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString
 @Getter
 @Table(name = "order_product")
@@ -39,13 +38,26 @@ public class OrderProduct {
 	private int buyPrice;
 
 	@Column(name = "is_confirm", nullable = false)
-	private byte is_confirm;
+	private boolean is_confirm;
 
 	@Column(name = "product_code")
 	private String productCode;
+
+	@Column(name = "origin_price")
+	private int originPrice;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "delivery_id", nullable = false)
 	private Delivery delivery;
 
+	@Builder
+	public OrderProduct(int count, int buyPrice, int originPrice, boolean is_confirm, String productCode,
+		Delivery delivery) {
+		this.count = count;
+		this.buyPrice = buyPrice;
+		this.originPrice = originPrice;
+		this.is_confirm = is_confirm;
+		this.productCode = productCode;
+		this.delivery = delivery;
+	}
 }

@@ -33,6 +33,7 @@ public class MemberSocial {
 	@Column(name = "member_social_code", nullable = false)
 	private String memberSocialCode;
 
-	@Column(name = "socail_division_code", nullable = false)
-	private byte socailDivisionCode;
+	@Column(name = "social_division_code", nullable = false)
+	private byte socialDivisionCode;
+
 }
