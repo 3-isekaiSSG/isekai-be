@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
 import com.isekai.ssgserver.cart.dto.CartInfoDto;
+import com.isekai.ssgserver.cart.dto.CartOptionDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
 import com.isekai.ssgserver.cart.entity.Cart;
@@ -37,10 +38,10 @@ public class CartService {
 	public CartResponseDto getMemberCart(String uuid) {
 
 		List<Cart> carts = cartRepository.findByUuidOrderByCreatedAtDesc(uuid);
-		List<CartInfoDto> normalItems = new ArrayList<>();
+		List<CartInfoDto> postItems = new ArrayList<>();
 		List<CartInfoDto> ssgItems = new ArrayList<>();
 
-		AtomicInteger normalId = new AtomicInteger(0);
+		AtomicInteger postId = new AtomicInteger(0);
 		AtomicInteger ssgId = new AtomicInteger(0);
 
 		for (Cart cart : carts) {
@@ -49,7 +50,7 @@ public class CartService {
 				.ifPresent(productDeliveryType -> {
 					CartInfoDto itemDTO = CartInfoDto.builder()
 						.id("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
-							ssgId.getAndIncrement() : normalId.getAndIncrement()) // 조건에 따라 ID 할당
+							ssgId.getAndIncrement() : postId.getAndIncrement()) // 조건에 따라 ID 할당
 						.code(cart.getOption().getProductCode()) // `Option`을 통해 `productCode` 접근
 						.count(cart.getCount())
 						.checked(cart.getChecked())
@@ -59,14 +60,14 @@ public class CartService {
 					if ("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
 						ssgItems.add(itemDTO);
 					} else {
-						normalItems.add(itemDTO);
+						postItems.add(itemDTO);
 					}
 				});
 		}
 
 		CartResponseDto cartResponse = CartResponseDto.builder()
 			.id(0)
-			.normal(normalItems)
+			.post(postItems)
 			.ssg(ssgItems)
 			.build();
 		return cartResponse;
@@ -76,10 +77,10 @@ public class CartService {
 	public CartResponseDto getNonMemberCart(String cartValue) {
 
 		List<Cart> carts = cartRepository.findByCartValueOrderByCreatedAtDesc(cartValue);
-		List<CartInfoDto> normalItems = new ArrayList<>();
+		List<CartInfoDto> postItems = new ArrayList<>();
 		List<CartInfoDto> ssgItems = new ArrayList<>();
 
-		AtomicInteger normalId = new AtomicInteger(0);
+		AtomicInteger postId = new AtomicInteger(0);
 		AtomicInteger ssgId = new AtomicInteger(0);
 
 		for (Cart cart : carts) {
@@ -88,7 +89,7 @@ public class CartService {
 				.ifPresent(productDeliveryType -> {
 					CartInfoDto itemDTO = CartInfoDto.builder()
 						.id("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
-							ssgId.getAndIncrement() : normalId.getAndIncrement()) // 조건에 따라 ID 할당
+							ssgId.getAndIncrement() : postId.getAndIncrement()) // 조건에 따라 ID 할당
 						.cartId(cart.getCartId())
 						.code(cart.getOption().getProductCode()) // `Option`을 통해 `productCode` 접근
 						.count(cart.getCount())
@@ -99,14 +100,14 @@ public class CartService {
 					if ("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
 						ssgItems.add(itemDTO);
 					} else {
-						normalItems.add(itemDTO);
+						postItems.add(itemDTO);
 					}
 				});
 		}
 
 		CartResponseDto cartResponse = CartResponseDto.builder()
 			.id(0)
-			.normal(normalItems)
+			.post(postItems)
 			.ssg(ssgItems)
 			.build();
 		return cartResponse;
@@ -171,6 +172,27 @@ public class CartService {
 			.checked((byte)0)
 			.build());
 		return ResponseEntity.ok("Ok");
+	}
+
+	// 장바구니 상품 옵션
+	public List<CartOptionDto> getCartProductOption(Long optionsId, Long parentId) {
+
+		List<Option> options;
+		if (parentId == null) {
+			options = optionRepository.findAllByOptionsIdAndDepth(optionsId, 1);
+		} else {
+			options = optionRepository.findAllByOptionsIdAndParentOptionsId(optionsId, parentId);
+		}
+		AtomicInteger responseId = new AtomicInteger(0);
+
+		return options.stream()
+			.map(o -> CartOptionDto.builder()
+				.id(responseId.getAndIncrement())
+				.optionsId(o.getOptionsId())
+				.value(o.getValue())
+				.build())
+			.toList();
+
 	}
 
 	// 장바구니 총 개수

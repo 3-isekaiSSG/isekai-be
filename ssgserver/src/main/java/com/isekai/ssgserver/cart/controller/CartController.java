@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
 import com.isekai.ssgserver.cart.dto.CartCountResponseDto;
+import com.isekai.ssgserver.cart.dto.CartOptionDto;
 import com.isekai.ssgserver.cart.dto.CartRequestDto;
 import com.isekai.ssgserver.cart.dto.CartResponseDto;
 import com.isekai.ssgserver.cart.dto.CartUpdateDto;
@@ -71,12 +72,6 @@ public class CartController {
 
 	}
 
-	// @GetMapping("/options/{optionId}")
-	// @Operation(summary = "장바구니 상품 옵션값", description = "optionId를 통해 해당 상품의 옵션값을 내려줍니다.")
-	// public ResponseEntity<CartOptionDto> getCartOption(@PathVariable Long optionId) {
-	//
-	// }
-
 	@PostMapping
 	@Operation(summary = "장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
 	public ResponseEntity<?> addCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
@@ -96,6 +91,16 @@ public class CartController {
 			return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
 		}
 
+	}
+
+	@GetMapping("/options/{optionsId}")
+	@Operation(summary = "장바구니 상품 옵션값", description = "optionId를 통해 해당 상품의 옵션값을 내려줍니다.")
+	public ResponseEntity<List<CartOptionDto>> getCartProductOption(@PathVariable Long optionsId,
+		@RequestParam(required = false) Long parentId) {
+
+		List<CartOptionDto> cartOption = cartService.getCartProductOption(optionsId, parentId);
+
+		return ResponseEntity.ok(cartOption);
 	}
 
 	@GetMapping("/count")
