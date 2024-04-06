@@ -23,6 +23,7 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @ToString
 @Getter
 @Table(name = "delivery")

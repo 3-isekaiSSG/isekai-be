@@ -1,7 +1,6 @@
 package com.isekai.ssgserver.cart.entity;
 
-import java.time.LocalDateTime;
-
+import com.isekai.ssgserver.common.BaseEntity;
 import com.isekai.ssgserver.option.entity.Option;
 
 import jakarta.persistence.Column;
@@ -27,23 +26,24 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "cart")
-public class Cart {
+public class Cart extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "cart_id")
 	private Long cartId;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String uuid;
+
+	// 비회원 장바구니 쿠키 value
+	@Column(name = "cart_value", nullable = true)
+	private String cartValue;
 
 	@Column(nullable = false)
 	private int count;
 
 	@Column(nullable = false)
 	private byte checked;
-
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
 
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
