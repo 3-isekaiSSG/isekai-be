@@ -50,6 +50,7 @@ public class OptionService {
 			.map(o -> OptionDetailDto.builder()
 				.id(id.getAndIncrement())
 				.optionsId(o.getOptionsId())
+				.category(o.getCategory())
 				.orderLimit(o.getOrderLimit())
 				.stock(o.getStock())
 				.value(o.getValue())
