@@ -64,9 +64,15 @@ public class MemberFavoriteController {
 
 	@GetMapping("/product-list")
 	@Operation(summary = "찜 상품 목록 조회", description = "찜 상품 목록을 조회합니다.")
-	public ResponseEntity<?> getFavoriteProductList() {
+	public ResponseEntity<FavoriteListResDto> getFavoriteProductList(
+		@RequestHeader("Authorization") String token,
+		@RequestParam(defaultValue = "0") int page
+	) {
+		String uuid = jwtProvider.getUuid(token);
 
-		return null;
+		FavoriteListResDto productList = memberFavoriteService.getFavoriteProductList(uuid, page);
+
+		return ResponseEntity.ok(productList);
 	}
 
 	@GetMapping("/seller-list")

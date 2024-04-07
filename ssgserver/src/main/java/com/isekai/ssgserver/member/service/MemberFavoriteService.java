@@ -203,4 +203,23 @@ public class MemberFavoriteService {
 
 		return new FavoriteListResDto(favoriteSellerResDtoList);
 	}
+
+	@Transactional
+	public FavoriteListResDto getFavoriteProductList(String uuid, int page) {
+		Pageable pageable = PageRequest.of(page, 30);
+
+		Page<Object[]> productList = memberFavoriteRepository.findByUuidProduct(uuid, pageable);
+		List<FavoriteResDto> favoriteProductResDtoList = new ArrayList<>();
+
+		for (Object[] result : productList) {
+			Long favoriteId = (Long)result[0];
+			byte divisionCode = (byte)result[1];
+			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
+			Long identifier = (Long)result[2];
+			FavoriteResDto favoriteProductResDto = new FavoriteResDto(favoriteId, division, identifier);
+			favoriteProductResDtoList.add(favoriteProductResDto);
+		}
+
+		return new FavoriteListResDto(favoriteProductResDtoList);
+	}
 }
