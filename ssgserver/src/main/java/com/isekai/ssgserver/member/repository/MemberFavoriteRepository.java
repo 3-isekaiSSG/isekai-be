@@ -1,8 +1,11 @@
 package com.isekai.ssgserver.member.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.isekai.ssgserver.member.entity.Favorite;
@@ -16,4 +19,7 @@ public interface MemberFavoriteRepository extends JpaRepository<Favorite, Long> 
 	boolean existsByUuidAndDivisionAndIdentifier(String uuid, byte division, Long identifier);
 
 	Optional<Favorite> findByFavoriteIdAndUuid(Long favoriteId, String uuid);
+
+	@Query("SELECT f.favoriteId, f.division, f.identifier FROM Favorite f WHERE f.uuid = :uuid AND (f.division = 2 OR f.division = 3)")
+	List<Object[]> findByUuidCategory(@Param("uuid") String uuid);
 }

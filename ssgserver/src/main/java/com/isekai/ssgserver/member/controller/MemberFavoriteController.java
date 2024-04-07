@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.isekai.ssgserver.member.dto.FavoriteCategoryListDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
@@ -51,14 +52,39 @@ public class MemberFavoriteController {
 	}
 
 	/** 찜 목록 조회
-	 * 	동적 - 쿼리dsl로
 	 * 	--> 상품전체 / 브랜드&스토어 / 카테고리 /
 	 * 	30개씩 페이지네이션
+	 *		Enum ->
+	 * 	상품전체 -> product_code 리턴해주면됨 => product_code 값으로 카드 조회
+	 * 	브랜드&스토어 -> seller_id 목록
+	 * 	카테고리M -> category_m_id, 카테고리M
+	 * 	카테고리S -> category_s_id, 카테고리S
 	 */
-	@GetMapping("/list")
-	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회합니다.")
-	public ResponseEntity<?> getFavoriteList() {
+
+	@GetMapping("/product-list")
+	@Operation(summary = "찜 상품 목록 조회", description = "찜 상품 목록을 조회합니다.")
+	public ResponseEntity<?> getFavoriteProductList() {
+
 		return null;
+	}
+
+	@GetMapping("/seller-list")
+	@Operation(summary = "찜 브랜드 목록 조회", description = "찜 목록을 조회합니다.")
+	public ResponseEntity<?> getFavoriteSellerList() {
+
+		return null;
+	}
+
+	@GetMapping("/category-list")
+	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
+	public ResponseEntity<FavoriteCategoryListDto> getFavoriteCategoryList(
+		@RequestHeader("Authorization") String token
+	) {
+		String uuid = jwtProvider.getUuid(token);
+
+		FavoriteCategoryListDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid);
+
+		return ResponseEntity.ok(categoryList);
 	}
 
 	@GetMapping("/check")

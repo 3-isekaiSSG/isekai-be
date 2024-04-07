@@ -9,6 +9,8 @@ import com.isekai.ssgserver.category.repository.CategoryMRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.member.dto.FavoriteCategoryListDto;
+import com.isekai.ssgserver.member.dto.FavoriteCategoryResDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
@@ -16,6 +18,7 @@ import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
 import com.isekai.ssgserver.member.entity.Favorite;
+import com.isekai.ssgserver.member.enums.FavoriteDivision;
 import com.isekai.ssgserver.member.repository.MemberFavoriteRepository;
 
 import jakarta.persistence.EntityManager;
@@ -161,7 +164,21 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void getFavoriteCategoryList(String uuid) {
-		// memberFavoriteRepository.findByUuid(uuid);
+	public FavoriteCategoryListDto getFavoriteCategoryList(String uuid) {
+
+		List<Object[]> categoryList = memberFavoriteRepository.findByUuidCategory(uuid);
+		List<FavoriteCategoryResDto> favoriteCategoryResDtoList = new ArrayList<>();
+		for (Object[] result : categoryList) {
+			Long favoriteId = (Long)result[0];
+			byte divisionCode = (byte)result[1]; // division 코드를 숫자로 받음
+			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode); // 코드를 FavoriteDivision으로 변환
+			Long identifier = (Long)result[2];
+
+			FavoriteCategoryResDto favoriteCategoryResDto = new FavoriteCategoryResDto(favoriteId, division,
+				identifier);
+			favoriteCategoryResDtoList.add(favoriteCategoryResDto);
+		}
+
+		return new FavoriteCategoryListDto(favoriteCategoryResDtoList);
 	}
 }

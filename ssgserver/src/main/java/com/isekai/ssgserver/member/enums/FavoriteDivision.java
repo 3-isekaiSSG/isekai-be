@@ -14,4 +14,13 @@ public enum FavoriteDivision {
 
 	private final byte code;
 	private final String description;
+
+	public static FavoriteDivision fromCode(byte code) {
+		for (FavoriteDivision division : FavoriteDivision.values()) {
+			if (division.getCode() == code) {
+				return division;
+			}
+		}
+		throw new IllegalArgumentException("Invalid division code: " + code);
+	}
 }
