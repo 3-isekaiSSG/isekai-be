@@ -40,20 +40,23 @@ public class DeliveryAddressController {
 	@GetMapping("/{deliveryAddressId}")
 	@Operation(summary = "배송지 정보 조회", description = "회원/비회원 - 배송지 정보 조회")
 	public ResponseEntity<DeliveryAddressInfoDto> getDeliveryAddressInfo(
-		@RequestHeader(value = "Authorization", required = false) String token,
-		@PathVariable Long deliveryAddressId) {
+			@RequestHeader(value = "Authorization", required = false) String token,
+			@PathVariable Long deliveryAddressId) {
 
-		String uuid = jwtProvider.getUuid(token);
+		String uuid = null;
+		if (token != null) {
+			uuid = jwtProvider.getUuid(token);
+		}
 
 		DeliveryAddressInfoDto deliveryAddressInfoDto = deliveryAddressService.getDeliveryAddressInfo(uuid,
-			deliveryAddressId);
+				deliveryAddressId);
 		return ResponseEntity.ok(deliveryAddressInfoDto);
 	}
 
 	@GetMapping("/members")
 	@Operation(summary = "회원 배송지 리스트 조회", description = "회원 - 관리하고 있는 배송지 리스트 조회")
 	public ResponseEntity<List<DeliveryAddressListDto>> getMembersDeliveryAddressList(
-		@RequestHeader(value = "Authorization") String token
+			@RequestHeader(value = "Authorization") String token
 	) {
 
 		String uuid = jwtProvider.getUuid(token);
