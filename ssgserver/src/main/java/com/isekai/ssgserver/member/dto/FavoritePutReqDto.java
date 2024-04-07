@@ -13,6 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class FavoritePutReqDto {
 	private String identifier;
-	private String uuid;
 	private FavoriteDivision division;
+	private String uuid;
 }
