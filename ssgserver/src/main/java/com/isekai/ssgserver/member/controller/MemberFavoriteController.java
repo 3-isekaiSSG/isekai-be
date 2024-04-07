@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.isekai.ssgserver.member.dto.FavoriteCategoryListDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
+import com.isekai.ssgserver.member.dto.FavoriteListResDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
 import com.isekai.ssgserver.member.enums.FavoriteDivision;
@@ -71,19 +71,23 @@ public class MemberFavoriteController {
 
 	@GetMapping("/seller-list")
 	@Operation(summary = "찜 브랜드 목록 조회", description = "찜 목록을 조회합니다.")
-	public ResponseEntity<?> getFavoriteSellerList() {
-
-		return null;
-	}
-
-	@GetMapping("/category-list")
-	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
-	public ResponseEntity<FavoriteCategoryListDto> getFavoriteCategoryList(
+	public ResponseEntity<FavoriteListResDto> getFavoriteSellerList(
 		@RequestHeader("Authorization") String token,
 		@RequestParam(defaultValue = "0") int page
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		FavoriteCategoryListDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page);
+		FavoriteListResDto sellerList = memberFavoriteService.getFavoriteSellerList(uuid, page);
+		return ResponseEntity.ok(sellerList);
+	}
+
+	@GetMapping("/category-list")
+	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
+	public ResponseEntity<FavoriteListResDto> getFavoriteCategoryList(
+		@RequestHeader("Authorization") String token,
+		@RequestParam(defaultValue = "0") int page
+	) {
+		String uuid = jwtProvider.getUuid(token);
+		FavoriteListResDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page);
 		return ResponseEntity.ok(categoryList);
 	}
 

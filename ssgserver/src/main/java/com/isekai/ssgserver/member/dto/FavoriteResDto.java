@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FavoriteCategoryResDto {
+public class FavoriteResDto {
 	private Long favoriteId;
 	private FavoriteDivision division;
 	private Long identifier;

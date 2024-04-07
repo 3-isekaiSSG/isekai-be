@@ -12,14 +12,14 @@ import com.isekai.ssgserver.category.repository.CategoryMRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.member.dto.FavoriteCategoryListDto;
-import com.isekai.ssgserver.member.dto.FavoriteCategoryResDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
+import com.isekai.ssgserver.member.dto.FavoriteListResDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteResDto;
 import com.isekai.ssgserver.member.entity.Favorite;
 import com.isekai.ssgserver.member.enums.FavoriteDivision;
 import com.isekai.ssgserver.member.repository.MemberFavoriteRepository;
@@ -167,22 +167,40 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteCategoryListDto getFavoriteCategoryList(String uuid, int page) {
+	public FavoriteListResDto getFavoriteCategoryList(String uuid, int page) {
 		Pageable pageable = PageRequest.of(page, 30);
 
 		Page<Object[]> categoryList = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
-		List<FavoriteCategoryResDto> favoriteCategoryResDtoList = new ArrayList<>();
+		List<FavoriteResDto> favoriteCategoryResDtoList = new ArrayList<>();
 		for (Object[] result : categoryList) {
 			Long favoriteId = (Long)result[0];
-			byte divisionCode = (byte)result[1]; // division 코드를 숫자로 받음
-			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode); // 코드를 FavoriteDivision으로 변환
+			byte divisionCode = (byte)result[1];
+			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
 
-			FavoriteCategoryResDto favoriteCategoryResDto = new FavoriteCategoryResDto(favoriteId, division,
+			FavoriteResDto favoriteCategoryResDto = new FavoriteResDto(favoriteId, division,
 				identifier);
 			favoriteCategoryResDtoList.add(favoriteCategoryResDto);
 		}
 
-		return new FavoriteCategoryListDto(favoriteCategoryResDtoList);
+		return new FavoriteListResDto(favoriteCategoryResDtoList);
+	}
+
+	@Transactional
+	public FavoriteListResDto getFavoriteSellerList(String uuid, int page) {
+		Pageable pageable = PageRequest.of(page, 30);
+
+		Page<Object[]> sellerList = memberFavoriteRepository.findByUuidSellrer(uuid, pageable);
+		List<FavoriteResDto> favoriteSellerResDtoList = new ArrayList<>();
+		for (Object[] result : sellerList) {
+			Long favoriteId = (Long)result[0];
+			byte divisionCode = (byte)result[1];
+			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
+			Long identifier = (Long)result[2];
+			FavoriteResDto favoriteSellerResDto = new FavoriteResDto(favoriteId, division, identifier);
+			favoriteSellerResDtoList.add(favoriteSellerResDto);
+		}
+
+		return new FavoriteListResDto(favoriteSellerResDtoList);
 	}
 }

@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class FavoriteCategoryListDto {
-	private List<FavoriteCategoryResDto> favoriteCategoryList;
+public class FavoriteListResDto {
+	private List<FavoriteResDto> favoriteCategoryList;
 }
