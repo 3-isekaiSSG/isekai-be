@@ -30,13 +30,16 @@ public class DeliveryAddressService {
 	private final DeliveryAddressRepository deliveryAddressRepository;
 	private final MemberService memberService;
 
-	public DeliveryAddressNicknameDto getDeliveryAddressNickname(Long deliveryAddressId) {
+	public DeliveryAddressNicknameDto getDeliveryAddressNickname(String uuid, Long deliveryAddressId) {
 
-		return deliveryAddressRepository.findById(deliveryAddressId)
-				.map(da -> DeliveryAddressNicknameDto.builder()
-						.nickname(da.getNickname())
-						.build())
+		DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId)
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		verifyDeliveryAddressByMember(uuid, deliveryAddress.getMemberId());
+
+		return DeliveryAddressNicknameDto.builder()
+						.nickname(deliveryAddress.getNickname())
+						.build();
 	}
 
 	public DeliveryAddressInfoDto getDeliveryAddressInfo(String uuid, Long deliveryAddressId) {
@@ -84,9 +87,8 @@ public class DeliveryAddressService {
 		DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId)
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
-		if (deliveryAddress.getMemberId() != -1L) { // 회원의 배송지인 경우
-			verifyDeliveryAddressByMember(uuid, deliveryAddress.getMemberId());
-		}
+		verifyDeliveryAddressByMember(uuid, deliveryAddress.getMemberId());
+
 
 		deliveryAddressRepository.delete(deliveryAddress);
 	}
