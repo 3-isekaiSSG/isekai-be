@@ -3,6 +3,9 @@ package com.isekai.ssgserver.member.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
@@ -164,9 +167,10 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteCategoryListDto getFavoriteCategoryList(String uuid) {
+	public FavoriteCategoryListDto getFavoriteCategoryList(String uuid, int page) {
+		Pageable pageable = PageRequest.of(page, 30);
 
-		List<Object[]> categoryList = memberFavoriteRepository.findByUuidCategory(uuid);
+		Page<Object[]> categoryList = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
 		List<FavoriteCategoryResDto> favoriteCategoryResDtoList = new ArrayList<>();
 		for (Object[] result : categoryList) {
 			Long favoriteId = (Long)result[0];

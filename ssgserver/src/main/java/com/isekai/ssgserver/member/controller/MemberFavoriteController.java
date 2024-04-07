@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.isekai.ssgserver.member.dto.FavoriteCategoryListDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
@@ -78,12 +79,11 @@ public class MemberFavoriteController {
 	@GetMapping("/category-list")
 	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
 	public ResponseEntity<FavoriteCategoryListDto> getFavoriteCategoryList(
-		@RequestHeader("Authorization") String token
+		@RequestHeader("Authorization") String token,
+		@RequestParam(defaultValue = "0") int page
 	) {
 		String uuid = jwtProvider.getUuid(token);
-
-		FavoriteCategoryListDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid);
-
+		FavoriteCategoryListDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page);
 		return ResponseEntity.ok(categoryList);
 	}
 
