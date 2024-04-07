@@ -2,6 +2,8 @@ package com.isekai.ssgserver.order.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -14,12 +16,14 @@ import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.repository.MemberRepository;
 import com.isekai.ssgserver.order.dto.MemberOrderDto;
 import com.isekai.ssgserver.order.dto.NonMemberOrderDto;
+import com.isekai.ssgserver.order.dto.OrderListDto;
 import com.isekai.ssgserver.order.dto.OrderProductDto;
 import com.isekai.ssgserver.order.dto.OrderResponseDto;
 import com.isekai.ssgserver.order.dto.OrderSellerProductDto;
 import com.isekai.ssgserver.order.dto.OrderSummaryDto;
 import com.isekai.ssgserver.order.entity.Order;
 import com.isekai.ssgserver.order.entity.OrderProduct;
+import com.isekai.ssgserver.order.repository.OrderCustomRepository;
 import com.isekai.ssgserver.order.repository.OrderProductRepository;
 import com.isekai.ssgserver.order.repository.OrderRepository;
 
@@ -38,6 +42,7 @@ public class OrderService {
 	private final DeliveryAddressRepository deliveryAddressRepository;
 	private final OrderProductRepository orderProductRepository;
 	private final MemberRepository memberRepository;
+	private final OrderCustomRepository orderCustomRepository;
 
 	/**
 	 * 비회원 주문 생성
@@ -242,5 +247,23 @@ public class OrderService {
 				.buyPrice(o.getBuyPrice())
 				.build())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+	}
+
+	public List<OrderListDto> getOrderList(String uuid, Integer month, LocalDate endDate, byte dType) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+		AtomicInteger id = new AtomicInteger(0);
+
+		List<Order> orders = orderCustomRepository.findByUuidAndFilter(uuid, month, endDate, dType);
+
+		return orders.stream()
+			.map(ol -> OrderListDto.builder()
+				.id(id.getAndIncrement())
+				.ordersId(ol.getOrdersId())
+				.code(ol.getCode())
+				.buyPrice(ol.getBuyPrice())
+				.date(ol.getCreatedAt().format(formatter))
+				.build())
+			.toList();
 	}
 }
