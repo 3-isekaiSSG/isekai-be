@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum FavoriteDivision {
 	SINGLE_PRODUCT((byte)0, "단일상품"),
 	BUNDLE_PRODUCT((byte)1, "묶음상품"),
-	CATEGORYL((byte)2, "카테고리L"),
-	CATEGORYM((byte)3, "카테고리M"),
+	CATEGORYM((byte)2, "카테고리M"),
+	CATEGORYS((byte)3, "카테고리S"),
 	BRAND((byte)4, "브랜드");
 
 	private final byte code;

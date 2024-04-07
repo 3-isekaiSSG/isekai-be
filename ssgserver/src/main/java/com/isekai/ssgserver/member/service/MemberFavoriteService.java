@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.isekai.ssgserver.category.repository.CategoryLRepository;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
+import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
@@ -29,8 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberFavoriteService {
 	private final MemberFavoriteRepository memberFavoriteRepository;
-	private final CategoryLRepository categoryLRepository;
 	private final CategoryMRepository categoryMRepository;
+	private final CategorySRepository categorySRepository;
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -40,11 +40,11 @@ public class MemberFavoriteService {
 		String uuid = favoriteReqDto.getUuid();
 
 		if (division == 2) {
-			// 카테고리L (2)
-			String largeName = favoriteReqDto.getIdentifier();
+			// 카테고리M (2)
+			String mediumName = favoriteReqDto.getIdentifier();
 
-			String modifiedLargeName = largeName.replace('-', '/');
-			Long identifier = categoryLRepository.findByLargeName(modifiedLargeName);
+			String modifiedMediumName = mediumName.replace('-', '/');
+			Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
 
 			Favorite favorite = Favorite.builder()
 				.uuid(uuid)
@@ -55,11 +55,11 @@ public class MemberFavoriteService {
 			memberFavoriteRepository.save(favorite);
 
 		} else if (division == 3) {
-			// 카테고리M (3)
-			String mediumName = favoriteReqDto.getIdentifier();
+			// 카테고리S (3)
+			String smallName = favoriteReqDto.getIdentifier();
 
-			String modifiedMediumName = mediumName.replace('-', '/');
-			Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
+			String modifiedSmallName = smallName.replace('-', '/');
+			Long identifier = categorySRepository.findBySmallName(modifiedSmallName);
 
 			Favorite favorite = Favorite.builder()
 				.uuid(uuid)
@@ -126,21 +126,27 @@ public class MemberFavoriteService {
 			.build();
 	}
 
+	@Transactional
 	public boolean getFavoriteIsDetails(String uuid, FavoriteReqDto favoriteReqDto) {
 		Long identifierModify;
 		String identifier = favoriteReqDto.getIdentifier();
 		byte division = favoriteReqDto.getDivision().getCode();
 
 		if (division == 2) {
-			String modifiedLargeName = identifier.replace('-', '/');
-			identifierModify = categoryLRepository.findByLargeName(modifiedLargeName);
-		} else if (division == 3) {
 			String modifiedMediumName = identifier.replace('-', '/');
 			identifierModify = categoryMRepository.findByMediumName(modifiedMediumName);
+		} else if (division == 3) {
+			String modifiedSmallName = identifier.replace('-', '/');
+			identifierModify = categorySRepository.findBySmallName(modifiedSmallName);
 		} else {
 			identifierModify = Long.parseLong(identifier);
 		}
 
 		return memberFavoriteRepository.existsByUuidAndDivisionAndIdentifier(uuid, division, identifierModify);
+	}
+
+	@Transactional
+	public void getFavoriteCategoryList(String uuid) {
+		// memberFavoriteRepository.findByUuid(uuid);
 	}
 }
