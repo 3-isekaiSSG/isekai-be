@@ -57,9 +57,15 @@ public class MemberFavoriteService {
 		} else if (division == 3) {
 			// 카테고리S (3)
 			String smallName = favoriteReqDto.getIdentifier();
+			String[] categories = smallName.split(">");
+			String categoryM = categories[0].trim();
+			String categoryS = categories[1].trim();
 
-			String modifiedSmallName = smallName.replace('-', '/');
-			Long identifier = categorySRepository.findBySmallName(modifiedSmallName);
+			String modifiedMediumName = categoryM.replace('-', '/');
+			String modifiedSmallName = categoryS.replace('-', '/');
+
+			Long categoryMId = categoryMRepository.findByMediumName(modifiedMediumName);
+			Long identifier = categorySRepository.findBySmallAndCategoryMId(modifiedSmallName, categoryMId);
 
 			Favorite favorite = Favorite.builder()
 				.uuid(uuid)
@@ -136,8 +142,17 @@ public class MemberFavoriteService {
 			String modifiedMediumName = identifier.replace('-', '/');
 			identifierModify = categoryMRepository.findByMediumName(modifiedMediumName);
 		} else if (division == 3) {
-			String modifiedSmallName = identifier.replace('-', '/');
-			identifierModify = categorySRepository.findBySmallName(modifiedSmallName);
+			String smallName = favoriteReqDto.getIdentifier();
+			String[] categories = smallName.split(">");
+			String categoryM = categories[0].trim();
+			String categoryS = categories[1].trim();
+
+			String modifiedMediumName = categoryM.replace('-', '/');
+			String modifiedSmallName = categoryS.replace('-', '/');
+
+			Long categoryMId = categoryMRepository.findByMediumName(modifiedMediumName);
+			identifierModify = categorySRepository.findBySmallAndCategoryMId(modifiedSmallName, categoryMId);
+
 		} else {
 			identifierModify = Long.parseLong(identifier);
 		}
