@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class CreatedDataIdDto {
+public class DataIdDto {
 
-    private Long createdId;
+    private Long id;
 }

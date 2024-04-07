@@ -1,9 +1,10 @@
 package com.isekai.ssgserver.deliveryAddress.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.isekai.ssgserver.common.dto.CreatedDataIdDto;
+import com.isekai.ssgserver.common.dto.DataIdDto;
 import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressCreateDto;
 import com.isekai.ssgserver.member.service.MemberService;
 import jakarta.transaction.Transactional;
@@ -90,7 +91,7 @@ public class DeliveryAddressService {
 		deliveryAddressRepository.delete(deliveryAddress);
 	}
 
-	public CreatedDataIdDto createDeliveryAddress(String uuid, DeliveryAddressCreateDto deliveryAddressCreateDto) {
+	public DataIdDto createDeliveryAddress(String uuid, DeliveryAddressCreateDto deliveryAddressCreateDto) {
 
 		Long memberId = -1L;  // 비회원
 		if (uuid != null) {   // 회원
@@ -115,20 +116,42 @@ public class DeliveryAddressService {
 
 		Long savedId = deliveryAddressRepository.save(deliveryAddress).getDeliveryAddressId();
 
-		return CreatedDataIdDto.builder()
-				.createdId(savedId)
+		return DataIdDto.builder()
+				.id(savedId)
+				.build();
+	}
+
+	public DataIdDto setDefaultDeliveryAddress(String uuid, Long deliveryAddressId) {
+
+		DeliveryAddress newDefault = deliveryAddressRepository.findById(deliveryAddressId)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		verifyDeliveryAddressByMember(uuid, newDefault.getMemberId());
+
+		// 기존 default 배송지 -> false
+		Optional<DeliveryAddress> originDefault = deliveryAddressRepository.findByMemberIdAndIsDefault(newDefault.getMemberId(), true);
+		if (originDefault.isPresent()) {
+			originDefault.get().changeIsDefault(false);
+			deliveryAddressRepository.save(originDefault.get());
+		}
+
+		newDefault.changeIsDefault(true);
+		deliveryAddressRepository.save(newDefault);
+
+		return DataIdDto.builder()
+				.id(newDefault.getDeliveryAddressId())
 				.build();
 	}
 
 	/**
 	 * 클라이언트의 인증된 회원 정보 - 배송지 매칭 확인
 	 * @param uuid token에서 파싱한 회원 정보 (uuid)
-	 * @param requestMemberId 클라이언트가 보낸 {deliveryAddressId}에 저장된 {memberId}
+	 * @param deliveryAddressMemberId 클라이언트가 보낸 {deliveryAddressId}에 저장된 {memberId}
 	 */
-	private void verifyDeliveryAddressByMember(String uuid, Long requestMemberId) {
+	private void verifyDeliveryAddressByMember(String uuid, Long deliveryAddressMemberId) {
 		Long savedMemberId = memberService.getMemberIdByUuid(uuid);
 
-		if (!savedMemberId.equals(requestMemberId)) {
+		if (!savedMemberId.equals(deliveryAddressMemberId)) {
 			throw new CustomException(ErrorCode.NO_AUTHORITY);
 		}
 	}

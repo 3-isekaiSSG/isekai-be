@@ -62,6 +62,10 @@ public class DeliveryAddress extends BaseEntity {
 	@Column(name = "order_history", nullable = false)
 	private boolean orderHistory;
 
+	public void changeIsDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
 	@Builder
 	public DeliveryAddress(Long memberId, String nickname, String name, String cellphone, String telephone,
 		String zipcode,

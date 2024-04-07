@@ -2,7 +2,7 @@ package com.isekai.ssgserver.deliveryAddress.controller;
 
 import java.util.List;
 
-import com.isekai.ssgserver.common.dto.CreatedDataIdDto;
+import com.isekai.ssgserver.common.dto.DataIdDto;
 import com.isekai.ssgserver.deliveryAddress.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +80,7 @@ public class DeliveryAddressController {
 
 	@PostMapping("")
 	@Operation(summary = "배송지 정보 생성", description = "회원/비회원 - 배송지 정보 추가")
-	public ResponseEntity<CreatedDataIdDto> createDeliveryAddress(
+	public ResponseEntity<DataIdDto> createDeliveryAddress(
 			@RequestHeader(value = "Authorization", required = false) String token,
 			@RequestBody DeliveryAddressCreateDto deliveryAddressCreateDto) {
 
@@ -89,8 +89,22 @@ public class DeliveryAddressController {
 			uuid = jwtProvider.getUuid(token);
 		}
 
-		CreatedDataIdDto createdAddress = deliveryAddressService.createDeliveryAddress(uuid, deliveryAddressCreateDto);
+		DataIdDto createdAddress = deliveryAddressService.createDeliveryAddress(uuid, deliveryAddressCreateDto);
 		return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
 	}
+
+	@PatchMapping("/{deliveryAddressId}/default")
+	@Operation(summary = "기본 배송지 설정", description = "회원 - 기본배송지 기존-false, 신규-true")
+	public ResponseEntity<DataIdDto> setDefaultDeliveryAddress(
+			@RequestHeader(value = "Authorization") String token,
+			@PathVariable Long deliveryAddressId) {
+
+		String uuid = jwtProvider.getUuid(token);
+
+		DataIdDto newDefaultDeliveryAddress = deliveryAddressService.setDefaultDeliveryAddress(uuid, deliveryAddressId);
+		return ResponseEntity.ok(newDefaultDeliveryAddress);
+	}
+
+
 
 }
