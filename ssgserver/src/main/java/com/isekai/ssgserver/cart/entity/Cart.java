@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -32,7 +33,7 @@ public class Cart extends BaseEntity {
 	@Column(name = "cart_id")
 	private Long cartId;
 
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private String uuid;
 
 	// 비회원 장바구니 쿠키 value
@@ -49,4 +50,8 @@ public class Cart extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "options_id", nullable = false)
 	private Option option;
+
+	public void updateUuid(String uuid) {
+		this.uuid = uuid;
+	}
 }

@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.cart.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.cart.dto.CartUpdateDto;
@@ -9,7 +11,10 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.option.entity.Option;
 import com.isekai.ssgserver.option.repository.OptionRepository;
+import com.isekai.ssgserver.util.jwt.JwtProvider;
+import com.isekai.ssgserver.util.jwt.JwtToken;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +25,21 @@ public class CartUpdateService {
 
 	private final CartRepository cartRepository;
 	private final OptionRepository optionRepository;
+
+	private final JwtProvider jwtProvider;
+
+	// 비회원 장바구니 -> 회원 장바구니
+	@Transactional
+	public void updateCartByUuid(JwtToken tokens, String cartValue) {
+		String uuid = jwtProvider.getUuid(tokens.getAccessToken()); // JWT 토큰에서 uuid 추출
+		List<Cart> nonMemberCarts = cartRepository.findByCartValue(cartValue); // 비회원 장바구니 조회
+
+		for (Cart cart : nonMemberCarts) {
+			cart.updateUuid(uuid); // 각 장바구니 항목의 uuid를 회원의 uuid로 변경
+		}
+
+		cartRepository.saveAll(nonMemberCarts);
+	}
 
 	public CartUpdateDto updateCartProductOption(Long cartId, Long optionsId) {
 
