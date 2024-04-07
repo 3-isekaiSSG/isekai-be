@@ -3,6 +3,9 @@ package com.isekai.ssgserver.deliveryAddress.service;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.isekai.ssgserver.common.dto.CreatedDataIdDto;
+import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressCreateDto;
+import com.isekai.ssgserver.member.service.MemberService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DeliveryAddressService {
 
 	private final DeliveryAddressRepository deliveryAddressRepository;
-	private final MemberRepository memberRepository;
+	private final MemberService memberService;
 
 	public DeliveryAddressNicknameDto getDeliveryAddressNickname(Long deliveryAddressId) {
 
@@ -62,9 +65,7 @@ public class DeliveryAddressService {
 
 		AtomicInteger id = new AtomicInteger(0);
 
-		Long memberId = memberRepository.findByUuidAndIsWithdraw(uuid, (byte)0)
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))
-				.getMemberId();
+		Long memberId = memberService.getMemberIdByUuid(uuid);
 
 		return deliveryAddressRepository.findAllByMemberId(memberId)
 				.stream()
@@ -87,7 +88,36 @@ public class DeliveryAddressService {
 		}
 
 		deliveryAddressRepository.delete(deliveryAddress);
+	}
 
+	public CreatedDataIdDto createDeliveryAddress(String uuid, DeliveryAddressCreateDto deliveryAddressCreateDto) {
+
+		Long memberId = -1L;  // 비회원
+		if (uuid != null) {   // 회원
+			memberId = memberService.getMemberIdByUuid(uuid);
+		}
+
+		String nickname = deliveryAddressCreateDto.getNickname();
+		if (nickname == null) nickname = "자택";
+
+		DeliveryAddress deliveryAddress = DeliveryAddress.builder()
+				.memberId(memberId)
+				.nickname(nickname)
+				.name(deliveryAddressCreateDto.getName())
+				.cellphone(deliveryAddressCreateDto.getCellphone())
+				.telephone(deliveryAddressCreateDto.getTelephone())
+				.zipcode(deliveryAddressCreateDto.getZipcode())
+				.address(deliveryAddressCreateDto.getAddress())
+				.isDefault(false)
+				.isDeleted(false)
+				.orderHistory(false)
+				.build();
+
+		Long savedId = deliveryAddressRepository.save(deliveryAddress).getDeliveryAddressId();
+
+		return CreatedDataIdDto.builder()
+				.createdId(savedId)
+				.build();
 	}
 
 	/**
@@ -96,12 +126,11 @@ public class DeliveryAddressService {
 	 * @param requestMemberId 클라이언트가 보낸 {deliveryAddressId}에 저장된 {memberId}
 	 */
 	private void verifyDeliveryAddressByMember(String uuid, Long requestMemberId) {
-		Long savedMemberId = memberRepository.findByUuidAndIsWithdraw(uuid, (byte)0)
-				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))
-				.getMemberId();
+		Long savedMemberId = memberService.getMemberIdByUuid(uuid);
 
 		if (!savedMemberId.equals(requestMemberId)) {
 			throw new CustomException(ErrorCode.NO_AUTHORITY);
 		}
 	}
+
 }

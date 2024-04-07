@@ -2,12 +2,12 @@ package com.isekai.ssgserver.deliveryAddress.controller;
 
 import java.util.List;
 
-import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressInfoDto;
+import com.isekai.ssgserver.common.dto.CreatedDataIdDto;
+import com.isekai.ssgserver.deliveryAddress.dto.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressListDto;
-import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressNicknameDto;
 import com.isekai.ssgserver.deliveryAddress.service.DeliveryAddressService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
 
@@ -76,6 +76,21 @@ public class DeliveryAddressController {
 		deliveryAddressService.softDeleteDeliveryAddress(uuid, deliveryAddressId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("")
+	@Operation(summary = "배송지 정보 생성", description = "회원/비회원 - 배송지 정보 추가")
+	public ResponseEntity<CreatedDataIdDto> createDeliveryAddress(
+			@RequestHeader(value = "Authorization", required = false) String token,
+			@RequestBody DeliveryAddressCreateDto deliveryAddressCreateDto) {
+
+		String uuid = null;
+		if (token != null) {
+			uuid = jwtProvider.getUuid(token);
+		}
+
+		CreatedDataIdDto createdAddress = deliveryAddressService.createDeliveryAddress(uuid, deliveryAddressCreateDto);
+		return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
 	}
 
 }
