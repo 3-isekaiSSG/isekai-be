@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @AllArgsConstructor
@@ -22,6 +23,7 @@ import org.hibernate.annotations.SQLDelete;
 @ToString
 @Getter
 @SQLDelete(sql = "UPDATE delivery_address SET is_deleted = true WHERE delivery_address_id = ?")
+@Where(clause = "is_deleted = false")
 @Table(name = "delivery_address")
 public class DeliveryAddress extends BaseEntity {
 
