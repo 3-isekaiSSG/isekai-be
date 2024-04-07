@@ -14,12 +14,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
+@SQLDelete(sql = "UPDATE delivery_address SET is_deleted = true WHERE delivery_address_id = ?")
 @Table(name = "delivery_address")
 public class DeliveryAddress extends BaseEntity {
 

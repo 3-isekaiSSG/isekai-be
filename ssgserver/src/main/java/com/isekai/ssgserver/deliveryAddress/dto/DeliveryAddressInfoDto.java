@@ -1,4 +1,4 @@
-package com.isekai.ssgserver.deliveryAddress.controller;
+package com.isekai.ssgserver.deliveryAddress.dto;
 
 import lombok.Builder;
 import lombok.Getter;

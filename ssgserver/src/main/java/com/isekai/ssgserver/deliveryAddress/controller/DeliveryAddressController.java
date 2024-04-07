@@ -2,12 +2,9 @@ package com.isekai.ssgserver.deliveryAddress.controller;
 
 import java.util.List;
 
+import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressInfoDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressListDto;
 import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressNicknameDto;
@@ -63,6 +60,22 @@ public class DeliveryAddressController {
 
 		List<DeliveryAddressListDto> addressList = deliveryAddressService.getMembersDeliveryAddressList(uuid);
 		return ResponseEntity.ok(addressList);
+	}
+
+	@DeleteMapping("/{deliveryAddressId}")
+	@Operation(summary = "배송지 삭제", description = "회원/비회원 - 배송지 is_deleted = true")
+	public ResponseEntity<Void> softDeleteDeliveryAddress(
+			@RequestHeader(value = "Authorization", required = false) String token,
+			@PathVariable Long deliveryAddressId) {
+
+		String uuid = null;
+		if (token != null) {
+			uuid = jwtProvider.getUuid(token);
+		}
+
+		deliveryAddressService.softDeleteDeliveryAddress(uuid, deliveryAddressId);
+
+		return ResponseEntity.ok().build();
 	}
 
 }
