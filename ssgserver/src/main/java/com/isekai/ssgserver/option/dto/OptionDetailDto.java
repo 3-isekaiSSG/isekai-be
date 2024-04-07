@@ -11,6 +11,7 @@ public class OptionDetailDto {
 
 	private int id;
 	private Long optionsId;
+	private String category;
 	private int orderLimit;
 	private int stock;
 	private String value;
