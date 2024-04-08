@@ -1,5 +1,9 @@
 package com.isekai.ssgserver.order.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.order.dto.MemberOrderDto;
 import com.isekai.ssgserver.order.dto.NonMemberOrderDto;
+import com.isekai.ssgserver.order.dto.OrderListDto;
 import com.isekai.ssgserver.order.dto.OrderResponseDto;
 import com.isekai.ssgserver.order.dto.OrderSummaryDto;
 import com.isekai.ssgserver.order.service.OrderService;
@@ -60,6 +66,20 @@ public class OrderController {
 		OrderSummaryDto orderSummaryDto = orderService.getOrderSummary(orderCode);
 		return ResponseEntity.ok(orderSummaryDto);
 
+	}
+
+	// 추후 페이징 처리
+	@GetMapping
+	@Operation(summary = "주문 정보 조회", description = "주문 정보 조회시 필요한 필터링 기능까지")
+	public ResponseEntity<List<OrderListDto>> getOrderList(@RequestHeader("Authorization") String token,
+		@RequestParam(value = "month", defaultValue = "3") Integer month,
+		@RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyyMMdd") LocalDate endDate,
+		@RequestParam(value = "dType", required = false) byte dType) {
+
+		String uuid = jwtProvider.getUuid(token);
+
+		List<OrderListDto> orderList = orderService.getOrderList(uuid, month, endDate, dType);
+		return ResponseEntity.ok(orderList);
 	}
 
 }
