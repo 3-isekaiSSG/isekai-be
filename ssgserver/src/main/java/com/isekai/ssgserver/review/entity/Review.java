@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.review.entity;
 
+import com.isekai.ssgserver.common.BaseEntity;
 import com.isekai.ssgserver.order.entity.OrderProduct;
 
 import jakarta.persistence.Column;
@@ -25,7 +26,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "review")
-public class Review {
+public class Review extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

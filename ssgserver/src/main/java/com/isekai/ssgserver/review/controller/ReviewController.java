@@ -28,15 +28,15 @@ public class ReviewController {
 	private final JwtProvider jwtProvider;
 
 	// 리뷰 생성
-	@PostMapping("/{orderProduct}")
+	@PostMapping("/{order_product_id}")
 	@Operation(summary = "리뷰 생성", description = "회원이 작성한 리뷰를 저장합니다.")
 	public ResponseEntity<Void> createReview(
 		@RequestHeader("Authorization") String token,
 		@RequestBody ReviewReqDto reviewReqDto,
-		@PathVariable Long orderProduct) {
+		@PathVariable Long order_product_id) {
 
 		String uuid = jwtProvider.getUuid(token);
-		reviewService.createReview(uuid, reviewReqDto, orderProduct);
+		reviewService.createReview(uuid, reviewReqDto, order_product_id);
 		return ResponseEntity.ok().build();
 	}
 
