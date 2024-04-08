@@ -17,12 +17,4 @@ public class SocialJoinDto {
 			.socialDivisionCode(socialDivisionCode)
 			.build();
 	}
-
-	public MemberSocial toEntity(String uuid, byte socialDivisionCode) {
-		return MemberSocial.builder()
-			.uuid(uuid)
-			.memberSocialCode(this.memberSocialCode)
-			.socialDivisionCode(socialDivisionCode)
-			.build();
-	}
 }
