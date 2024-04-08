@@ -25,9 +25,9 @@ public class MemberJoinDto {
 	private String address;
 	private Integer gender;
 
-	public Member toEntity(String encodedPassword) {
+	public Member toEntity(String uuid, String encodedPassword) {
 		return Member.builder()
-			.uuid(String.valueOf(UUID.randomUUID()))
+			.uuid(uuid)
 			.accountId(this.accountId)
 			.name(this.name)
 			.password(encodedPassword)
