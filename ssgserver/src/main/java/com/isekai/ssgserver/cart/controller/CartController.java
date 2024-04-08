@@ -183,7 +183,7 @@ public class CartController {
 			// 쿠키가 없는 경우, 새 장바구니 ID 생성 및 쿠키에 저장
 			String newCartValue = UUID.randomUUID().toString();
 			Cookie newCookie = new Cookie("CART_VALUE", newCartValue);
-			newCookie.setDomain(".isekai-ssg.shop");
+			// newCookie.setDomain(".isekai-ssg.shop");
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
 			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
