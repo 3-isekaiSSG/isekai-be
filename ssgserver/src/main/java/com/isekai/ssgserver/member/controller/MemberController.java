@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
+import com.isekai.ssgserver.cart.service.CartUpdateService;
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
 import com.isekai.ssgserver.member.dto.SocialJoinDto;
@@ -22,6 +24,9 @@ import com.isekai.ssgserver.util.jwt.JwtToken;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final CartUpdateService cartUpdateService;
 	@Value("${jwt.token.refresh-expire-time}")
 	private long refreshExpireTime;
 
@@ -50,15 +56,39 @@ public class MemberController {
 
 	@PostMapping("/login")
 	@Operation(summary = "로그인")
-	public ResponseEntity<JwtToken> login(@RequestBody MemberLoginDto loginDto) {
+	public ResponseEntity<JwtToken> login(@RequestBody MemberLoginDto loginDto, HttpServletRequest request,
+		HttpServletResponse response) {
 		JwtToken tokens = memberService.login(loginDto);
+
+		// 비회원 장바구니 -> 회원 장바구니
+		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
+		if (cartCookie != null) {
+			String cartValue = cartCookie.getValue();
+			cartUpdateService.updateCartByUuid(tokens, cartValue);
+			cartCookie.setPath("/");
+			cartCookie.setMaxAge(0);
+			response.addCookie(cartCookie);
+		}
+
 		return ResponseEntity.ok(tokens);
 	}
 
 	@PostMapping("/social-login")
 	@Operation(summary = "소셜 회원 확인", description = "소셜로 가입된 유저인지 아닌지 확인해서 맞다면 login 시키고, 아니라면 간편회원가입 페이지로 리다이렉트")
-	public ResponseEntity<JwtToken> socialMember(@RequestBody SocialMemberDto socialMemberDto) {
+	public ResponseEntity<JwtToken> socialMember(@RequestBody SocialMemberDto socialMemberDto,
+		HttpServletRequest request, HttpServletResponse response) {
 		JwtToken tokens = memberService.socialLogin(socialMemberDto);
+
+		// 비회원 장바구니 -> 회원 장바구니
+		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
+		if (cartCookie != null) {
+			String cartValue = cartCookie.getValue();
+			cartUpdateService.updateCartByUuid(tokens, cartValue);
+			cartCookie.setPath("/");
+			cartCookie.setMaxAge(0);
+			response.addCookie(cartCookie);
+		}
+
 		return ResponseEntity.ok(tokens);
 	}
 

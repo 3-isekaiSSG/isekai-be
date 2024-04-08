@@ -70,23 +70,24 @@ public class CartController {
 
 	@PostMapping("/member")
 	@Operation(summary = "회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
-	public ResponseEntity<Void> addMemberCart(@RequestBody CartRequestDto cartRequestDto,
+	public ResponseEntity<Void> addMemberCart(@RequestBody List<CartRequestDto> cartRequestDtos,
 		@RequestHeader("Authorization") String token) {
 
 		String uuid = jwtProvider.getUuid(token);
 
-		return cartService.addMemberCartProduct(cartRequestDto, uuid);
+		return cartService.addMemberCartProduct(cartRequestDtos, uuid);
 	}
 
 	@PostMapping("/non-member")
 	@Operation(summary = "비회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
-	public ResponseEntity<Void> addNonMemberCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
+	public ResponseEntity<Void> addNonMemberCart(@RequestBody List<CartRequestDto> cartRequestDtos,
+		HttpServletRequest request,
 		HttpServletResponse response
 	) {
 
 		String cartValue = getOrCreateCartValue(request, response);
 
-		return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
+		return cartService.addNonMemberCartProduct(cartRequestDtos, cartValue);
 	}
 
 	@GetMapping("/options/{optionsId}")
@@ -176,17 +177,13 @@ public class CartController {
 
 		// 쿠키에서 장바구니 value를 찾음
 		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
-		log.info(String.valueOf(cartCookie));
 		if (cartCookie != null) {
-			log.info("쿠키 들어오나");
 			cartCookie.setMaxAge(24 * 60 * 60 * 2);
 			return cartCookie.getValue();
 		} else {
 			// 쿠키가 없는 경우, 새 장바구니 ID 생성 및 쿠키에 저장
-			log.info("쿠키 없나");
 			String newCartValue = UUID.randomUUID().toString();
 			Cookie newCookie = new Cookie("CART_VALUE", newCartValue);
-			// newCookie.setDomain(".isekai-ssg.shop");
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
 			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
