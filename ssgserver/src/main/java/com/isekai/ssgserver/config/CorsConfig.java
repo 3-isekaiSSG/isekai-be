@@ -16,7 +16,7 @@ public class CorsConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.addAllowedOriginPattern("https://m.isekai-ssg.shop"); // 허용할 URL
+		config.addAllowedOriginPattern("*"); // 허용할 URL
 		config.addAllowedHeader("*"); // 허용할 Header
 		config.addAllowedMethod("*"); // 허용할 Http Method
 		config.setExposedHeaders(Arrays.asList("Authorization", "refreshToken"));
