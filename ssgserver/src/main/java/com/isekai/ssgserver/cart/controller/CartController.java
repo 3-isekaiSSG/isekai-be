@@ -176,19 +176,17 @@ public class CartController {
 
 		// 쿠키에서 장바구니 value를 찾음
 		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
-		log.info(String.valueOf(cartCookie));
 		if (cartCookie != null) {
-			log.info("뭐가 들어오나?");
 			cartCookie.setMaxAge(24 * 60 * 60 * 2);
 			return cartCookie.getValue();
 		} else {
 			// 쿠키가 없는 경우, 새 장바구니 ID 생성 및 쿠키에 저장
-			log.info("쿠키가 없나");
 			String newCartValue = UUID.randomUUID().toString();
 			Cookie newCookie = new Cookie("CART_VALUE", newCartValue);
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
 			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
+			newCookie.setSecure(true);
 			response.addCookie(newCookie);
 			return newCartValue;
 		}
