@@ -14,12 +14,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
+@SQLDelete(sql = "UPDATE delivery_address SET is_deleted = true WHERE delivery_address_id = ?")
+@Where(clause = "is_deleted = false")
 @Table(name = "delivery_address")
 public class DeliveryAddress extends BaseEntity {
 
@@ -57,6 +61,10 @@ public class DeliveryAddress extends BaseEntity {
 
 	@Column(name = "order_history", nullable = false)
 	private boolean orderHistory;
+
+	public void changeIsDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
 
 	@Builder
 	public DeliveryAddress(Long memberId, String nickname, String name, String cellphone, String telephone,
