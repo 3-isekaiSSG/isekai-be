@@ -227,7 +227,8 @@ public class OrderService {
 
 	/**
 	 * 주문 번호 생성 메서드
-	 *  - 생성 규칙 : YYYYMMDD-{orderId} (추후 변경 예정)
+	 * - 생성 규칙 : YYYYMMDD-{orderId} (추후 변경 예정)
+	 *
 	 * @return
 	 */
 	private String generateOrderCode() {
@@ -254,9 +255,7 @@ public class OrderService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		AtomicInteger id = new AtomicInteger(0);
 
-		List<Order> orders = orderCustomRepository.findByUuidAndFilter(uuid, month, endDate, dType);
-
-		return orders.stream()
+		return orderCustomRepository.findByUuidAndFilter(uuid, month, endDate, dType).stream()
 			.map(ol -> OrderListDto.builder()
 				.id(id.getAndIncrement())
 				.ordersId(ol.getOrdersId())
