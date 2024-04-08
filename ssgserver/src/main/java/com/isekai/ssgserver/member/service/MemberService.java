@@ -81,7 +81,12 @@ public class MemberService {
 		Member member = memberRepository.findByUuid(socialJoinDto.getUuid())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-		MemberSocial memberSocial = socialJoinDto.joinToEntity();
+		byte code = (byte)0;
+		if (Objects.equals(socialJoinDto.getSocialDivisionCode(), "kakao")) {
+			code = (byte)1;
+		}
+
+		MemberSocial memberSocial = socialJoinDto.joinToEntity(code);
 		socialRepository.save(memberSocial);
 	}
 
@@ -90,7 +95,13 @@ public class MemberService {
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		String uuid = member.getUuid();
-		MemberSocial memberSocial = new SocialJoinDto().toEntity(uuid);
+
+		byte code = (byte)0;
+		if (Objects.equals(socialMappingDto.getProvider(), "kakao")) {
+			code = (byte)1;
+		}
+
+		MemberSocial memberSocial = new SocialJoinDto().toEntity(uuid, code);
 		socialRepository.save(memberSocial);
 	}
 }

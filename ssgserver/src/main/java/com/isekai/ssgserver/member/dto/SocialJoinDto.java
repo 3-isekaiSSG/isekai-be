@@ -8,21 +8,21 @@ import lombok.Getter;
 public class SocialJoinDto {
 	private String uuid;
 	private String memberSocialCode;
-	private byte socialDivisionCode;
+	private String socialDivisionCode;
 
-	public MemberSocial joinToEntity() {
+	public MemberSocial joinToEntity(byte socialDivisionCode) {
 		return MemberSocial.builder()
 			.uuid(this.uuid)
 			.memberSocialCode(this.memberSocialCode)
-			.socialDivisionCode(this.socialDivisionCode)
+			.socialDivisionCode(socialDivisionCode)
 			.build();
 	}
 
-	public MemberSocial toEntity(String uuid) {
+	public MemberSocial toEntity(String uuid, byte socialDivisionCode) {
 		return MemberSocial.builder()
 			.uuid(uuid)
 			.memberSocialCode(this.memberSocialCode)
-			.socialDivisionCode(this.socialDivisionCode)
+			.socialDivisionCode(socialDivisionCode)
 			.build();
 	}
 }

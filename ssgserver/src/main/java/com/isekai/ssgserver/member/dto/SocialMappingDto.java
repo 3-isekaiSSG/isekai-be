@@ -5,4 +5,5 @@ import lombok.Getter;
 @Getter
 public class SocialMappingDto {
 	private String phone;
+	private String provider;
 }
