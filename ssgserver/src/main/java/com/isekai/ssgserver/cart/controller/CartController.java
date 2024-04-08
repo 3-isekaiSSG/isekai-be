@@ -70,23 +70,24 @@ public class CartController {
 
 	@PostMapping("/member")
 	@Operation(summary = "회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
-	public ResponseEntity<Void> addMemberCart(@RequestBody CartRequestDto cartRequestDto,
+	public ResponseEntity<Void> addMemberCart(@RequestBody List<CartRequestDto> cartRequestDtos,
 		@RequestHeader("Authorization") String token) {
 
 		String uuid = jwtProvider.getUuid(token);
 
-		return cartService.addMemberCartProduct(cartRequestDto, uuid);
+		return cartService.addMemberCartProduct(cartRequestDtos, uuid);
 	}
 
 	@PostMapping("/non-member")
 	@Operation(summary = "비회원 장바구니 담기", description = "해당 상품을 옵션과 함께 저장합니다.")
-	public ResponseEntity<Void> addNonMemberCart(@RequestBody CartRequestDto cartRequestDto, HttpServletRequest request,
+	public ResponseEntity<Void> addNonMemberCart(@RequestBody List<CartRequestDto> cartRequestDtos,
+		HttpServletRequest request,
 		HttpServletResponse response
 	) {
 
 		String cartValue = getOrCreateCartValue(request, response);
 
-		return cartService.addNonMemberCartProduct(cartRequestDto, cartValue);
+		return cartService.addNonMemberCartProduct(cartRequestDtos, cartValue);
 	}
 
 	@GetMapping("/options/{optionsId}")
