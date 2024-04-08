@@ -65,9 +65,21 @@ public class ReviewService {
 			String reviewImage = (String)result[4];
 			byte score = (byte)result[5];
 			Long reviewId = (Long)result[6];
-			return new ReviewProductResDto(reviewId, score, reviewContent, accountId, productIdMod, reviewImage,
+
+			String maskedAccountId = maskAccountId(accountId);
+
+			return new ReviewProductResDto(reviewId, score, reviewContent, maskedAccountId, productIdMod, reviewImage,
 				createdAt);
 		});
 	}
 
+	private String maskAccountId(String accountId) {
+		if (accountId.length() <= 3) {
+			return accountId;
+		} else {
+			String prefix = accountId.substring(0, 3);
+			String maskedAccountId = prefix + "*".repeat(accountId.length() - 3);
+			return maskedAccountId;
+		}
+	}
 }
