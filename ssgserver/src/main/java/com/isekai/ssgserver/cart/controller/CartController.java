@@ -187,6 +187,7 @@ public class CartController {
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
 			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
+			newCookie.setSecure(true);
 			response.addCookie(newCookie);
 			return newCartValue;
 		}
