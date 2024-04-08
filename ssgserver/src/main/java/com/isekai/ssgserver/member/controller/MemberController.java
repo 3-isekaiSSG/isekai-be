@@ -1,6 +1,5 @@
 package com.isekai.ssgserver.member.controller;
 
-import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
+import com.isekai.ssgserver.member.dto.SocialJoinDto;
+import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import com.isekai.ssgserver.member.dto.SocialMemberDto;
 import com.isekai.ssgserver.member.service.MemberService;
 import com.isekai.ssgserver.util.MessageResponse;
@@ -58,6 +59,13 @@ public class MemberController {
 	public ResponseEntity<JwtToken> socialMember(@RequestBody SocialMemberDto socialMemberDto) {
 		JwtToken tokens = memberService.socialLogin(socialMemberDto);
 		return ResponseEntity.ok(tokens);
+	}
+
+	@PostMapping("/social-join")
+	@Operation(summary = "소셜 회원가입", description = "소셜 회원가입")
+	public ResponseEntity<MessageResponse> socialJoin(@RequestBody SocialJoinDto socialJoinDto) {
+		memberService.socialJoin(socialJoinDto);
+		return ResponseEntity.ok(new MessageResponse("소셜 회원가입 완료"));
 	}
 
 	@PostMapping("/social-mapping")

@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.isekai.ssgserver.member.dto.SocialMappingDto;
-import org.apache.catalina.util.CustomObjectInputStream;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +12,8 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
+import com.isekai.ssgserver.member.dto.SocialJoinDto;
+import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import com.isekai.ssgserver.member.dto.SocialMemberDto;
 import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.entity.MemberSocial;
@@ -56,19 +56,6 @@ public class MemberService {
 		return null;
 	}
 
-	public void socialMapping(SocialMappingDto socialDto) {
-		Member member = memberRepository.findByUuid(socialDto.getUuid())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-		byte socialDivCode = (byte)0;
-		if (passwordEncoder.matches(member.getPassword(), "kakao")) {
-			socialDivCode = (byte)1;
-		}
-
-		MemberSocial memberSocial = socialDto.toEntity(socialDivCode);
-		socialRepository.save(memberSocial);
-	}
-
 	public JwtToken login(MemberLoginDto loginDto) {
 		Member member = memberRepository.findByAccountId(loginDto.getAccountId())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
@@ -88,5 +75,22 @@ public class MemberService {
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		return jwtProvider.createToken(member.getUuid());
+	}
+
+	public void socialJoin(SocialJoinDto socialJoinDto) {
+		Member member = memberRepository.findByUuid(socialJoinDto.getUuid())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+		MemberSocial memberSocial = socialJoinDto.joinToEntity();
+		socialRepository.save(memberSocial);
+	}
+
+	public void socialMapping(SocialMappingDto socialMappingDto) {
+		Member member = memberRepository.findByPhone(socialMappingDto.getPhone())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+		String uuid = member.getUuid();
+		MemberSocial memberSocial = new SocialJoinDto().toEntity(uuid);
+		socialRepository.save(memberSocial);
 	}
 }
