@@ -5,14 +5,15 @@ import com.isekai.ssgserver.member.enums.FavoriteDivision;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
 @Builder
 @AllArgsConstructor
-public class FavoritePutReqDto {
+@NoArgsConstructor
+public class FavoriteReqDto {
 	private String identifier;
 	private FavoriteDivision division;
-	private String uuid;
 }

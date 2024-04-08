@@ -1,6 +1,6 @@
 package com.isekai.ssgserver.member.dto;
 
-import com.isekai.ssgserver.member.enums.FavoriteDivision;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,6 @@ import lombok.ToString;
 @ToString
 @Builder
 @AllArgsConstructor
-public class FavoritePutReqDto {
-	private String identifier;
-	private FavoriteDivision division;
-	private String uuid;
+public class FavoriteCountResponseDto {
+	private List<FavoriteCountDto> favoriteCountList;
 }

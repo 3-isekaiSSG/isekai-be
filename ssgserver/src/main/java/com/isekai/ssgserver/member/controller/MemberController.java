@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.member.controller;
 
+import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
