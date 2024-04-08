@@ -1,6 +1,8 @@
 package com.isekai.ssgserver.member.controller;
 
-import com.isekai.ssgserver.member.dto.SocialMappingDto;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +44,11 @@ public class MemberController {
 
 	@PostMapping("/join")
 	@Operation(summary = "회원가입")
-	public ResponseEntity<String> join(@RequestBody MemberJoinDto joinDto) {
-		String response = memberService.join(joinDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	public ResponseEntity<Map<String, String>> join(@RequestBody MemberJoinDto joinDto) {
+		Map<String, String> responseBody = new HashMap<>();
+		String uuid = memberService.join(joinDto);
+		responseBody.put("uuid", uuid);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
 	}
 
 	@GetMapping("/duplication-id")
