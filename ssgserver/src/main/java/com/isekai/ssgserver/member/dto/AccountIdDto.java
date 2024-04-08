@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class AccoutIdDto {
-	private String accoutId;
+public class AccountIdDto {
+	private String accountId;
 
 	public void setAccountId(String memberAccountIdValue) {
-		this.accoutId = memberAccountIdValue;
+		this.accountId = memberAccountIdValue;
 	}
 }
