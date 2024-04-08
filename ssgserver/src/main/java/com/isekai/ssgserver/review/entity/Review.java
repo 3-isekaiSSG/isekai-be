@@ -32,14 +32,14 @@ public class Review {
 	@Column(name = "review_id")
 	private Long rewiewId;
 
-	@Column(name = "member_id", nullable = false)
-	private Long memberId;
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "account_id", nullable = false)
 	private String accountId;
 
 	@Column(name = "score", nullable = false)
-	private String score;
+	private byte score;
 
 	@Column(name = "review_content", nullable = false)
 	private String reviewContent;
@@ -51,7 +51,7 @@ public class Review {
 	private Long productId;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true) // 추후 빼기 테스트용
 	@JoinColumn(name = "order_product_id", nullable = false)
 	private OrderProduct orderProduct;
 }
