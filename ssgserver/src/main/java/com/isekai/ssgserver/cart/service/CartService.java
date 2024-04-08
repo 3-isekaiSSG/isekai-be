@@ -122,15 +122,20 @@ public class CartService {
 	// 장바구니 담기
 	// 회원
 	@Transactional
-	public ResponseEntity<Void> addMemberCartProduct(CartRequestDto cartRequestDto, String uuid) {
+	public ResponseEntity<Void> addMemberCartProduct(List<CartRequestDto> cartRequestDtos, String uuid) {
 
 		List<Cart> carts = cartRepository.findByUuid(uuid);
-		Option option = optionRepository.findById(cartRequestDto.getOptionsId())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
-		// 이미 장바구니에 있는지 확인
-		for (Cart cart : carts) {
-			if (cart.getOption().getOptionsId().equals(cartRequestDto.getOptionsId())) {
+		for (CartRequestDto cartRequestDto : cartRequestDtos) {
+			Option option = optionRepository.findById(cartRequestDto.getOptionsId())
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+			Cart cart = carts.stream()
+				.filter(c -> c.getOption().getOptionsId().equals(cartRequestDto.getOptionsId()))
+				.findFirst()
+				.orElse(null);
+
+			if (cart != null) {
 				cartRepository.save(Cart.builder()
 					.cartId(cart.getCartId())
 					.uuid(uuid)
@@ -139,49 +144,52 @@ public class CartService {
 					.count(cart.getCount() + cartRequestDto.getCount())
 					.checked(cart.getChecked())
 					.build());
-				return ResponseEntity.ok().build();
+			} else {
+				cartRepository.save(Cart.builder()
+					.uuid(uuid)
+					.option(option)
+					.count(cartRequestDto.getCount())
+					.checked((byte)0)
+					.build());
 			}
 		}
-		// 새롭게 담는 상품
-		cartRepository.save(Cart.builder()
-			.uuid(uuid)
-			.option(option)
-			.count(cartRequestDto.getCount())
-			.checked((byte)0)
-			.build());
 		return ResponseEntity.ok().build();
+
 	}
 
 	// 비회원
 	@Transactional
-	public ResponseEntity<Void> addNonMemberCartProduct(CartRequestDto cartRequestDto, String cartValue) {
+	public ResponseEntity<Void> addNonMemberCartProduct(List<CartRequestDto> cartRequestDtos, String cartValue) {
 
 		List<Cart> carts = cartRepository.findByCartValue(cartValue);
-		Option option = optionRepository.findById(cartRequestDto.getOptionsId())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
-		// 이미 장바구니에 있는지 확인
-		for (Cart cart : carts) {
-			if (cart.getOption().getOptionsId().equals(cartRequestDto.getOptionsId())) {
+		for (CartRequestDto cartRequestDto : cartRequestDtos) {
+			Option option = optionRepository.findById(cartRequestDto.getOptionsId())
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+			Cart cart = carts.stream()
+				.filter(c -> c.getOption().getOptionsId().equals(cartRequestDto.getOptionsId()))
+				.findFirst()
+				.orElse(null);
+
+			if (cart != null) {
 				cartRepository.save(Cart.builder()
 					.cartId(cart.getCartId())
 					.uuid("-1")
-					.cartValue(cartValue)
+					.cartValue(cart.getCartValue())
 					.option(option)
 					.count(cart.getCount() + cartRequestDto.getCount())
 					.checked(cart.getChecked())
 					.build());
-				return ResponseEntity.ok().build();
+			} else {
+				cartRepository.save(Cart.builder()
+					.uuid("-1")
+					.option(option)
+					.count(cartRequestDto.getCount())
+					.checked((byte)0)
+					.build());
 			}
 		}
-		// 새롭게 담는 상품
-		cartRepository.save(Cart.builder()
-			.uuid("-1")
-			.cartValue(cartValue)
-			.option(option)
-			.count(cartRequestDto.getCount())
-			.checked((byte)0)
-			.build());
 		return ResponseEntity.ok().build();
 	}
 
@@ -239,6 +247,11 @@ public class CartService {
 		Option option = optionRepository.findById(optionsId)
 			.orElseThrow(() -> new RuntimeException("Option not found with id: " + optionsId));
 
+		// 부모 옵션이 존재하는 경우 재귀적으로 탐색
+		if (option.getParent() != null) {
+			findOptionsRecursively(option.getParent().getOptionsId(), cartOptionDtos, id);
+		}
+
 		CartOptionDto cartOptionDto = CartOptionDto.builder()
 			.id(id.getAndIncrement())
 			.optionsId(option.getOptionsId())
@@ -248,10 +261,6 @@ public class CartService {
 			.build();
 		cartOptionDtos.add(cartOptionDto);
 
-		// 부모 옵션이 존재하는 경우 재귀적으로 탐색
-		if (option.getParent() != null) {
-			findOptionsRecursively(option.getParent().getOptionsId(), cartOptionDtos, id);
-		}
 	}
 
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
-import com.isekai.ssgserver.member.dto.UuidDto;
 import com.isekai.ssgserver.member.dto.WithdrawInfoDto;
 import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.entity.WithdrawInfo;
@@ -23,14 +22,14 @@ public class WithdrawService {
 	private final WithdrawRepository withdrawRepository;
 	private final MemberRepository memberRepository;
 
+	/**
+	 * 1. 회원 찾기
+	 * 2. 탈퇴여부 0 -> 1로 수정, 탈퇴일시, 수정일자 업데이트
+	 *  - is_withdraw, withdraw_at, updated_at
+	 */
 	@Transactional
-	public void withdrawUpdate(UuidDto uuidDto) {
-		/*
-		 * 1. 회원 찾기
-		 * 2. 탈퇴여부 0 -> 1로 수정, 탈퇴일시, 수정일자 업데이트
-		 *  - is_withdraw, withdraw_at, updated_at
-		 */
-		String uuid = uuidDto.getUuid();
+	public void updateWithdraw(String uuid) {
+
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
@@ -42,8 +41,13 @@ public class WithdrawService {
 	}
 
 	@Transactional
-	public void reasonsSave(WithdrawInfoDto withdrawInfoDto) {
-		WithdrawInfo withdrawInfo = WithdrawInfo.toWithdrawInfoEntity(withdrawInfoDto);
+	public void addWithdrawReasons(String uuid, WithdrawInfoDto withdrawInfoDto) {
+		WithdrawInfo withdrawInfo = WithdrawInfo.builder()
+			.uuid(uuid)
+			.withdrawInfoId(withdrawInfoDto.getWithdrawInfoId())
+			.reason(withdrawInfoDto.getReason())
+			.build();
+
 		withdrawRepository.save(withdrawInfo);
 	}
 }

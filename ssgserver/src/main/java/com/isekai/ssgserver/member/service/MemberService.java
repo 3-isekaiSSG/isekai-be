@@ -104,4 +104,13 @@ public class MemberService {
 		MemberSocial memberSocial = new SocialJoinDto().toEntity(uuid, code);
 		socialRepository.save(memberSocial);
 	}
+
+	/**
+	 * uuid로 member_id (pk) 조회 + 활동 회원인지 검증
+	 */
+	public Long getMemberIdByUuid(String uuid) {
+		return memberRepository.findByUuidAndIsWithdraw(uuid, (byte)0)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))
+			.getMemberId();
+	}
 }
