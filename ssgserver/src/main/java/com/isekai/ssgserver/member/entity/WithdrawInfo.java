@@ -1,7 +1,6 @@
 package com.isekai.ssgserver.member.entity;
 
 import com.isekai.ssgserver.common.BaseEntity;
-import com.isekai.ssgserver.member.dto.WithdrawInfoDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,13 +32,5 @@ public class WithdrawInfo extends BaseEntity {
 	private String uuid;
 
 	private String reason;
-
-	public static WithdrawInfo toWithdrawInfoEntity(WithdrawInfoDto withdrawInfoDto) {
-		return WithdrawInfo.builder()
-			.withdrawInfoId(withdrawInfoDto.getWithdrawInfoId())
-			.uuid(withdrawInfoDto.getUuid())
-			.reason(withdrawInfoDto.getReason())
-			.build();
-	}
 
 }

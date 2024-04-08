@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.member.controller;
 
+import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +40,9 @@ public class MemberController {
 
 	@PostMapping("/join")
 	@Operation(summary = "회원가입")
-	public ResponseEntity<MessageResponse> join(@RequestBody MemberJoinDto joinDto) {
-		memberService.join(joinDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("회원가입에 성공하셨습니다."));
+	public ResponseEntity<String> join(@RequestBody MemberJoinDto joinDto) {
+		String response = memberService.join(joinDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping("/duplication-id")
@@ -87,5 +88,12 @@ public class MemberController {
 		}
 
 		return ResponseEntity.ok(tokens);
+	}
+
+	@PostMapping("/social-mapping")
+	@Operation(summary = "소셜 회원 매핑", description = "가입된 유저의 social 테이블 매핑")
+	public ResponseEntity<MessageResponse> socialMapping(@RequestBody SocialMappingDto socialMappingDto) {
+		memberService.socialMapping(socialMappingDto);
+		return ResponseEntity.ok(new MessageResponse("매핑 완료"));
 	}
 }
