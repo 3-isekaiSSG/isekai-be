@@ -101,7 +101,7 @@ public class MemberService {
 			code = (byte)1;
 		}
 
-		MemberSocial memberSocial = new SocialJoinDto().toEntity(uuid, code);
+		MemberSocial memberSocial = socialMappingDto.toEntity(uuid, code);
 		socialRepository.save(memberSocial);
 	}
 
