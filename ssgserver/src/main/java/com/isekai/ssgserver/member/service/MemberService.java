@@ -46,7 +46,7 @@ public class MemberService {
 
 	public JwtToken login(MemberLoginDto loginDto) {
 		Member member = memberRepository.findByAccountId(loginDto.getAccountId())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		if (!passwordEncoder.matches(loginDto.getPassword(), member.getPassword())) {
 			throw new CustomException(ErrorCode.PASSWORD_ERROR);
@@ -57,11 +57,20 @@ public class MemberService {
 
 	public JwtToken socialLogin(SocialMemberDto isMemberDto) {
 		MemberSocial social = socialRepository.findByMemberSocialCode(isMemberDto.getSocialCode())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		Member member = memberRepository.findByUuid(social.getUuid())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		return jwtProvider.createToken(member.getUuid());
+	}
+
+	/**
+	 * uuid로 member_id (pk) 조회 + 활동 회원인지 검증
+	 */
+	public Long getMemberIdByUuid(String uuid) {
+		return memberRepository.findByUuidAndIsWithdraw(uuid, (byte)0)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER))
+				.getMemberId();
 	}
 }
