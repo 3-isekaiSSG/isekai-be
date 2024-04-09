@@ -2,6 +2,7 @@ package com.isekai.ssgserver.review.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,13 +89,17 @@ public class ReviewController {
 
 		return ResponseEntity.ok().build();
 	}
-	//
-	// // 리뷰 삭제
-	// @DeleteMapping("{reviewId}")
-	// public ResponseEntity<?> deleteReview(
-	// 	@PathVariable Long reviewId
-	// ) {
-	// 	return ResponseEntity.ok().build();
-	// }
+
+	@DeleteMapping("{reviewId}")
+	@Operation(summary = "리뷰 삭제", description = "해당 리뷰를 삭제합니다.")
+	public ResponseEntity<?> deleteReview(
+		@RequestHeader("Authorization") String token,
+		@PathVariable Long reviewId
+	) {
+		String uuid = jwtProvider.getUuid(token);
+		reviewService.deleteReview(uuid, reviewId);
+
+		return ResponseEntity.ok().build();
+	}
 
 }

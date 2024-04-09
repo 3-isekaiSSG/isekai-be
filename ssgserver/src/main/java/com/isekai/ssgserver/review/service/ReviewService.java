@@ -133,4 +133,11 @@ public class ReviewService {
 		updatedReview.setScore(reviewReqDto.getScore());
 		reviewRepository.save(updatedReview);
 	}
+
+	@Transactional
+	public void deleteReview(String uuid, Long reviewId) {
+		Review reviewOptional = reviewRepository.findByReviewIdAndUuid(reviewId, uuid)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		reviewRepository.deleteByReviewId(reviewId);
+	}
 }

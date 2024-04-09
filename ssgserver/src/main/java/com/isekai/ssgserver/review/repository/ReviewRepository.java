@@ -25,4 +25,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Long countByProductIdAndImage(@Param("productId") Long productId);
 
 	Optional<Review> findByReviewIdAndUuid(Long reviewId, String uuid);
+
+	void deleteByReviewId(Long reviewId);
 }
