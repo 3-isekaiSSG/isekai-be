@@ -51,7 +51,7 @@ public class CartService {
 			productDeliveryTypeRepository.findByProductCode(cart.getOption().getProductCode())
 				.ifPresent(productDeliveryType -> {
 					CartInfoDto itemDTO = CartInfoDto.builder()
-						.id("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
+						.id("emart".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
 							ssgId.getAndIncrement() : postId.getAndIncrement()) // 조건에 따라 ID 할당
 						.code(cart.getOption().getProductCode()) // `Option`을 통해 `productCode` 접근
 						.count(cart.getCount())
@@ -59,7 +59,7 @@ public class CartService {
 						.optionId(cart.getOption().getOptionsId())
 						.build();
 
-					if ("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
+					if ("emart".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
 						ssgItems.add(itemDTO);
 					} else {
 						postItems.add(itemDTO);
@@ -93,7 +93,7 @@ public class CartService {
 			productDeliveryTypeRepository.findByProductCode(cart.getOption().getProductCode())
 				.ifPresent(productDeliveryType -> {
 					CartInfoDto itemDTO = CartInfoDto.builder()
-						.id("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
+						.id("emart".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
 							ssgId.getAndIncrement() : postId.getAndIncrement()) // 조건에 따라 ID 할당
 						.cartId(cart.getCartId())
 						.code(cart.getOption().getProductCode()) // `Option`을 통해 `productCode` 접근
@@ -102,7 +102,7 @@ public class CartService {
 						.optionId(cart.getOption().getOptionsId())
 						.build();
 
-					if ("ssg".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
+					if ("emart".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName())) {
 						ssgItems.add(itemDTO);
 					} else {
 						postItems.add(itemDTO);
