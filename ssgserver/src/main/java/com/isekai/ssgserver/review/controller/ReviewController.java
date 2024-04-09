@@ -17,6 +17,7 @@ import com.isekai.ssgserver.review.dto.ReviewCountResDto;
 import com.isekai.ssgserver.review.dto.ReviewPhotoResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
+import com.isekai.ssgserver.review.enums.ReviewType;
 import com.isekai.ssgserver.review.service.ReviewService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
 
@@ -53,9 +54,11 @@ public class ReviewController {
 	public ResponseEntity<?> getProductReviewList(
 		@PathVariable Long product_id,
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "30") int pageSize
+		@RequestParam(defaultValue = "30") int pageSize,
+		@RequestParam(defaultValue = "LATEST") ReviewType sortType
 	) {
-		Page<ReviewProductResDto> reviewList = reviewService.getProductReviewList(product_id, page, pageSize);
+		Page<ReviewProductResDto> reviewList = reviewService.getProductReviewListSorted(product_id, page, pageSize,
+			sortType);
 		return ResponseEntity.ok(reviewList);
 	}
 

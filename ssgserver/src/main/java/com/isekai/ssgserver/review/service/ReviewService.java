@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.exception.common.CustomException;
@@ -25,6 +26,7 @@ import com.isekai.ssgserver.review.dto.ReviewPhotoResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
 import com.isekai.ssgserver.review.entity.Review;
+import com.isekai.ssgserver.review.enums.ReviewType;
 import com.isekai.ssgserver.review.repository.ReviewRepository;
 
 import jakarta.transaction.Transactional;
@@ -92,8 +94,16 @@ public class ReviewService {
 	}
 
 	@Transactional
-	public Page<ReviewProductResDto> getProductReviewList(Long productId, int page, int pageSize) {
-		Pageable pageable = PageRequest.of(page, pageSize);
+	public Page<ReviewProductResDto> getProductReviewListSorted(Long productId, int page, int pageSize,
+		ReviewType sortType) {
+		Pageable pageable;
+		if (sortType == ReviewType.LATEST) {
+			pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
+		} else if (sortType == ReviewType.HIGHEST_RATING) {
+			pageable = PageRequest.of(page, pageSize, Sort.by("score").descending());
+		} else { // 평점 낮은순
+			pageable = PageRequest.of(page, pageSize, Sort.by("score").ascending());
+		}
 
 		Page<Object[]> reviewsPage = reviewRepository.findByProductId(productId, pageable);
 
