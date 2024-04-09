@@ -53,6 +53,7 @@ public class CartService {
 					CartInfoDto itemDTO = CartInfoDto.builder()
 						.id("emart".equalsIgnoreCase(productDeliveryType.getDeliveryType().getEngName()) ?
 							ssgId.getAndIncrement() : postId.getAndIncrement()) // 조건에 따라 ID 할당
+						.cartId(cart.getCartId())
 						.code(cart.getOption().getProductCode()) // `Option`을 통해 `productCode` 접근
 						.count(cart.getCount())
 						.checked(cart.getChecked())
