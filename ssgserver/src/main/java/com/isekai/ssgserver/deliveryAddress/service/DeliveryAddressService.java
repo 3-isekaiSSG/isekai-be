@@ -38,8 +38,8 @@ public class DeliveryAddressService {
 		verifyDeliveryAddressByMember(uuid, deliveryAddress.getMemberId());
 
 		return DeliveryAddressNicknameDto.builder()
-						.nickname(deliveryAddress.getNickname())
-						.build();
+				.nickname(deliveryAddress.getNickname())
+				.build();
 	}
 
 	public DeliveryAddressInfoDto getDeliveryAddressInfo(String uuid, Long deliveryAddressId) {
@@ -93,6 +93,7 @@ public class DeliveryAddressService {
 		deliveryAddressRepository.delete(deliveryAddress);
 	}
 
+	@Transactional
 	public DataIdDto createDeliveryAddress(String uuid, DeliveryAddressCreateDto deliveryAddressCreateDto) {
 
 		Long memberId = -1L;  // 비회원
@@ -120,6 +121,21 @@ public class DeliveryAddressService {
 
 		return DataIdDto.builder()
 				.id(savedId)
+				.build();
+	}
+
+	@Transactional
+	public DataIdDto updateDeliveryAddress(String uuid, Long deliveryAddressId, DeliveryAddressCreateDto deliveryAddressCreateDto) {
+
+		DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		verifyDeliveryAddressByMember(uuid, deliveryAddress.getMemberId());
+
+		deliveryAddress.update(deliveryAddressCreateDto);
+
+		return DataIdDto.builder()
+				.id(deliveryAddressId)
 				.build();
 	}
 

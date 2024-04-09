@@ -107,6 +107,19 @@ public class DeliveryAddressController {
 		return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
 	}
 
+	@PutMapping("/{deliveryAddressId}")
+	@Operation(summary = "배송지 정보 수정 - 회원", description = "배송지 정보 수정")
+	public ResponseEntity<DataIdDto> updateMemberDeliveryAddress(
+			@RequestHeader(value = "Authorization") String token,
+			@PathVariable Long deliveryAddressId,
+			@RequestBody DeliveryAddressCreateDto deliveryAddressCreateDto) {
+
+		String uuid = jwtProvider.getUuid(token);
+
+		DataIdDto updatedAddress = deliveryAddressService.updateDeliveryAddress(uuid, deliveryAddressId, deliveryAddressCreateDto);
+		return ResponseEntity.ok(updatedAddress);
+	}
+
 	@PatchMapping("/{deliveryAddressId}/default")
 	@Operation(summary = "기본 배송지 설정 - 회원", description = "기본배송지 기존-false, 신규-true")
 	public ResponseEntity<DataIdDto> setDefaultDeliveryAddress(
