@@ -16,4 +16,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Page<Object[]> findByProductId(@Param("productId") Long productId, Pageable pageable);
 
 	Review findByReviewId(Long reviewId);
+
+	Long countByProductId(Long productId);
+
+	@Query("SELECT COUNT(r) FROM Review r WHERE r.productId = :productId AND r.reviewImage IS NOT NULL")
+	Long countByProductIdAndImage(@Param("productId") Long productId);
 }

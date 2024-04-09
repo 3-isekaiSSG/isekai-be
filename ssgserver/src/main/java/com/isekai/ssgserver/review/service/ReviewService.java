@@ -1,6 +1,7 @@
 package com.isekai.ssgserver.review.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,8 @@ import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.repository.MemberRepository;
 import com.isekai.ssgserver.order.entity.OrderProduct;
 import com.isekai.ssgserver.order.repository.OrderProductRepository;
+import com.isekai.ssgserver.review.dto.ReviewCountDto;
+import com.isekai.ssgserver.review.dto.ReviewCountResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
 import com.isekai.ssgserver.review.entity.Review;
@@ -97,6 +100,19 @@ public class ReviewService {
 			.productId(review.getProductId())
 			.reviewImage(review.getReviewImage())
 			.createdAt(review.getCreatedAt())
+			.build();
+	}
+
+	@Transactional
+	public ReviewCountResDto getReviewCountList(Long productId) {
+		Long totalCount = reviewRepository.countByProductId(productId);
+		Long imageCount = reviewRepository.countByProductIdAndImage(productId);
+
+		return ReviewCountResDto.builder()
+			.reviewCountList(new ArrayList<ReviewCountDto>() {{
+				add(new ReviewCountDto("totalCount", totalCount));
+				add(new ReviewCountDto("imageCount", imageCount));
+			}})
 			.build();
 	}
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.review.dto.ReviewCountResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
 import com.isekai.ssgserver.review.service.ReviewService;
@@ -64,11 +65,15 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewDetails);
 	}
 
-	// // 리뷰 갯수
-	// @GetMapping("/number")
-	// public ResponseEntity<?> getReviewCountList() {
-	// 	return ResponseEntity.ok().build();
-	// }
+	// 리뷰 갯수
+	@GetMapping("/{product_id}/number")
+	@Operation(summary = "리뷰 개수 조회", description = "특정 상품 리뷰를 전체 개수, 이미지 또는 동영상 리뷰 개수 조회합니다.")
+	public ResponseEntity<ReviewCountResDto> getReviewCountList(
+		@PathVariable Long product_id
+	) {
+		ReviewCountResDto countList = reviewService.getReviewCountList(product_id);
+		return ResponseEntity.ok(countList);
+	}
 	//
 	// // 리뷰 수정
 	// @PutMapping("{}")
