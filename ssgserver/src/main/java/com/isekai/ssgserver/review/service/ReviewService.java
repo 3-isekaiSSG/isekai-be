@@ -15,6 +15,10 @@ import com.isekai.ssgserver.member.entity.Member;
 import com.isekai.ssgserver.member.repository.MemberRepository;
 import com.isekai.ssgserver.order.entity.OrderProduct;
 import com.isekai.ssgserver.order.repository.OrderProductRepository;
+import com.isekai.ssgserver.product.entity.Product;
+import com.isekai.ssgserver.product.entity.ReviewScore;
+import com.isekai.ssgserver.product.repository.ProductRepository;
+import com.isekai.ssgserver.product.repository.ReviewScoreRepository;
 import com.isekai.ssgserver.review.dto.ReviewCountDto;
 import com.isekai.ssgserver.review.dto.ReviewCountResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
@@ -33,6 +37,8 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final MemberRepository memberRepository;
 	private final OrderProductRepository orderProductRepository;
+	private final ReviewScoreRepository reviewScoreRepository;
+	private final ProductRepository productRepository;
 
 	@Transactional
 	public void createReview(String uuid, ReviewReqDto reviewReqDto, Long orderProductId) {
@@ -53,6 +59,35 @@ public class ReviewService {
 
 		reviewRepository.save(review);
 
+		updateReviewScore(reviewReqDto.getScore(), reviewReqDto.getProductId());
+	}
+
+	@Transactional
+	private void updateReviewScore(int score, Long productId) {
+		Product product = productRepository.findByProductId(productId);
+		String productCode = product.getCode();
+		ReviewScore reviewScore = reviewScoreRepository.findByProductCode(productCode)
+			.orElseGet(() -> createNewReviewScore(productCode));
+
+		long reviewCount = reviewScore.getReviewCount() + 1;
+		long totalScore = reviewScore.getTotalScore() + score;
+		double avgScore = (double)totalScore / reviewCount;
+
+		reviewScore.setReviewCount(reviewCount);
+		reviewScore.setTotalScore(totalScore);
+		reviewScore.setAvgScore(avgScore);
+
+		reviewScoreRepository.save(reviewScore);
+	}
+
+	@Transactional
+	private ReviewScore createNewReviewScore(String productCode) {
+		return ReviewScore.builder()
+			.avgScore(0.0)
+			.reviewCount(0L)
+			.totalScore(0L)
+			.productCode(productCode)
+			.build();
 	}
 
 	@Transactional
