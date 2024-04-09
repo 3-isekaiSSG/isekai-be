@@ -82,4 +82,21 @@ public class ReviewService {
 			return maskedAccountId;
 		}
 	}
+
+	@Transactional
+	public ReviewProductResDto getReviewDetails(Long reviewId) {
+		Review review = reviewRepository.findByReviewId(reviewId);
+
+		String maskedAccountId = maskAccountId(review.getAccountId());
+
+		return ReviewProductResDto.builder()
+			.reviewId(review.getReviewId())
+			.score(review.getScore())
+			.reviewContent(review.getReviewContent())
+			.accountId(maskedAccountId)
+			.productId(review.getProductId())
+			.reviewImage(review.getReviewImage())
+			.createdAt(review.getCreatedAt())
+			.build();
+	}
 }

@@ -55,10 +55,13 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewList);
 	}
 
-	// 특정 리뷰 조회
 	@GetMapping("/{review_id}")
-	public ResponseEntity<?> getReviewDetails() {
-		return ResponseEntity.ok().build();
+	@Operation(summary = "특정 리뷰 조회", description = "특정 리뷰를 한개를 조회합니다.")
+	public ResponseEntity<ReviewProductResDto> getReviewDetails(
+		@PathVariable Long review_id
+	) {
+		ReviewProductResDto reviewDetails = reviewService.getReviewDetails(review_id);
+		return ResponseEntity.ok(reviewDetails);
 	}
 
 	// // 리뷰 갯수

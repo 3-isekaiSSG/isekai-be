@@ -14,4 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	@Query("SELECT r.createdAt, r.accountId, r.productId, r.reviewContent, r.reviewImage, r.score, r.reviewId " +
 		"FROM Review r WHERE r.productId = :productId")
 	Page<Object[]> findByProductId(@Param("productId") Long productId, Pageable pageable);
+
+	Review findByReviewId(Long reviewId);
 }
