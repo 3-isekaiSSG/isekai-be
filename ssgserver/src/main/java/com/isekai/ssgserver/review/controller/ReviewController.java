@@ -36,7 +36,6 @@ public class ReviewController {
 	private final ReviewService reviewService;
 	private final JwtProvider jwtProvider;
 
-	// 리뷰 생성
 	@PostMapping("/{order_product_id}")
 	@Operation(summary = "리뷰 생성", description = "회원이 작성한 리뷰를 저장합니다.")
 	public ResponseEntity<Void> createReview(
@@ -91,7 +90,6 @@ public class ReviewController {
 		return ResponseEntity.ok(countList);
 	}
 
-	// 리뷰 수정
 	@PutMapping("/{review_id}")
 	@Operation(summary = "리뷰 수정", description = "작성한 리뷰를 수정합니다.")
 	public ResponseEntity<?> updateReview(
