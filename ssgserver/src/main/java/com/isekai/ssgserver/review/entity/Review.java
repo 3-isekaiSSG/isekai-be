@@ -55,4 +55,20 @@ public class Review extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY, optional = true) // 추후 빼기 테스트용
 	@JoinColumn(name = "order_product_id", nullable = false)
 	private OrderProduct orderProduct;
+
+	public void setAccountId(String maskedAccountId) {
+		this.accountId = maskedAccountId;
+	}
+
+	public void setReviewContent(String reviewContent) {
+		this.reviewContent = reviewContent;
+	}
+
+	public void setReviewImage(String reviewImage) {
+		this.reviewImage = reviewImage;
+	}
+
+	public void setScore(byte score) {
+		this.score = score;
+	}
 }

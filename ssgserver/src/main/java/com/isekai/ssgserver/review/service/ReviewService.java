@@ -3,6 +3,7 @@ package com.isekai.ssgserver.review.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -88,7 +89,8 @@ public class ReviewService {
 
 	@Transactional
 	public ReviewProductResDto getReviewDetails(Long reviewId) {
-		Review review = reviewRepository.findByReviewId(reviewId);
+		Review review = reviewRepository.findByReviewId(reviewId)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		String maskedAccountId = maskAccountId(review.getAccountId());
 
@@ -114,5 +116,21 @@ public class ReviewService {
 				add(new ReviewCountDto("imageCount", imageCount));
 			}})
 			.build();
+	}
+
+	@Transactional
+	public void updateReviewContents(String uuid, Long reviewId, ReviewReqDto reviewReqDto) {
+		Review review = reviewRepository.findByReviewIdAndUuid(reviewId, uuid)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		ModelMapper modelMapper = new ModelMapper();
+		Review updatedReview = modelMapper.map(review, Review.class);
+
+		String maskedAccountId = maskAccountId(review.getAccountId());
+		updatedReview.setAccountId(maskedAccountId);
+		updatedReview.setReviewContent(reviewReqDto.getReviewContent());
+		updatedReview.setReviewImage(reviewReqDto.getReviewImage());
+		updatedReview.setScore(reviewReqDto.getScore());
+		reviewRepository.save(updatedReview);
 	}
 }

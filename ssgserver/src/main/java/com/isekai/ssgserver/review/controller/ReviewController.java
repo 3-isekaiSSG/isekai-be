@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +66,6 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewDetails);
 	}
 
-	// 리뷰 갯수
 	@GetMapping("/{product_id}/number")
 	@Operation(summary = "리뷰 개수 조회", description = "특정 상품 리뷰를 전체 개수, 이미지 또는 동영상 리뷰 개수 조회합니다.")
 	public ResponseEntity<ReviewCountResDto> getReviewCountList(
@@ -74,17 +74,20 @@ public class ReviewController {
 		ReviewCountResDto countList = reviewService.getReviewCountList(product_id);
 		return ResponseEntity.ok(countList);
 	}
-	//
-	// // 리뷰 수정
-	// @PutMapping("{}")
-	// public ResponseEntity<?> updateReview(
-	// 	@RequestHeader("Authorization") String token
-	//
-	// ) {
-	// 	String uuid = jwtProvider.getUuid(token);
-	//
-	// 	return ResponseEntity.ok().build();
-	// }
+
+	// 리뷰 수정
+	@PutMapping("/{review_id}")
+	@Operation(summary = "리뷰 수정", description = "작성한 리뷰를 수정합니다.")
+	public ResponseEntity<?> updateReview(
+		@RequestHeader("Authorization") String token,
+		@PathVariable Long review_id,
+		@RequestBody ReviewReqDto reviewReqDto
+	) {
+		String uuid = jwtProvider.getUuid(token);
+		reviewService.updateReviewContents(uuid, review_id, reviewReqDto);
+
+		return ResponseEntity.ok().build();
+	}
 	//
 	// // 리뷰 삭제
 	// @DeleteMapping("{reviewId}")
