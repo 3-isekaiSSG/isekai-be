@@ -50,7 +50,7 @@ public class ReviewController {
 
 	@GetMapping("/{product_id}/list")
 	@Operation(summary = "단일 상품 전체 리뷰 조회", description = "단일 상품에 대한 전체 리뷰를 조회합니다.")
-	public ResponseEntity<?> getProductReviewList(
+	public ResponseEntity<Page<ReviewProductResDto>> getProductReviewList(
 		@PathVariable Long product_id,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "30") int pageSize,
@@ -63,7 +63,7 @@ public class ReviewController {
 
 	@GetMapping("/{product_id}/photo")
 	@Operation(summary = "단일 상품 포토 리뷰 조회", description = "단일 상품에 대한 포토 리뷰를 조회합니다.")
-	public ResponseEntity<?> getProductPhotoReviewList(
+	public ResponseEntity<Page<ReviewPhotoResDto>> getProductPhotoReviewList(
 		@PathVariable Long product_id,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "8") int pageSize
@@ -92,7 +92,7 @@ public class ReviewController {
 
 	@PutMapping("/{review_id}")
 	@Operation(summary = "리뷰 수정", description = "작성한 리뷰를 수정합니다.")
-	public ResponseEntity<?> updateReview(
+	public ResponseEntity<Void> updateReview(
 		@RequestHeader("Authorization") String token,
 		@PathVariable Long review_id,
 		@RequestBody ReviewReqDto reviewReqDto
@@ -105,7 +105,7 @@ public class ReviewController {
 
 	@DeleteMapping("{review_id}")
 	@Operation(summary = "리뷰 삭제", description = "해당 리뷰를 삭제합니다.")
-	public ResponseEntity<?> deleteReview(
+	public ResponseEntity<Void> deleteReview(
 		@RequestHeader("Authorization") String token,
 		@PathVariable Long review_id
 	) {
