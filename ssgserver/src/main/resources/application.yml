@@ -48,7 +48,7 @@ logging:
 jwt:
   key: ${JWT_SECRET_KEY}
   token:
-    access-expire-time: 300000
+    access-expire-time: 604800000
     refresh-expire-time: 18000000
 
 coolsms:
