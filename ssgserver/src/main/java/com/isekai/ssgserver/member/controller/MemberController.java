@@ -1,8 +1,5 @@
 package com.isekai.ssgserver.member.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +14,6 @@ import org.springframework.web.util.WebUtils;
 import com.isekai.ssgserver.cart.service.CartUpdateService;
 import com.isekai.ssgserver.member.dto.MemberJoinDto;
 import com.isekai.ssgserver.member.dto.MemberLoginDto;
-import com.isekai.ssgserver.member.dto.SocialJoinDto;
 import com.isekai.ssgserver.member.dto.SocialMappingDto;
 import com.isekai.ssgserver.member.dto.SocialMemberDto;
 import com.isekai.ssgserver.member.service.MemberService;
@@ -44,11 +40,9 @@ public class MemberController {
 
 	@PostMapping("/join")
 	@Operation(summary = "회원가입")
-	public ResponseEntity<Map<String, String>> join(@RequestBody MemberJoinDto joinDto) {
-		Map<String, String> responseBody = new HashMap<>();
-		String uuid = memberService.join(joinDto);
-		responseBody.put("uuid", uuid);
-		return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+	public ResponseEntity<Void> join(@RequestBody MemberJoinDto joinDto) {
+		memberService.join(joinDto);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@GetMapping("/duplication-id")
@@ -94,13 +88,6 @@ public class MemberController {
 		}
 
 		return ResponseEntity.ok(tokens);
-	}
-
-	@PostMapping("/social-join")
-	@Operation(summary = "소셜 회원가입", description = "소셜 회원가입")
-	public ResponseEntity<MessageResponse> socialJoin(@RequestBody SocialJoinDto socialJoinDto) {
-		memberService.socialJoin(socialJoinDto);
-		return ResponseEntity.ok(new MessageResponse("소셜 회원가입 완료"));
 	}
 
 	@PostMapping("/social-mapping")

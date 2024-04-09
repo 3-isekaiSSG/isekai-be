@@ -40,7 +40,7 @@ public class MemberService {
 		}
 	}
 
-	public String join(MemberJoinDto joinDto) {
+	public void join(MemberJoinDto joinDto) {
 		String uuid = String.valueOf(UUID.randomUUID());
 		String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
 
@@ -48,12 +48,18 @@ public class MemberService {
 		Member member = joinDto.toEntity(uuid, encodedPassword);
 		memberRepository.save(member);
 
-		// 소셜 로그인을 했다면 uuid를 반환하도록
+		byte code = -1;
+		// 소셜 로그인을 했다면 소셜 매핑도 처리해주기. 추가로 네이버 등등 들어오면 1, 2, 3 처리
 		if (Objects.equals(joinDto.getPassword(), "kakao")) {
-			return uuid;
+			code = (byte)0;
 		}
 
-		return null;
+		if (code == -1) {
+			return;
+		}
+
+		MemberSocial memberSocial = SocialJoinDto.joinToEntity(uuid, joinDto.getAccountId(), code);
+		socialRepository.save(memberSocial);
 	}
 
 	public JwtToken login(MemberLoginDto loginDto) {
@@ -77,28 +83,19 @@ public class MemberService {
 		return jwtProvider.createToken(member.getUuid());
 	}
 
-	public void socialJoin(SocialJoinDto socialJoinDto) {
-		Member member = memberRepository.findByUuid(socialJoinDto.getUuid())
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-		byte code = (byte)0;
-		if (Objects.equals(socialJoinDto.getSocialDivisionCode(), "kakao")) {
-			code = (byte)1;
-		}
-
-		MemberSocial memberSocial = socialJoinDto.joinToEntity(code);
-		socialRepository.save(memberSocial);
-	}
-
 	public void socialMapping(SocialMappingDto socialMappingDto) {
 		Member member = memberRepository.findByPhone(socialMappingDto.getPhone())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		String uuid = member.getUuid();
 
-		byte code = (byte)0;
+		byte code = -1;
 		if (Objects.equals(socialMappingDto.getProvider(), "kakao")) {
-			code = (byte)1;
+			code = (byte)0;
+		}
+
+		if (code == -1) {
+			return;
 		}
 
 		MemberSocial memberSocial = socialMappingDto.toEntity(uuid, code);

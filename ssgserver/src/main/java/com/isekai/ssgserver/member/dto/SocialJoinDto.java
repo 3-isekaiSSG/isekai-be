@@ -10,10 +10,10 @@ public class SocialJoinDto {
 	private String memberSocialCode;
 	private String socialDivisionCode;
 
-	public MemberSocial joinToEntity(byte socialDivisionCode) {
+	public static MemberSocial joinToEntity(String uuid, String memberSocialCode, byte socialDivisionCode) {
 		return MemberSocial.builder()
-			.uuid(this.uuid)
-			.memberSocialCode(this.memberSocialCode)
+			.uuid(uuid)
+			.memberSocialCode(memberSocialCode)
 			.socialDivisionCode(socialDivisionCode)
 			.build();
 	}
