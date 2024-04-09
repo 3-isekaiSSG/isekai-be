@@ -103,14 +103,14 @@ public class ReviewController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("{reviewId}")
+	@DeleteMapping("{review_id}")
 	@Operation(summary = "리뷰 삭제", description = "해당 리뷰를 삭제합니다.")
 	public ResponseEntity<?> deleteReview(
 		@RequestHeader("Authorization") String token,
-		@PathVariable Long reviewId
+		@PathVariable Long review_id
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		reviewService.deleteReview(uuid, reviewId);
+		reviewService.deleteReview(uuid, review_id);
 
 		return ResponseEntity.ok().build();
 	}
