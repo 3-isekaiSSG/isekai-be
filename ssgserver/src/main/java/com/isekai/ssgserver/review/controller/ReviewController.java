@@ -41,22 +41,22 @@ public class ReviewController {
 	public ResponseEntity<Void> createReview(
 		@RequestHeader("Authorization") String token,
 		@RequestBody ReviewReqDto reviewReqDto,
-		@PathVariable Long order_product_id) {
+		@PathVariable Long orderProductId) {
 
 		String uuid = jwtProvider.getUuid(token);
-		reviewService.createReview(uuid, reviewReqDto, order_product_id);
+		reviewService.createReview(uuid, reviewReqDto, orderProductId);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/{productId}/list")
 	@Operation(summary = "단일 상품 전체 리뷰 조회", description = "단일 상품에 대한 전체 리뷰를 조회합니다.")
 	public ResponseEntity<Page<ReviewProductResDto>> getProductReviewList(
-		@PathVariable Long product_id,
+		@PathVariable Long productId,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "30") int pageSize,
 		@RequestParam(defaultValue = "LATEST") ReviewType sortType
 	) {
-		Page<ReviewProductResDto> reviewList = reviewService.getProductReviewListSorted(product_id, page, pageSize,
+		Page<ReviewProductResDto> reviewList = reviewService.getProductReviewListSorted(productId, page, pageSize,
 			sortType);
 		return ResponseEntity.ok(reviewList);
 	}
@@ -64,29 +64,29 @@ public class ReviewController {
 	@GetMapping("/{productId}/photo")
 	@Operation(summary = "단일 상품 포토 리뷰 조회", description = "단일 상품에 대한 포토 리뷰를 조회합니다.")
 	public ResponseEntity<Page<ReviewPhotoResDto>> getProductPhotoReviewList(
-		@PathVariable Long product_id,
+		@PathVariable Long productId,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "8") int pageSize
 	) {
-		Page<ReviewPhotoResDto> reviewPhotoList = reviewService.getProductPhotoReviewList(product_id, page, pageSize);
+		Page<ReviewPhotoResDto> reviewPhotoList = reviewService.getProductPhotoReviewList(productId, page, pageSize);
 		return ResponseEntity.ok(reviewPhotoList);
 	}
 
 	@GetMapping("/{reviewId}")
 	@Operation(summary = "특정 리뷰 조회", description = "특정 리뷰를 한개를 조회합니다.")
 	public ResponseEntity<ReviewProductResDto> getReviewDetails(
-		@PathVariable Long review_id
+		@PathVariable Long reviewId
 	) {
-		ReviewProductResDto reviewDetails = reviewService.getReviewDetails(review_id);
+		ReviewProductResDto reviewDetails = reviewService.getReviewDetails(reviewId);
 		return ResponseEntity.ok(reviewDetails);
 	}
 
 	@GetMapping("/{productId}/number")
 	@Operation(summary = "리뷰 개수 조회", description = "특정 상품 리뷰를 전체 개수, 이미지 또는 동영상 리뷰 개수 조회합니다.")
 	public ResponseEntity<ReviewCountResDto> getReviewCountList(
-		@PathVariable Long product_id
+		@PathVariable Long productId
 	) {
-		ReviewCountResDto countList = reviewService.getReviewCountList(product_id);
+		ReviewCountResDto countList = reviewService.getReviewCountList(productId);
 		return ResponseEntity.ok(countList);
 	}
 
@@ -94,11 +94,11 @@ public class ReviewController {
 	@Operation(summary = "리뷰 수정", description = "작성한 리뷰를 수정합니다.")
 	public ResponseEntity<Void> updateReview(
 		@RequestHeader("Authorization") String token,
-		@PathVariable Long review_id,
+		@PathVariable Long reviewId,
 		@RequestBody ReviewReqDto reviewReqDto
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		reviewService.updateReviewContents(uuid, review_id, reviewReqDto);
+		reviewService.updateReviewContents(uuid, reviewId, reviewReqDto);
 
 		return ResponseEntity.ok().build();
 	}
@@ -107,10 +107,10 @@ public class ReviewController {
 	@Operation(summary = "리뷰 삭제", description = "해당 리뷰를 삭제합니다.")
 	public ResponseEntity<Void> deleteReview(
 		@RequestHeader("Authorization") String token,
-		@PathVariable Long review_id
+		@PathVariable Long reviewId
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		reviewService.deleteReview(uuid, review_id);
+		reviewService.deleteReview(uuid, reviewId);
 
 		return ResponseEntity.ok().build();
 	}
