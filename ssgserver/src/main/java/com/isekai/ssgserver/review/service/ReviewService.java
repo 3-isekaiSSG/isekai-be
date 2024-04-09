@@ -21,6 +21,7 @@ import com.isekai.ssgserver.product.repository.ProductRepository;
 import com.isekai.ssgserver.product.repository.ReviewScoreRepository;
 import com.isekai.ssgserver.review.dto.ReviewCountDto;
 import com.isekai.ssgserver.review.dto.ReviewCountResDto;
+import com.isekai.ssgserver.review.dto.ReviewPhotoResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
 import com.isekai.ssgserver.review.entity.Review;
@@ -109,6 +110,21 @@ public class ReviewService {
 
 			return new ReviewProductResDto(reviewId, score, reviewContent, maskedAccountId, productIdMod, reviewImage,
 				createdAt);
+		});
+	}
+
+	@Transactional
+	public Page<ReviewPhotoResDto> getProductPhotoReviewList(Long productId, int page, int pageSize) {
+		Pageable pageable = PageRequest.of(page, pageSize);
+		Page<Object[]> reviewsPhoto = reviewRepository.findByProductIdAndImage(productId, pageable);
+
+		return reviewsPhoto.map(result -> {
+			Long reviewId = (Long)result[0];
+			String reviewImage = (String)result[1];
+			Long productIdMod = (Long)result[2];
+			LocalDateTime createdAt = (LocalDateTime)result[3];
+
+			return new ReviewPhotoResDto(reviewId, reviewImage, productIdMod, createdAt);
 		});
 	}
 

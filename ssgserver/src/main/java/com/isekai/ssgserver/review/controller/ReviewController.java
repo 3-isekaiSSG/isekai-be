@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isekai.ssgserver.review.dto.ReviewCountResDto;
+import com.isekai.ssgserver.review.dto.ReviewPhotoResDto;
 import com.isekai.ssgserver.review.dto.ReviewProductResDto;
 import com.isekai.ssgserver.review.dto.ReviewReqDto;
 import com.isekai.ssgserver.review.service.ReviewService;
@@ -56,6 +57,17 @@ public class ReviewController {
 	) {
 		Page<ReviewProductResDto> reviewList = reviewService.getProductReviewList(product_id, page, pageSize);
 		return ResponseEntity.ok(reviewList);
+	}
+
+	@GetMapping("/{product_id}/photo")
+	@Operation(summary = "단일 상품 포토 리뷰 조회", description = "단일 상품에 대한 포토 리뷰를 조회합니다.")
+	public ResponseEntity<?> getProductPhotoReviewList(
+		@PathVariable Long product_id,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "8") int pageSize
+	) {
+		Page<ReviewPhotoResDto> reviewPhotoList = reviewService.getProductPhotoReviewList(product_id, page, pageSize);
+		return ResponseEntity.ok(reviewPhotoList);
 	}
 
 	@GetMapping("/{review_id}")

@@ -17,6 +17,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 		"FROM Review r WHERE r.productId = :productId")
 	Page<Object[]> findByProductId(@Param("productId") Long productId, Pageable pageable);
 
+	@Query("SELECT r.reviewId, r.reviewImage, r.productId, r.createdAt FROM Review r WHERE r.productId = :productId AND r.reviewImage IS NOT NULL")
+	Page<Object[]> findByProductIdAndImage(@Param("productId") Long productId, Pageable pageable);
+
 	Optional<Review> findByReviewId(Long reviewId);
 
 	Long countByProductId(Long productId);
@@ -27,4 +30,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Optional<Review> findByReviewIdAndUuid(Long reviewId, String uuid);
 
 	void deleteByReviewId(Long reviewId);
+
 }
