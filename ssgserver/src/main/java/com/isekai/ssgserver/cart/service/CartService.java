@@ -184,6 +184,7 @@ public class CartService {
 			} else {
 				cartRepository.save(Cart.builder()
 					.uuid("-1")
+					.cartValue(cartValue)
 					.option(option)
 					.count(cartRequestDto.getCount())
 					.checked((byte)0)
