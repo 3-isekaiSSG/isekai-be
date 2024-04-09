@@ -36,7 +36,7 @@ public class ReviewController {
 	private final ReviewService reviewService;
 	private final JwtProvider jwtProvider;
 
-	@PostMapping("/{order_product_id}")
+	@PostMapping("/{orderProductId}")
 	@Operation(summary = "리뷰 생성", description = "회원이 작성한 리뷰를 저장합니다.")
 	public ResponseEntity<Void> createReview(
 		@RequestHeader("Authorization") String token,
@@ -48,7 +48,7 @@ public class ReviewController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{product_id}/list")
+	@GetMapping("/{productId}/list")
 	@Operation(summary = "단일 상품 전체 리뷰 조회", description = "단일 상품에 대한 전체 리뷰를 조회합니다.")
 	public ResponseEntity<Page<ReviewProductResDto>> getProductReviewList(
 		@PathVariable Long product_id,
@@ -61,7 +61,7 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewList);
 	}
 
-	@GetMapping("/{product_id}/photo")
+	@GetMapping("/{productId}/photo")
 	@Operation(summary = "단일 상품 포토 리뷰 조회", description = "단일 상품에 대한 포토 리뷰를 조회합니다.")
 	public ResponseEntity<Page<ReviewPhotoResDto>> getProductPhotoReviewList(
 		@PathVariable Long product_id,
@@ -72,7 +72,7 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewPhotoList);
 	}
 
-	@GetMapping("/{review_id}")
+	@GetMapping("/{reviewId}")
 	@Operation(summary = "특정 리뷰 조회", description = "특정 리뷰를 한개를 조회합니다.")
 	public ResponseEntity<ReviewProductResDto> getReviewDetails(
 		@PathVariable Long review_id
@@ -81,7 +81,7 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewDetails);
 	}
 
-	@GetMapping("/{product_id}/number")
+	@GetMapping("/{productId}/number")
 	@Operation(summary = "리뷰 개수 조회", description = "특정 상품 리뷰를 전체 개수, 이미지 또는 동영상 리뷰 개수 조회합니다.")
 	public ResponseEntity<ReviewCountResDto> getReviewCountList(
 		@PathVariable Long product_id
@@ -90,7 +90,7 @@ public class ReviewController {
 		return ResponseEntity.ok(countList);
 	}
 
-	@PutMapping("/{review_id}")
+	@PutMapping("/{reviewId}")
 	@Operation(summary = "리뷰 수정", description = "작성한 리뷰를 수정합니다.")
 	public ResponseEntity<Void> updateReview(
 		@RequestHeader("Authorization") String token,
@@ -103,7 +103,7 @@ public class ReviewController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("{review_id}")
+	@DeleteMapping("{reviewId}")
 	@Operation(summary = "리뷰 삭제", description = "해당 리뷰를 삭제합니다.")
 	public ResponseEntity<Void> deleteReview(
 		@RequestHeader("Authorization") String token,
