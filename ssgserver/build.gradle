@@ -71,6 +71,10 @@ dependencies {
     // ModelMapper
     implementation 'org.modelmapper:modelmapper:2.4.4'
 
+    // ElasticSearch
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.17.1'
+
 }
 
 tasks.named('bootBuildImage') {
