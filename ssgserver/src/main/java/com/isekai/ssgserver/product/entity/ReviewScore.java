@@ -39,4 +39,15 @@ public class ReviewScore {
 	@Column(name = "product_code")
 	private String productCode;
 
+	public void setReviewCount(long reviewCount) {
+		this.reviewCount = reviewCount;
+	}
+
+	public void setTotalScore(long totalScore) {
+		this.totalScore = totalScore;
+	}
+
+	public void setAvgScore(double avgScore) {
+		this.avgScore = avgScore;
+	}
 }

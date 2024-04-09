@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.review.entity;
 
+import com.isekai.ssgserver.common.BaseEntity;
 import com.isekai.ssgserver.order.entity.OrderProduct;
 
 import jakarta.persistence.Column;
@@ -25,21 +26,21 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "review")
-public class Review {
+public class Review extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
-	private Long rewiewId;
+	private Long reviewId;
 
-	@Column(name = "member_id", nullable = false)
-	private Long memberId;
+	@Column(nullable = false)
+	private String uuid;
 
 	@Column(name = "account_id", nullable = false)
 	private String accountId;
 
 	@Column(name = "score", nullable = false)
-	private String score;
+	private byte score;
 
 	@Column(name = "review_content", nullable = false)
 	private String reviewContent;
@@ -51,7 +52,23 @@ public class Review {
 	private Long productId;
 
 	// 연관 관계
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true) // 추후 빼기 테스트용
 	@JoinColumn(name = "order_product_id", nullable = false)
 	private OrderProduct orderProduct;
+
+	public void setAccountId(String maskedAccountId) {
+		this.accountId = maskedAccountId;
+	}
+
+	public void setReviewContent(String reviewContent) {
+		this.reviewContent = reviewContent;
+	}
+
+	public void setReviewImage(String reviewImage) {
+		this.reviewImage = reviewImage;
+	}
+
+	public void setScore(byte score) {
+		this.score = score;
+	}
 }
