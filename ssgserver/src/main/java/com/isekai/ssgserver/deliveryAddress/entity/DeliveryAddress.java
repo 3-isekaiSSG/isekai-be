@@ -2,6 +2,7 @@ package com.isekai.ssgserver.deliveryAddress.entity;
 
 import com.isekai.ssgserver.common.BaseEntity;
 
+import com.isekai.ssgserver.deliveryAddress.dto.DeliveryAddressCreateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -80,5 +81,14 @@ public class DeliveryAddress extends BaseEntity {
 		this.isDefault = isDefault;
 		this.isDeleted = isDeleted;
 		this.orderHistory = orderHistory;
+	}
+
+	public void update(DeliveryAddressCreateDto deliveryAddressCreateDto) {
+		this.nickname = deliveryAddressCreateDto.getNickname();
+		this.name = deliveryAddressCreateDto.getName();
+		this.cellphone = deliveryAddressCreateDto.getCellphone();
+		this.telephone = deliveryAddressCreateDto.getTelephone();
+		this.zipcode = deliveryAddressCreateDto.getZipcode();
+		this.address = deliveryAddressCreateDto.getAddress();
 	}
 }
