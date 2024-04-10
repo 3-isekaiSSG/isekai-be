@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "productName": { "type": "text"},
+    "price": { "type": "integer"},
+    "code": { "type": "text"},
+    "productDetail": { "type": "text"},
+    "adultSales": { "type": "integer"},
+    "status": { "type": "integer"},
+    "createdAt": { "type": "date"}
+  }
+}
