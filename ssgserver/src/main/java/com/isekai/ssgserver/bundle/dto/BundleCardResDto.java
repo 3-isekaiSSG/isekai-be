@@ -12,4 +12,5 @@ public class BundleCardResDto {
 	private String outerName;
 	private String code;
 	private Integer minPrice;
+	private Long buyCount;
 }

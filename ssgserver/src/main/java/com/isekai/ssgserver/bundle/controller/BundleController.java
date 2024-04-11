@@ -2,7 +2,6 @@ package com.isekai.ssgserver.bundle.controller;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +31,12 @@ public class BundleController {
 
 	@GetMapping("")
 	@Operation(summary = "묶음 상품 목록 조회", description = "묶음 상품 리스트를 조회 합니다.")
-	public ResponseEntity<Page<BundleListResDto>> getBundleList(
+	public ResponseEntity<List<BundleListResDto>> getBundleList(
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "20") int pageSize,
 		@RequestParam(defaultValue = "LATEST") BundleType sortType
 	) {
-		Page<BundleListResDto> bundleList = bundleService.getBundleList(page, pageSize, sortType);
+		List<BundleListResDto> bundleList = bundleService.getBundleList(page, pageSize, sortType);
 		return ResponseEntity.ok(bundleList);
 	}
 

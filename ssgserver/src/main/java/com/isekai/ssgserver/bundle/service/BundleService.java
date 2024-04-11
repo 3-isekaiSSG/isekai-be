@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.bundle.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class BundleService {
 	private final ProductRepository productRepository;
 
 	@Transactional
-	public Page<BundleListResDto> getBundleList(int page, int pageSize, BundleType sortType) {
+	public List<BundleListResDto> getBundleList(int page, int pageSize, BundleType sortType) {
 		Pageable pageable;
 		if (sortType == BundleType.LATEST) {
 			pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
@@ -43,14 +44,21 @@ public class BundleService {
 		} else {
 			pageable = PageRequest.of(page, pageSize, Sort.by("buy_count").descending());
 		}
+		List<BundleListResDto> bundleList = new ArrayList<>();
+		for (int i = 0; i < pageSize; i++) {
+			bundleList.add(new BundleListResDto((long)i, null, null));
+		}
 
 		Page<Object[]> bundlePage = bundleRepository.findBundleCode(pageable);
-
-		return bundlePage.map(result -> {
-			Long bundelId = (Long)result[0];
+		int index = 0;
+		for (Object[] result : bundlePage.getContent()) {
+			Long bundleId = (Long)result[0];
 			String code = (String)result[1];
-			return new BundleListResDto(bundelId, code);
-		});
+			bundleList.get(index).setBundleId(bundleId);
+			bundleList.get(index).setCode(code);
+			index++;
+		}
+		return bundleList;
 	}
 
 	@Transactional
@@ -63,6 +71,7 @@ public class BundleService {
 			.outerName(bundle.getOuterName())
 			.code(bundle.getCode())
 			.minPrice(bundle.getMinPrice())
+			.buyCount(bundle.getBuyCount())
 			.build();
 	}
 
