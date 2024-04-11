@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
+import com.isekai.ssgserver.bundle.dto.BundleInfoResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
 import com.isekai.ssgserver.bundle.entity.Bundle;
 import com.isekai.ssgserver.bundle.repository.BundleRepository;
@@ -45,6 +46,22 @@ public class BundleService {
 			.outerName(bundle.getOuterName())
 			.code(bundle.getCode())
 			.minPrice(bundle.getMinPrice())
+			.build();
+	}
+
+	@Transactional
+	public BundleInfoResDto getBundleDetails(String code) {
+		Bundle bundel = bundleRepository.findByCode(code)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		return BundleInfoResDto.builder()
+			.bundleId(bundel.getBundleId())
+			.innerName(bundel.getInnerName())
+			.code(bundel.getCode())
+			.minPrice(bundel.getMinPrice())
+			.reviewCount(bundel.getReviewCount())
+			.avgScore(bundel.getAvgScore())
+			.buyCount(bundel.getBuyCount())
 			.build();
 	}
 }
