@@ -51,4 +51,6 @@ public class Bundle {
 	@Column(name = "delivery_type", nullable = false)
 	private byte deliveryType;
 
+	@Column(name = "image_url")
+	private String imageUrl;
 }
