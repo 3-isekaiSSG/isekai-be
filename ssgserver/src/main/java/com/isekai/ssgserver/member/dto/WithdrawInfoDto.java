@@ -6,6 +6,5 @@ import lombok.ToString;
 @Getter
 @ToString
 public class WithdrawInfoDto {
-	private Long withdrawInfoId;
 	private String reason;
 }

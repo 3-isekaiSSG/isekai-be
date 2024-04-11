@@ -22,11 +22,6 @@ public class WithdrawService {
 	private final WithdrawRepository withdrawRepository;
 	private final MemberRepository memberRepository;
 
-	/**
-	 * 1. 회원 찾기
-	 * 2. 탈퇴여부 0 -> 1로 수정, 탈퇴일시, 수정일자 업데이트
-	 *  - is_withdraw, withdraw_at, updated_at
-	 */
 	@Transactional
 	public void updateWithdraw(String uuid) {
 
@@ -44,7 +39,6 @@ public class WithdrawService {
 	public void addWithdrawReasons(String uuid, WithdrawInfoDto withdrawInfoDto) {
 		WithdrawInfo withdrawInfo = WithdrawInfo.builder()
 			.uuid(uuid)
-			.withdrawInfoId(withdrawInfoDto.getWithdrawInfoId())
 			.reason(withdrawInfoDto.getReason())
 			.build();
 
