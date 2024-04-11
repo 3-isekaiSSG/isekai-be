@@ -5,8 +5,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
+import com.isekai.ssgserver.bundle.entity.Bundle;
 import com.isekai.ssgserver.bundle.repository.BundleRepository;
+import com.isekai.ssgserver.exception.common.CustomException;
+import com.isekai.ssgserver.exception.constants.ErrorCode;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +23,6 @@ public class BundleService {
 	private final BundleRepository bundleRepository;
 
 	@Transactional
-
 	public Page<BundleListResDto> getBundleList(int page, int pageSize) {
 		Pageable pageable = PageRequest.of(page, pageSize);
 
@@ -32,4 +35,16 @@ public class BundleService {
 		});
 	}
 
+	@Transactional
+	public BundleCardResDto getBudleCardInfo(String code) {
+		Bundle bundle = bundleRepository.findByCode(code)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		return BundleCardResDto.builder()
+			.bundleId(bundle.getBundleId())
+			.outerName(bundle.getOuterName())
+			.code(bundle.getCode())
+			.minPrice(bundle.getMinPrice())
+			.build();
+	}
 }

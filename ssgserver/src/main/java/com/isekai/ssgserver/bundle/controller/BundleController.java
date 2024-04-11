@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
 import com.isekai.ssgserver.bundle.service.BundleService;
 
@@ -40,11 +41,12 @@ public class BundleController {
 	/**
 	 * 묶음상품 카드
 	 */
-	@GetMapping("/{code}")
-	public ResponseEntity<?> getBundleCode(
-		@PathVariable Integer code
+	@GetMapping("/card/{code}")
+	public ResponseEntity<BundleCardResDto> getBundleCode(
+		@PathVariable String code
 	) {
-		return ResponseEntity.ok().build();
+		BundleCardResDto bundleCard = bundleService.getBudleCardInfo(code);
+		return ResponseEntity.ok(bundleCard);
 	}
 
 	/**
