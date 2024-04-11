@@ -16,7 +16,6 @@ import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
-import com.isekai.ssgserver.member.dto.FavoriteListResDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteResDto;
@@ -46,7 +45,6 @@ public class MemberFavoriteService {
 		String uuid = favoriteReqDto.getUuid();
 
 		if (division == 2) {
-			// 카테고리M (2)
 			String mediumName = favoriteReqDto.getIdentifier();
 
 			String modifiedMediumName = mediumName.replace('-', '/');
@@ -61,7 +59,6 @@ public class MemberFavoriteService {
 			memberFavoriteRepository.save(favorite);
 
 		} else if (division == 3) {
-			// 카테고리S (3)
 			String smallName = favoriteReqDto.getIdentifier();
 			String[] categories = smallName.split(">");
 			String categoryM = categories[0].trim();
@@ -82,7 +79,6 @@ public class MemberFavoriteService {
 			memberFavoriteRepository.save(favorite);
 
 		} else {
-			// 나머지 ( 단일상품, 묶음상품, 브랜드 )
 			String tempId = favoriteReqDto.getIdentifier();
 
 			long identifier = Long.parseLong(tempId);
@@ -122,11 +118,8 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public FavoriteCountResponseDto getFavoriteCountList() {
-		// 상품 전체 및 묶음상품 갯수
 		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
-		// 브랜드 갯수
 		Long brandCount = memberFavoriteRepository.countByDivision((byte)4);
-		// 카테고리 L, M 갯수
 		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)2, (byte)3);
 
 		return FavoriteCountResponseDto.builder()
@@ -167,59 +160,46 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteListResDto getFavoriteCategoryList(String uuid, int page) {
-		Pageable pageable = PageRequest.of(page, 30);
+	public Page<FavoriteResDto> getFavoriteCategoryList(String uuid, int page, int pageSize) {
+		Pageable pageable = PageRequest.of(page, pageSize);
 
-		Page<Object[]> categoryList = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
-		List<FavoriteResDto> favoriteCategoryResDtoList = new ArrayList<>();
-		for (Object[] result : categoryList) {
+		Page<Object[]> categoryPage = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
+		return categoryPage.map(result -> {
 			Long favoriteId = (Long)result[0];
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
 
-			FavoriteResDto favoriteCategoryResDto = new FavoriteResDto(favoriteId, division,
+			return new FavoriteResDto(favoriteId, division,
 				identifier);
-			favoriteCategoryResDtoList.add(favoriteCategoryResDto);
-		}
-
-		return new FavoriteListResDto(favoriteCategoryResDtoList);
+		});
 	}
 
 	@Transactional
-	public FavoriteListResDto getFavoriteSellerList(String uuid, int page) {
-		Pageable pageable = PageRequest.of(page, 30);
+	public Page<FavoriteResDto> getFavoriteSellerList(String uuid, int page, int pageSize) {
+		Pageable pageable = PageRequest.of(page, pageSize);
 
-		Page<Object[]> sellerList = memberFavoriteRepository.findByUuidSellrer(uuid, pageable);
-		List<FavoriteResDto> favoriteSellerResDtoList = new ArrayList<>();
-		for (Object[] result : sellerList) {
+		Page<Object[]> sellerPage = memberFavoriteRepository.findByUuidSellrer(uuid, pageable);
+		return sellerPage.map(result -> {
 			Long favoriteId = (Long)result[0];
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
-			FavoriteResDto favoriteSellerResDto = new FavoriteResDto(favoriteId, division, identifier);
-			favoriteSellerResDtoList.add(favoriteSellerResDto);
-		}
-
-		return new FavoriteListResDto(favoriteSellerResDtoList);
+			return new FavoriteResDto(favoriteId, division, identifier);
+		});
 	}
 
 	@Transactional
-	public FavoriteListResDto getFavoriteProductList(String uuid, int page) {
-		Pageable pageable = PageRequest.of(page, 30);
+	public Page<FavoriteResDto> getFavoriteProductList(String uuid, int page, int pageSize) {
+		Pageable pageable = PageRequest.of(page, pageSize);
 
-		Page<Object[]> productList = memberFavoriteRepository.findByUuidProduct(uuid, pageable);
-		List<FavoriteResDto> favoriteProductResDtoList = new ArrayList<>();
-
-		for (Object[] result : productList) {
+		Page<Object[]> productPage = memberFavoriteRepository.findByUuidProduct(uuid, pageable);
+		return productPage.map(result -> {
 			Long favoriteId = (Long)result[0];
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
-			FavoriteResDto favoriteProductResDto = new FavoriteResDto(favoriteId, division, identifier);
-			favoriteProductResDtoList.add(favoriteProductResDto);
-		}
-
-		return new FavoriteListResDto(favoriteProductResDtoList);
+			return new FavoriteResDto(favoriteId, division, identifier);
+		});
 	}
 }

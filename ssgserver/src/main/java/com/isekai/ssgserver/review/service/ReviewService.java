@@ -101,7 +101,7 @@ public class ReviewService {
 			pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
 		} else if (sortType == ReviewType.HIGHEST_RATING) {
 			pageable = PageRequest.of(page, pageSize, Sort.by("score").descending());
-		} else { // 평점 낮은순
+		} else {
 			pageable = PageRequest.of(page, pageSize, Sort.by("score").ascending());
 		}
 

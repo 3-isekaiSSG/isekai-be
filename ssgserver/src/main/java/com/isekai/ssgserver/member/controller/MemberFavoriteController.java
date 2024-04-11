@@ -1,5 +1,6 @@
 package com.isekai.ssgserver.member.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
-import com.isekai.ssgserver.member.dto.FavoriteListResDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
+import com.isekai.ssgserver.member.dto.FavoriteResDto;
 import com.isekai.ssgserver.member.enums.FavoriteDivision;
 import com.isekai.ssgserver.member.service.MemberFavoriteService;
 import com.isekai.ssgserver.util.jwt.JwtProvider;
@@ -52,48 +53,41 @@ public class MemberFavoriteController {
 		return ResponseEntity.ok().build();
 	}
 
-	/** 찜 목록 조회
-	 * 	--> 상품전체 / 브랜드&스토어 / 카테고리 /
-	 * 	30개씩 페이지네이션
-	 *		Enum ->
-	 * 	상품전체 -> product_code 리턴해주면됨 => product_code 값으로 카드 조회
-	 * 	브랜드&스토어 -> seller_id 목록
-	 * 	카테고리M -> category_m_id, 카테고리M
-	 * 	카테고리S -> category_s_id, 카테고리S
-	 */
-
 	@GetMapping("/product-list")
 	@Operation(summary = "찜 상품 목록 조회", description = "찜 상품 목록을 조회합니다.")
-	public ResponseEntity<FavoriteListResDto> getFavoriteProductList(
+	public ResponseEntity<Page<FavoriteResDto>> getFavoriteProductList(
 		@RequestHeader("Authorization") String token,
-		@RequestParam(defaultValue = "0") int page
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "30") int pageSize
 	) {
 		String uuid = jwtProvider.getUuid(token);
 
-		FavoriteListResDto productList = memberFavoriteService.getFavoriteProductList(uuid, page);
+		Page<FavoriteResDto> productList = memberFavoriteService.getFavoriteProductList(uuid, page, pageSize);
 
 		return ResponseEntity.ok(productList);
 	}
 
 	@GetMapping("/seller-list")
 	@Operation(summary = "찜 브랜드 목록 조회", description = "찜 목록을 조회합니다.")
-	public ResponseEntity<FavoriteListResDto> getFavoriteSellerList(
+	public ResponseEntity<Page<FavoriteResDto>> getFavoriteSellerList(
 		@RequestHeader("Authorization") String token,
-		@RequestParam(defaultValue = "0") int page
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "30") int pageSize
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		FavoriteListResDto sellerList = memberFavoriteService.getFavoriteSellerList(uuid, page);
+		Page<FavoriteResDto> sellerList = memberFavoriteService.getFavoriteSellerList(uuid, page, pageSize);
 		return ResponseEntity.ok(sellerList);
 	}
 
 	@GetMapping("/category-list")
 	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
-	public ResponseEntity<FavoriteListResDto> getFavoriteCategoryList(
+	public ResponseEntity<Page<FavoriteResDto>> getFavoriteCategoryList(
 		@RequestHeader("Authorization") String token,
-		@RequestParam(defaultValue = "0") int page
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "30") int pageSize
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		FavoriteListResDto categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page);
+		Page<FavoriteResDto> categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page, pageSize);
 		return ResponseEntity.ok(categoryList);
 	}
 
