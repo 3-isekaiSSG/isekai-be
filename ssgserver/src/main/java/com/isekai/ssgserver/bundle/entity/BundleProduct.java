@@ -36,6 +36,9 @@ public class BundleProduct {
 	@Column(name = "product_code")
 	private String productCode;
 
+	@Column(name = "seq")
+	private Integer seq;
+
 	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bundle_id", nullable = false)

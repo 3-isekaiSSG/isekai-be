@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.bundle.entity;
 
+import com.isekai.ssgserver.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Table(name = "bundle")
-public class Bundle {
+public class Bundle extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

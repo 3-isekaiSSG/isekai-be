@@ -1,0 +1,35 @@
+package com.isekai.ssgserver.bundle.service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.isekai.ssgserver.bundle.dto.BundleListResDto;
+import com.isekai.ssgserver.bundle.repository.BundleRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class BundleService {
+	private final BundleRepository bundleRepository;
+
+	@Transactional
+
+	public Page<BundleListResDto> getBundleList(int page, int pageSize) {
+		Pageable pageable = PageRequest.of(page, pageSize);
+
+		Page<Object[]> bundlePage = bundleRepository.findBundleCode(page, pageable);
+
+		return bundlePage.map(result -> {
+			Long bundelId = (Long)result[0];
+			String code = (String)result[1];
+			return new BundleListResDto(bundelId, code);
+		});
+	}
+
+}
