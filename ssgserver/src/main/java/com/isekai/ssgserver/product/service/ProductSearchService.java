@@ -23,9 +23,7 @@ public class ProductSearchService {
 
 	public List<ProductDocument> searchProduct(String productName) {
 
-		List<ProductDocument> productList;
-
-		productList = elasticSearchProductRepository.findByProductName(productName);
+		List<ProductDocument> productList = elasticSearchProductRepository.findByProductName(productName);
 
 		return productList;
 	}

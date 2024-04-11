@@ -2,6 +2,7 @@ package com.isekai.ssgserver.product.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -13,12 +14,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Document(indexName = "product")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Mapping(mappingPath = "elastic/product-mapping.json")
 @Setting(settingPath = "elastic/product-setting.json")
+@ToString
 public class ProductDocument {
 
 	@Id
@@ -42,7 +45,7 @@ public class ProductDocument {
 	@Field(type = FieldType.Integer)
 	private Integer status;
 
-	@Field(type = FieldType.Date)
+	@Field(type = FieldType.Date, format = DateFormat.basic_date)
 	private LocalDateTime createdAt;
 
 	@Builder
