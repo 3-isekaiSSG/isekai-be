@@ -28,33 +28,22 @@ public class MemberInfoService {
 
 	@Transactional
 	public String updateByPassword(String uuid, InfoPasswordDto infoPasswordDto) {
-		/** 비밀번호 재설정 로직
-		 * 	1. 기존 비밀번호랑 새번호 일치 여부 조회
-		 * 	2. 비밀번호 재설정
-		 * 		필요데이터 : 기존 비밀번호, 변경 비밀번호
-		 */
 
-		//* 기존 password랑 일치하는지 확인
 		String newPassword = infoPasswordDto.getNewPassword();
 		Member member = memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-		// 기존 비밀번호 조회
+
 		String existPassword = member.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String messageRe = "";
 
-		// 일치 확인
 		if (encoder.matches(newPassword, existPassword)) {
-			//* 일치하는 경우 입력값 같음
-			log.info("기존 비밀번호랑 일치함");
 			messageRe = "현재 사용 중인 비밀번호와 동일합니다. 다른 비밀번호로 다시 입력해주세요.";
 		} else {
-			//* 다른 경우 변경
-			log.info("비밀번호 변경 분기");
-
+			
 			ModelMapper modelMapper = new ModelMapper();
 			Member updatedMember = modelMapper.map(member, Member.class);
-			// 새 비밀번호 암호화 필요
+
 			String encodedPassword = passwordEncoder.encode(newPassword);
 			updatedMember.setPassword(encodedPassword);
 
@@ -66,12 +55,6 @@ public class MemberInfoService {
 
 	@Transactional
 	public AccountIdDto getMemberId(VerificationDto.SmsVerificationRequest smsVerificationRequest) {
-		/** 아이디 찾기 로직
-		 *	1. 인증 번호 일치 여부 확인
-		 * 	2. 아이디 해당 회원
-		 */
-
-		//* 인증번호 일치 여부 확인
 		if (verificationService.isVerify(smsVerificationRequest)) {
 			throw new CustomException(ErrorCode.WRONG_NUMBER);
 		} else {
@@ -79,7 +62,6 @@ public class MemberInfoService {
 
 			String phoneNum = smsVerificationRequest.getPhone();
 
-			//* 아이디 해당 회원 조회
 			Member phoneMember = memberRepository.findByPhone(phoneNum)
 				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 

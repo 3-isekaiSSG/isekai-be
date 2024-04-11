@@ -50,7 +50,5 @@ public class MemberInfoController {
 		AccountIdDto accountIdDto = memberInfoService.getMemberId(smsVerificationRequest);
 
 		return ResponseEntity.ok(accountIdDto);
-
 	}
-
 }
