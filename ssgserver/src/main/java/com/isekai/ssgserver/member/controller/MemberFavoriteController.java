@@ -85,7 +85,6 @@ public class MemberFavoriteController {
 		@RequestHeader("Authorization") String token,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "30") int pageSize
-
 	) {
 		String uuid = jwtProvider.getUuid(token);
 		Page<FavoriteResDto> categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page, pageSize);

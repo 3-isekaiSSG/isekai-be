@@ -45,7 +45,6 @@ public class MemberFavoriteService {
 		String uuid = favoriteReqDto.getUuid();
 
 		if (division == 2) {
-			// 카테고리M (2)
 			String mediumName = favoriteReqDto.getIdentifier();
 
 			String modifiedMediumName = mediumName.replace('-', '/');
@@ -60,7 +59,6 @@ public class MemberFavoriteService {
 			memberFavoriteRepository.save(favorite);
 
 		} else if (division == 3) {
-			// 카테고리S (3)
 			String smallName = favoriteReqDto.getIdentifier();
 			String[] categories = smallName.split(">");
 			String categoryM = categories[0].trim();
@@ -81,7 +79,6 @@ public class MemberFavoriteService {
 			memberFavoriteRepository.save(favorite);
 
 		} else {
-			// 나머지 ( 단일상품, 묶음상품, 브랜드 )
 			String tempId = favoriteReqDto.getIdentifier();
 
 			long identifier = Long.parseLong(tempId);
@@ -121,11 +118,8 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public FavoriteCountResponseDto getFavoriteCountList() {
-		// 상품 전체 및 묶음상품 갯수
 		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
-		// 브랜드 갯수
 		Long brandCount = memberFavoriteRepository.countByDivision((byte)4);
-		// 카테고리 L, M 갯수
 		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)2, (byte)3);
 
 		return FavoriteCountResponseDto.builder()
