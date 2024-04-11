@@ -42,7 +42,7 @@ public class BundleService {
 		} else if (sortType == BundleType.HIGHEST_RATING) {
 			pageable = PageRequest.of(page, pageSize, Sort.by("avgScore").descending());
 		} else {
-			pageable = PageRequest.of(page, pageSize, Sort.by("buy_count").descending());
+			pageable = PageRequest.of(page, pageSize, Sort.by("buyCount").descending());
 		}
 		List<BundleListResDto> bundleList = new ArrayList<>();
 		for (int i = 0; i < pageSize; i++) {
