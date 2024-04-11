@@ -37,6 +37,8 @@ spring:
       repositories:
         enabled: true
       url: ${ES_URL}
+      username: ${ES_USERNAME}
+      password: ${ES_PASSWORD}
 
 logging:
   level:

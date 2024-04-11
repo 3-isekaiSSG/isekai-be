@@ -24,7 +24,7 @@ public class ProductDocument {
 	@Id
 	private Long id;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, analyzer = "nori")
 	private String productName;
 
 	@Field(type = FieldType.Integer)

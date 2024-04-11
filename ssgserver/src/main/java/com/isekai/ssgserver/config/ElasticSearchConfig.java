@@ -15,12 +15,17 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
 	@Value("${spring.data.elasticsearch.url}")
 	String esUrl;
+	@Value("${spring.data.elasticsearch.username}")
+	String esUser;
+	@Value("${spring.data.elasticsearch.password}")
+	String esPass;
 
 	@Bean
 	public RestHighLevelClient restHighLevelClient() {
 
 		ClientConfiguration clientConfiguration = ClientConfiguration.builder()
 			.connectedTo(esUrl)
+			.withBasicAuth(esUser, esPass)
 			.build();
 
 		return RestClients.create(clientConfiguration).rest();
@@ -30,6 +35,7 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 	public ClientConfiguration clientConfiguration() {
 		return ClientConfiguration.builder()
 			.connectedTo(esUrl)
+			.withBasicAuth(esUser, esPass)
 			.build();
 	}
 }
