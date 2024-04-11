@@ -14,6 +14,7 @@ import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
 import com.isekai.ssgserver.bundle.dto.BundleInfoResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
 import com.isekai.ssgserver.bundle.dto.BundleProductListResDto;
+import com.isekai.ssgserver.bundle.enums.BundleType;
 import com.isekai.ssgserver.bundle.service.BundleService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,13 +34,14 @@ public class BundleController {
 	@Operation(summary = "묶음 상품 목록 조회", description = "묶음 상품 리스트를 조회 합니다.")
 	public ResponseEntity<Page<BundleListResDto>> getBundleList(
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int pageSize
+		@RequestParam(defaultValue = "20") int pageSize,
+		@RequestParam(defaultValue = "LATEST") BundleType sortType
 	) {
-		Page<BundleListResDto> bundleList = bundleService.getBundleList(page, pageSize);
+		Page<BundleListResDto> bundleList = bundleService.getBundleList(page, pageSize, sortType);
 		return ResponseEntity.ok(bundleList);
 	}
 
-	@GetMapping("/card/{code}")
+	@GetMapping("/{code}")
 	@Operation(summary = "묶음 상품 카드 조회", description = "묶음 상품 카드 정보를 조회 합니다.")
 	public ResponseEntity<BundleCardResDto> getBundleCode(
 		@PathVariable String code

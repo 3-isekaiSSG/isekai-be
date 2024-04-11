@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
@@ -13,6 +14,7 @@ import com.isekai.ssgserver.bundle.dto.BundleInfoResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
 import com.isekai.ssgserver.bundle.dto.BundleProductListResDto;
 import com.isekai.ssgserver.bundle.entity.Bundle;
+import com.isekai.ssgserver.bundle.enums.BundleType;
 import com.isekai.ssgserver.bundle.repository.BundleProductRepository;
 import com.isekai.ssgserver.bundle.repository.BundleRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
@@ -32,10 +34,17 @@ public class BundleService {
 	private final ProductRepository productRepository;
 
 	@Transactional
-	public Page<BundleListResDto> getBundleList(int page, int pageSize) {
-		Pageable pageable = PageRequest.of(page, pageSize);
+	public Page<BundleListResDto> getBundleList(int page, int pageSize, BundleType sortType) {
+		Pageable pageable;
+		if (sortType == BundleType.LATEST) {
+			pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
+		} else if (sortType == BundleType.HIGHEST_RATING) {
+			pageable = PageRequest.of(page, pageSize, Sort.by("avgScore").descending());
+		} else {
+			pageable = PageRequest.of(page, pageSize, Sort.by("buy_count").descending());
+		}
 
-		Page<Object[]> bundlePage = bundleRepository.findBundleCode(page, pageable);
+		Page<Object[]> bundlePage = bundleRepository.findBundleCode(pageable);
 
 		return bundlePage.map(result -> {
 			Long bundelId = (Long)result[0];
