@@ -1,5 +1,7 @@
 package com.isekai.ssgserver.bundle.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
 import com.isekai.ssgserver.bundle.dto.BundleInfoResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
+import com.isekai.ssgserver.bundle.dto.BundleProductListResDto;
 import com.isekai.ssgserver.bundle.service.BundleService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,11 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BundleController {
 	private final BundleService bundleService;
 
-	/**
-	 * 묶음상품 리스트
-	 *
-	 * @return list 묶음상품 code 값
-	 */
 	@GetMapping("")
 	@Operation(summary = "묶음 상품 목록 조회", description = "묶음 상품 리스트를 조회 합니다.")
 	public ResponseEntity<Page<BundleListResDto>> getBundleList(
@@ -41,9 +39,6 @@ public class BundleController {
 		return ResponseEntity.ok(bundleList);
 	}
 
-	/**
-	 * 묶음상품 카드
-	 */
 	@GetMapping("/card/{code}")
 	@Operation(summary = "묶음 상품 카드 조회", description = "묶음 상품 카드 정보를 조회 합니다.")
 	public ResponseEntity<BundleCardResDto> getBundleCode(
@@ -53,10 +48,6 @@ public class BundleController {
 		return ResponseEntity.ok(bundleCard);
 	}
 
-	/**
-	 * 묶음상품 내부 정보
-	 * @return
-	 */
 	@GetMapping("/{code}/info")
 	@Operation(summary = "묶음 상품 내부 조회", description = "묶음 상품 내부 정보를 조회 합니다.")
 	public ResponseEntity<BundleInfoResDto> getBundleDetails(
@@ -66,12 +57,12 @@ public class BundleController {
 		return ResponseEntity.ok(bundleInfo);
 	}
 
-	/**
-	 * 묶음 상품 세부 상품 리스트
-	 */
-	@GetMapping("/{bundle}/list")
-	public ResponseEntity<?> getBundleProductsList() {
-		return ResponseEntity.ok().build();
+	@GetMapping("/{code}/list")
+	@Operation(summary = "묶음 상품 내부 세부 상품 목록 조회", description = "묶음 상품 내부 세부 상품 목록 정보를 조회 합니다.")
+	public ResponseEntity<List<BundleProductListResDto>> getBundleProductsList(
+		@PathVariable String code
+	) {
+		List<BundleProductListResDto> bundleProductList = bundleService.getBundleProductList(code);
+		return ResponseEntity.ok(bundleProductList);
 	}
-
 }

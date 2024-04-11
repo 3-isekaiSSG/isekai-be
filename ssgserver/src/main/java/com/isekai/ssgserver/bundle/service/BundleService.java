@@ -1,5 +1,8 @@
 package com.isekai.ssgserver.bundle.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,10 +11,13 @@ import org.springframework.stereotype.Service;
 import com.isekai.ssgserver.bundle.dto.BundleCardResDto;
 import com.isekai.ssgserver.bundle.dto.BundleInfoResDto;
 import com.isekai.ssgserver.bundle.dto.BundleListResDto;
+import com.isekai.ssgserver.bundle.dto.BundleProductListResDto;
 import com.isekai.ssgserver.bundle.entity.Bundle;
+import com.isekai.ssgserver.bundle.repository.BundleProductRepository;
 import com.isekai.ssgserver.bundle.repository.BundleRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.product.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BundleService {
 	private final BundleRepository bundleRepository;
+	private final BundleProductRepository bundleProductRepository;
+	private final ProductRepository productRepository;
 
 	@Transactional
 	public Page<BundleListResDto> getBundleList(int page, int pageSize) {
@@ -63,5 +71,25 @@ public class BundleService {
 			.avgScore(bundel.getAvgScore())
 			.buyCount(bundel.getBuyCount())
 			.build();
+	}
+
+	@Transactional
+	public List<BundleProductListResDto> getBundleProductList(String code) {
+		Bundle bundle = bundleRepository.findByCode(code)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		Long bundleId = bundle.getBundleId();
+		List<Object[]> bundleProductList = bundleProductRepository.findByBundleId(bundleId);
+
+		System.out.println(bundleProductList);
+
+		List<BundleProductListResDto> dtoList = bundleProductList.stream()
+			.map(row -> BundleProductListResDto.builder()
+				.bundleProductId((Long)row[0])
+				.productCode((String)row[1])
+				.bundleId((Long)row[2])
+				.build())
+			.collect(Collectors.toList());
+		return dtoList;
 	}
 }
