@@ -128,14 +128,20 @@ public class MemberFavoriteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/{favoriteId}")
+	@DeleteMapping("/{identifier}/{division}")
 	@Operation(summary = "찜 하나 삭제", description = "찜 하나를 삭제합니다.")
 	public ResponseEntity<Void> removeFavoriteOne(
 		@RequestHeader("Authorization") String token,
-		@PathVariable Long favoriteId) {
-
+		@PathVariable String identifier,
+		@PathVariable FavoriteDivision division
+	) {
 		String uuid = jwtProvider.getUuid(token);
-		memberFavoriteService.removeFavoriteOne(uuid, favoriteId);
+		FavoriteReqDto favoriteReqDto = FavoriteReqDto.builder()
+			.identifier(identifier)
+			.division(division)
+			.build();
+
+		memberFavoriteService.removeFavoriteOne(uuid, favoriteReqDto);
 		return ResponseEntity.ok().build();
 	}
 

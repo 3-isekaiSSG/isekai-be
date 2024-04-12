@@ -94,7 +94,15 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public void removeFavoriteOne(String uuid, Long favoriteId) {
+	public void removeFavoriteOne(String uuid, FavoriteReqDto favoriteReqDto) {
+		String identifier = favoriteReqDto.getIdentifier();
+		byte division = favoriteReqDto.getDivision().getCode();
+
+		Favorite favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier, division)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+		Long favoriteId = favorite.getFavoriteId();
+
 		Favorite favoriteOptional = memberFavoriteRepository.findByFavoriteIdAndUuid(favoriteId, uuid)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 		memberFavoriteRepository.deleteById(favoriteId);

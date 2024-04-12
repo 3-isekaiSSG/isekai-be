@@ -29,4 +29,8 @@ public interface MemberFavoriteRepository extends JpaRepository<Favorite, Long> 
 
 	@Query("SELECT f.favoriteId, f.division, f.identifier FROM Favorite f WHERE f.uuid = :uuid AND (f.division = 0 OR f.division = 1)")
 	Page<Object[]> findByUuidProduct(@Param("uuid") String uuid, Pageable pageable);
+
+	@Query("SELECT f FROM Favorite f WHERE f.uuid = :uuid AND f.identifier = :identifier AND f.division = :division")
+	Optional<Favorite> findByUuidAndIdentifierAndDivision(@Param("uuid") String uuid,
+		@Param("identifier") String identifier, @Param("division") byte division);
 }
