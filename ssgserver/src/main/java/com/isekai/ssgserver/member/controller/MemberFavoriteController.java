@@ -91,13 +91,18 @@ public class MemberFavoriteController {
 		return ResponseEntity.ok(categoryList);
 	}
 
-	@GetMapping("/check")
+	@GetMapping("/check/{identifier}/{division}")
 	@Operation(summary = "찜인지 여부", description = "찜인지 여부를 조회합니다.")
 	public ResponseEntity<Boolean> getFavoriteIsDetails(
 		@RequestHeader("Authorization") String token,
-		@RequestBody FavoriteReqDto favoriteReqDto
+		@PathVariable String identifier,
+		@PathVariable FavoriteDivision division
 	) {
 		String uuid = jwtProvider.getUuid(token);
+		FavoriteReqDto favoriteReqDto = FavoriteReqDto.builder()
+			.identifier(identifier)
+			.division(division)
+			.build();
 
 		boolean result = memberFavoriteService.getFavoriteIsDetails(uuid, favoriteReqDto);
 
