@@ -14,7 +14,6 @@ import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
-import com.isekai.ssgserver.member.dto.FavoriteDelReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
 import com.isekai.ssgserver.member.dto.FavoriteReqDto;
@@ -110,10 +109,16 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public void removeFavoriteList(String uuid, FavoriteDelRequestDto favoriteDelRequestDto) {
-		List<FavoriteDelReqDto> favoriteDelList = favoriteDelRequestDto.getFavoriteDelList();
+		List<FavoriteReqDto> favoriteDelList = favoriteDelRequestDto.getFavoriteDelList();
 
-		for (FavoriteDelReqDto favoriteDelReqDto : favoriteDelList) {
-			Long favoriteId = favoriteDelReqDto.getFavoriteId();
+		for (FavoriteReqDto favoriteDelReqDto : favoriteDelList) {
+			byte division = favoriteDelReqDto.getDivision().getCode();
+			String identifier = favoriteDelReqDto.getIdentifier();
+			Favorite favoriteTemp = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier,
+					division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+
+			Long favoriteId = favoriteTemp.getFavoriteId();
 			memberFavoriteRepository.findByFavoriteIdAndUuid(favoriteId, uuid)
 				.ifPresentOrElse(
 					favorite -> memberFavoriteRepository.deleteById(favoriteId),

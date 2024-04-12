@@ -12,5 +12,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteDelRequestDto {
-	private List<FavoriteDelReqDto> favoriteDelList;
+	private List<FavoriteReqDto> favoriteDelList;
 }
