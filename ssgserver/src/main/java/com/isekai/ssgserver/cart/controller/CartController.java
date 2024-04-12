@@ -178,7 +178,6 @@ public class CartController {
 		// 쿠키에서 장바구니 value를 찾음
 		Cookie cartCookie = WebUtils.getCookie(request, "CART_VALUE");
 		if (cartCookie != null) {
-			cartCookie.setMaxAge(24 * 60 * 60 * 2);
 			return cartCookie.getValue();
 		} else {
 			// 쿠키가 없는 경우, 새 장바구니 ID 생성 및 쿠키에 저장
@@ -187,7 +186,7 @@ public class CartController {
 			newCookie.setPath("/");
 			newCookie.setHttpOnly(true);
 			newCookie.setMaxAge(24 * 60 * 60 * 2); // 쿠키 유효기간 2일 설정
-			// newCookie.setSecure(true);
+			newCookie.setSecure(true);
 			response.addCookie(newCookie);
 			return newCartValue;
 		}
