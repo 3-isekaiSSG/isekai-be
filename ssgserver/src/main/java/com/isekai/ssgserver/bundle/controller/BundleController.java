@@ -45,7 +45,7 @@ public class BundleController {
 	public ResponseEntity<BundleCardResDto> getBundleCode(
 		@PathVariable String code
 	) {
-		BundleCardResDto bundleCard = bundleService.getBudleCardInfo(code);
+		BundleCardResDto bundleCard = bundleService.getBundleCardInfo(code);
 		return ResponseEntity.ok(bundleCard);
 	}
 

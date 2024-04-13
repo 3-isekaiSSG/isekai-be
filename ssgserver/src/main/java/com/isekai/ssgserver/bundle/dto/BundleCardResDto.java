@@ -13,4 +13,5 @@ public class BundleCardResDto {
 	private String code;
 	private Integer minPrice;
 	private Long buyCount;
+	private String imgUrl;
 }

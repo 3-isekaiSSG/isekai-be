@@ -62,7 +62,7 @@ public class BundleService {
 	}
 
 	@Transactional
-	public BundleCardResDto getBudleCardInfo(String code) {
+	public BundleCardResDto getBundleCardInfo(String code) {
 		Bundle bundle = bundleRepository.findByCode(code)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
@@ -72,22 +72,23 @@ public class BundleService {
 			.code(bundle.getCode())
 			.minPrice(bundle.getMinPrice())
 			.buyCount(bundle.getBuyCount())
+			.imgUrl(bundle.getImageUrl())
 			.build();
 	}
 
 	@Transactional
 	public BundleInfoResDto getBundleDetails(String code) {
-		Bundle bundel = bundleRepository.findByCode(code)
+		Bundle bundle = bundleRepository.findByCode(code)
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
 
 		return BundleInfoResDto.builder()
-			.bundleId(bundel.getBundleId())
-			.innerName(bundel.getInnerName())
-			.code(bundel.getCode())
-			.minPrice(bundel.getMinPrice())
-			.reviewCount(bundel.getReviewCount())
-			.avgScore(bundel.getAvgScore())
-			.buyCount(bundel.getBuyCount())
+			.bundleId(bundle.getBundleId())
+			.innerName(bundle.getInnerName())
+			.code(bundle.getCode())
+			.minPrice(bundle.getMinPrice())
+			.reviewCount(bundle.getReviewCount())
+			.avgScore(bundle.getAvgScore())
+			.buyCount(bundle.getBuyCount())
 			.build();
 	}
 
