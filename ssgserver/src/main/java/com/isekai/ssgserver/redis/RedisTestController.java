@@ -9,28 +9,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @Tag(name = "RedisTestController")
 public class RedisTestController {
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
-    @PostMapping("/redisTest")
-    public ResponseEntity<?> addRedisKey() {
-        ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        vop.set("mirim", "jang");
-        vop.set("jang", "mirim");
-        return ResponseEntity.ok().build();
-    }
+	@PostMapping("/redisTest")
+	@Operation(summary = "Redis 데이터 저장 테스트", description = "저장이 제대로 이루어지는지 확인합니다. (저장되는 값은 'banana-yellow', 'apple-red'로 고정)")
+	public ResponseEntity<Void> addRedisKey() {
+		ValueOperations<String, String> vop = redisTemplate.opsForValue();
+		vop.set("banana", "yellow");
+		vop.set("apple", "red");
+		return ResponseEntity.ok().build();
+	}
 
-    @GetMapping("/redisTest/{key}")
-    public ResponseEntity<?> getReisKey(@PathVariable String key) {
-        ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        String value = vop.get(key);
-        return ResponseEntity.ok(value);
-    }
+	@GetMapping("/redisTest/{key}")
+	@Operation(summary = "Redis key-value 조회", description = "입력한 key값으로 저장된 value를 조회합니다.")
+	public ResponseEntity<String> getReisKey(@PathVariable String key) {
+		ValueOperations<String, String> vop = redisTemplate.opsForValue();
+		String value = vop.get(key);
+		return ResponseEntity.ok(value);
+	}
 
 }

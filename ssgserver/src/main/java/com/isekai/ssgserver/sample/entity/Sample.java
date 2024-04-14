@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Sample {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long samplePk;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long samplePk;
 }

@@ -33,8 +33,11 @@ public class PhoneVerificationUtil {
 	}
 
 	public SingleMessageSentResponse sendSms(String to, String verificationNumber) {
+		log.info(PHONE_NUM);
 		Message message = new Message();
+		log.info(PHONE_NUM);
 		message.setFrom(PHONE_NUM);
+		log.info(PHONE_NUM);
 		message.setTo(to);
 		message.setText("[isekai-SSG] 인증번호[" + verificationNumber + "] 를 입력해주세요.");
 

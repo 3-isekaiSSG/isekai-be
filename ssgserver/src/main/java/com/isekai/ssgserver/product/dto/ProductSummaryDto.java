@@ -1,0 +1,26 @@
+package com.isekai.ssgserver.product.dto;
+
+import java.time.LocalDateTime;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@Builder
+@ToString
+public class ProductSummaryDto {
+	// 상품코드
+	private String code;
+	// 	상품 이름 (outer)
+	private String name;
+	// 상품 상태
+	private int status;
+	// 생성일자
+	private LocalDateTime createdAt;
+	// 	정가
+	private int originPrice;
+	// 성인 판매 여부
+	private int adultSales;
+
+}
