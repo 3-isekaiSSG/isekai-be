@@ -111,8 +111,11 @@ public class MemberFavoriteController {
 
 	@GetMapping("/number")
 	@Operation(summary = "찜 갯수", description = "찜 상품, 브랜드, 카테고리 갯수를 구합니다.")
-	public ResponseEntity<FavoriteCountResponseDto> getFavoriteCountList() {
-		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.getFavoriteCountList();
+	public ResponseEntity<FavoriteCountResponseDto> getFavoriteCountList(
+		@RequestHeader("Authorization") String token
+	) {
+		String uuid = jwtProvider.getUuid(token);
+		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.getFavoriteCountList(uuid);
 
 		return ResponseEntity.ok(favoriteCountResponseDto);
 	}
