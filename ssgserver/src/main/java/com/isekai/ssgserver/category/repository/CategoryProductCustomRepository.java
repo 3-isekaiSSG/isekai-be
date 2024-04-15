@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.isekai.ssgserver.category.entity.QCategoryProduct;
@@ -42,10 +41,8 @@ public class CategoryProductCustomRepository extends QuerydslRepositorySupport {
 	}
 
 	// 카테고리 상품 조회
-	public Page<Product> findCategoryProduct(@Param("largeName") String largeName,
-		@Param("mediumName") String mediumName, @Param("smallName") String smallName,
-		@Param("sort") String criteria, @Param("brandName") String brandName, @Param("dType") String dType,
-		@Param("minPrc") Integer minPrc, @Param("maxPrc") Integer maxPrc, Pageable pageable) {
+	public Page<Product> findCategoryProduct(String largeName, String mediumName, String smallName, String criteria,
+		String brandName, String dType, Integer minPrc, Integer maxPrc, Pageable pageable) {
 
 		if (criteria == null) {
 			criteria = "id";
