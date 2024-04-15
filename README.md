@@ -257,7 +257,7 @@
 
 - **카테고리**
 
-| ![카테고리1.PNG](https://github.com/3-isekaiSSG/.github/assets/122415662/0f5377c5-3678-4c84-a66e-0c8bd659ffe7) | ![카테고리2.PNG](https://github.com/3-isekaiSSG/.github/assets/122415662/d610d7df-b11f-4760-925f-13a21bd51367) | ![카테고리3.PNG][(assets/category3.png)](https://github.com/3-isekaiSSG/.github/assets/122415662/fef35251-4153-4dc6-91c3-1427fc0e97db) |
+| ![카테고리1.PNG](https://github.com/3-isekaiSSG/.github/assets/122415662/0f5377c5-3678-4c84-a66e-0c8bd659ffe7) | ![카테고리2.PNG](https://github.com/3-isekaiSSG/.github/assets/122415662/d610d7df-b11f-4760-925f-13a21bd51367) | ![카테고리3.PNG](https://github.com/3-isekaiSSG/.github/assets/122415662/fef35251-4153-4dc6-91c3-1427fc0e97db) |
 |:--------------------------------:|:----------------------------------:|:----------------------------------:|
 | 카테고리 대분류를 통해 원하는<br>카테고리를 선택합니다. | 대분류를 선택하면 중분류<br>카테고리가 나오게 되고 그 중 관심있는 카테고리를 선택합니다. | 해당 카테고리의 상품들을<br>볼 수 있습니다. 정렬과 필터링을 통해 원하는<br>순서로 볼 수 있습니다. |
 
