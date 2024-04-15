@@ -13,9 +13,11 @@ import com.isekai.ssgserver.member.entity.Favorite;
 
 @Repository
 public interface MemberFavoriteRepository extends JpaRepository<Favorite, Long> {
-	Long countByDivision(byte division);
+	Long countByDivisionAndUuid(byte division, String uuid);
 
-	Long countByDivisionEqualsOrDivisionEquals(byte division1, byte division2);
+	@Query("SELECT COUNT(f.favoriteId) FROM Favorite f WHERE (f.division = :division1 OR f.division = :division2) AND f.uuid = :uuid")
+	Long countByDivisionEqualsOrDivisionEqualsAndUuid(@Param("division1") byte division1,
+		@Param("division2") byte division2, @Param("uuid") String uuid);
 
 	boolean existsByUuidAndDivisionAndIdentifier(String uuid, byte division, Long identifier);
 

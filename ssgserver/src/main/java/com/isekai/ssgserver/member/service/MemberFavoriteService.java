@@ -130,10 +130,13 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteCountResponseDto getFavoriteCountList() {
-		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
-		Long brandCount = memberFavoriteRepository.countByDivision((byte)4);
-		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)2, (byte)3);
+	public FavoriteCountResponseDto getFavoriteCountList(String uuid) {
+
+		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEqualsAndUuid((byte)0,
+			(byte)1, uuid);
+		Long brandCount = memberFavoriteRepository.countByDivisionAndUuid((byte)4, uuid);
+		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEqualsAndUuid((byte)2,
+			(byte)3, uuid);
 
 		return FavoriteCountResponseDto.builder()
 			.favoriteCountList(new ArrayList<FavoriteCountDto>() {{
