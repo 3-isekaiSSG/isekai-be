@@ -14,4 +14,7 @@ public interface CategorySRepository extends JpaRepository<CategoryS, Long> {
 	@Query("SELECT cs.categorySId FROM CategoryS cs WHERE cs.smallName = :modifiedSmallName AND cs.categoryM.id = :categoryMId")
 	Long findBySmallAndCategoryMId(@Param("modifiedSmallName") String modifiedSmallName,
 		@Param("categoryMId") Long categoryMId);
+
+	@Query("SELECT cs FROM CategoryS cs WHERE cs.categorySId = :categorySId")
+	CategoryS findByCategorySId(@Param("categorySId") Long categorySId);
 }

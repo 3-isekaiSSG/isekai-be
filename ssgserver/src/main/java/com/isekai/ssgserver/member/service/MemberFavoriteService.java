@@ -8,10 +8,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.category.entity.CategoryM;
+import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.member.dto.FavoriteCateResDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
@@ -176,18 +179,43 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public Page<FavoriteResDto> getFavoriteCategoryList(String uuid, int page, int pageSize) {
+	public Page<FavoriteCateResDto> getFavoriteCategoryList(String uuid, int page, int pageSize) {
 		Pageable pageable = PageRequest.of(page, pageSize);
 
 		Page<Object[]> categoryPage = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
+
 		return categoryPage.map(result -> {
 			Long favoriteId = (Long)result[0];
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
+			String categoryName = null;
 
-			return new FavoriteResDto(favoriteId, division,
-				identifier);
+			if (divisionCode == 2) {
+				Long categoryMId = identifier;
+				CategoryM categoryM = categoryMRepository.findByCategoryMId(categoryMId);
+				String categoryMName = categoryM.getMediumName();
+				String categoryLName = categoryM.getCategoryL().getLargeName();
+
+				String modifiedMediumName = categoryMName.replace('/', '-');
+				String modifiedLargeName = categoryLName.replace('/', '-');
+
+				categoryName = modifiedLargeName + " > " + modifiedMediumName;
+			} else if (divisionCode == 3) {
+				Long categorySId = identifier;
+				CategoryS categoryS = categorySRepository.findByCategorySId(categorySId);
+
+				String categoryMName = categoryS.getCategoryM().getMediumName();
+				String categorySName = categoryS.getSmallName();
+
+				String modifiedMediumName = categoryMName.replace('/', '-');
+				String modifiedSmallName = categorySName.replace('/', '-');
+
+				categoryName = modifiedMediumName + " > " + modifiedSmallName;
+			}
+
+			return new FavoriteCateResDto(favoriteId, division,
+				identifier, categoryName);
 		});
 	}
 
