@@ -97,11 +97,38 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public void removeFavoriteOne(String uuid, FavoriteReqDto favoriteReqDto) {
-		String identifier = favoriteReqDto.getIdentifier();
-		byte division = favoriteReqDto.getDivision().getCode();
 
-		Favorite favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier, division)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		byte division = favoriteReqDto.getDivision().getCode();
+		Favorite favorite = null;
+		if (division == 2) {
+
+			String mediumName = favoriteReqDto.getIdentifier();
+
+			String modifiedMediumName = mediumName.replace('-', '/');
+			Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
+
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision2(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		} else if (division == 3) {
+
+			String smallName = favoriteReqDto.getIdentifier();
+			String[] categories = smallName.split(">");
+			String categoryM = categories[0].trim();
+			String categoryS = categories[1].trim();
+
+			String modifiedMediumName = categoryM.replace('-', '/');
+			String modifiedSmallName = categoryS.replace('-', '/');
+
+			Long categoryMId = categoryMRepository.findByMediumName(modifiedMediumName);
+			Long identifier = categorySRepository.findBySmallAndCategoryMId(modifiedSmallName, categoryMId);
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision2(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		} else {
+			String identifier = favoriteReqDto.getIdentifier();
+
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		}
 
 		Long favoriteId = favorite.getFavoriteId();
 
