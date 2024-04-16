@@ -189,33 +189,38 @@ public class MemberFavoriteService {
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
-			String categoryName = null;
+			String categoryFirst = null;
+			String categorySecond = null;
+			String categoryMImg = null;
 
 			if (divisionCode == 2) {
 				Long categoryMId = identifier;
 				CategoryM categoryM = categoryMRepository.findByCategoryMId(categoryMId);
 				String categoryMName = categoryM.getMediumName();
 				String categoryLName = categoryM.getCategoryL().getLargeName();
+				categoryMImg = categoryM.getMediumImg();
 
 				String modifiedMediumName = categoryMName.replace('/', '-');
 				String modifiedLargeName = categoryLName.replace('/', '-');
 
-				categoryName = modifiedLargeName + " > " + modifiedMediumName;
+				categoryFirst = modifiedLargeName;
+				categorySecond = modifiedMediumName;
 			} else if (divisionCode == 3) {
 				Long categorySId = identifier;
 				CategoryS categoryS = categorySRepository.findByCategorySId(categorySId);
 
 				String categoryMName = categoryS.getCategoryM().getMediumName();
 				String categorySName = categoryS.getSmallName();
+				categoryMImg = categoryS.getCategoryM().getMediumImg();
 
 				String modifiedMediumName = categoryMName.replace('/', '-');
 				String modifiedSmallName = categorySName.replace('/', '-');
-
-				categoryName = modifiedMediumName + " > " + modifiedSmallName;
+				categoryFirst = modifiedMediumName;
+				categorySecond = modifiedSmallName;
 			}
 
 			return new FavoriteCateResDto(favoriteId, division,
-				identifier, categoryName);
+				identifier, categoryFirst, categorySecond, categoryMImg);
 		});
 	}
 

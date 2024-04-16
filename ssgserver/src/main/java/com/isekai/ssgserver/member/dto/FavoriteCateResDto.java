@@ -13,5 +13,7 @@ public class FavoriteCateResDto {
 	private Long favoriteId;
 	private FavoriteDivision division;
 	private Long identifier;
-	private String categoryName;
+	private String categoryLName;
+	private String categoryMName;
+	private String categoryMImg;
 }
