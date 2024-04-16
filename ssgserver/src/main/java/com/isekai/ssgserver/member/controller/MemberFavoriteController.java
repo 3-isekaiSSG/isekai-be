@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,7 +121,7 @@ public class MemberFavoriteController {
 		return ResponseEntity.ok(favoriteCountResponseDto);
 	}
 
-	@DeleteMapping("/selects")
+	@PutMapping("/selects")
 	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
 	public ResponseEntity<Void> removeFavoriteList(
 		@RequestHeader("Authorization") String token,
