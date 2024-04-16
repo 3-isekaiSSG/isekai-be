@@ -33,6 +33,10 @@ public interface MemberFavoriteRepository extends JpaRepository<Favorite, Long> 
 	Page<Object[]> findByUuidProduct(@Param("uuid") String uuid, Pageable pageable);
 
 	@Query("SELECT f FROM Favorite f WHERE f.uuid = :uuid AND f.identifier = :identifier AND f.division = :division")
+	Optional<Favorite> findByUuidAndIdentifierAndDivision2(@Param("uuid") String uuid,
+		@Param("identifier") Long identifier, @Param("division") byte division);
+
+	@Query("SELECT f FROM Favorite f WHERE f.uuid = :uuid AND f.identifier = :identifier AND f.division = :division")
 	Optional<Favorite> findByUuidAndIdentifierAndDivision(@Param("uuid") String uuid,
 		@Param("identifier") String identifier, @Param("division") byte division);
 }
