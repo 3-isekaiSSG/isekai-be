@@ -33,16 +33,8 @@ public class CategoryS {
 	@Column(name = "small_name", nullable = false)
 	private String smallName;
 
-	// 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_m_id", nullable = false)
 	private CategoryM categoryM;
 
-	// @OneToMany(mappedBy = "categoryS")
-	// private List<CategoryProduct> categoryProductList = new ArrayList<>();
-	//
-	// @Builder
-	// public CategoryS(String smallName) {
-	// 	this.smallName = smallName;
-	// }
 }

@@ -8,10 +8,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.isekai.ssgserver.category.entity.CategoryM;
+import com.isekai.ssgserver.category.entity.CategoryS;
 import com.isekai.ssgserver.category.repository.CategoryMRepository;
 import com.isekai.ssgserver.category.repository.CategorySRepository;
 import com.isekai.ssgserver.exception.common.CustomException;
 import com.isekai.ssgserver.exception.constants.ErrorCode;
+import com.isekai.ssgserver.member.dto.FavoriteCateResDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
@@ -94,11 +97,38 @@ public class MemberFavoriteService {
 
 	@Transactional
 	public void removeFavoriteOne(String uuid, FavoriteReqDto favoriteReqDto) {
-		String identifier = favoriteReqDto.getIdentifier();
-		byte division = favoriteReqDto.getDivision().getCode();
 
-		Favorite favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier, division)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		byte division = favoriteReqDto.getDivision().getCode();
+		Favorite favorite = null;
+		if (division == 2) {
+
+			String mediumName = favoriteReqDto.getIdentifier();
+
+			String modifiedMediumName = mediumName.replace('-', '/');
+			Long identifier = categoryMRepository.findByMediumName(modifiedMediumName);
+
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision2(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		} else if (division == 3) {
+
+			String smallName = favoriteReqDto.getIdentifier();
+			String[] categories = smallName.split(">");
+			String categoryM = categories[0].trim();
+			String categoryS = categories[1].trim();
+
+			String modifiedMediumName = categoryM.replace('-', '/');
+			String modifiedSmallName = categoryS.replace('-', '/');
+
+			Long categoryMId = categoryMRepository.findByMediumName(modifiedMediumName);
+			Long identifier = categorySRepository.findBySmallAndCategoryMId(modifiedSmallName, categoryMId);
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision2(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		} else {
+			String identifier = favoriteReqDto.getIdentifier();
+
+			favorite = memberFavoriteRepository.findByUuidAndIdentifierAndDivision(uuid, identifier, division)
+				.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ENTITY));
+		}
 
 		Long favoriteId = favorite.getFavoriteId();
 
@@ -130,10 +160,13 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public FavoriteCountResponseDto getFavoriteCountList() {
-		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)0, (byte)1);
-		Long brandCount = memberFavoriteRepository.countByDivision((byte)4);
-		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEquals((byte)2, (byte)3);
+	public FavoriteCountResponseDto getFavoriteCountList(String uuid) {
+
+		Long totalCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEqualsAndUuid((byte)0,
+			(byte)1, uuid);
+		Long brandCount = memberFavoriteRepository.countByDivisionAndUuid((byte)4, uuid);
+		Long categoryCount = memberFavoriteRepository.countByDivisionEqualsOrDivisionEqualsAndUuid((byte)2,
+			(byte)3, uuid);
 
 		return FavoriteCountResponseDto.builder()
 			.favoriteCountList(new ArrayList<FavoriteCountDto>() {{
@@ -173,18 +206,48 @@ public class MemberFavoriteService {
 	}
 
 	@Transactional
-	public Page<FavoriteResDto> getFavoriteCategoryList(String uuid, int page, int pageSize) {
+	public Page<FavoriteCateResDto> getFavoriteCategoryList(String uuid, int page, int pageSize) {
 		Pageable pageable = PageRequest.of(page, pageSize);
 
 		Page<Object[]> categoryPage = memberFavoriteRepository.findByUuidCategory(uuid, pageable);
+
 		return categoryPage.map(result -> {
 			Long favoriteId = (Long)result[0];
 			byte divisionCode = (byte)result[1];
 			FavoriteDivision division = FavoriteDivision.fromCode(divisionCode);
 			Long identifier = (Long)result[2];
+			String categoryFirst = null;
+			String categorySecond = null;
+			String categoryMImg = null;
 
-			return new FavoriteResDto(favoriteId, division,
-				identifier);
+			if (divisionCode == 2) {
+				Long categoryMId = identifier;
+				CategoryM categoryM = categoryMRepository.findByCategoryMId(categoryMId);
+				String categoryMName = categoryM.getMediumName();
+				String categoryLName = categoryM.getCategoryL().getLargeName();
+				categoryMImg = categoryM.getMediumImg();
+
+				String modifiedMediumName = categoryMName.replace('/', '-');
+				String modifiedLargeName = categoryLName.replace('/', '-');
+
+				categoryFirst = modifiedLargeName;
+				categorySecond = modifiedMediumName;
+			} else if (divisionCode == 3) {
+				Long categorySId = identifier;
+				CategoryS categoryS = categorySRepository.findByCategorySId(categorySId);
+
+				String categoryMName = categoryS.getCategoryM().getMediumName();
+				String categorySName = categoryS.getSmallName();
+				categoryMImg = categoryS.getCategoryM().getMediumImg();
+
+				String modifiedMediumName = categoryMName.replace('/', '-');
+				String modifiedSmallName = categorySName.replace('/', '-');
+				categoryFirst = modifiedMediumName;
+				categorySecond = modifiedSmallName;
+			}
+
+			return new FavoriteCateResDto(favoriteId, division,
+				identifier, categoryFirst, categorySecond, categoryMImg);
 		});
 	}
 

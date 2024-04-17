@@ -23,11 +23,11 @@ public class ProductSearchService {
 		
 		AtomicInteger id = new AtomicInteger(0);
 
-		return productKeywordRepository.findByNameContaining(keyword)
+		return productKeywordRepository.findDistinctProductCodeByNameContaining(keyword)
 			.stream()
-			.map(p -> ProductInfoDto.builder()
+			.map(code -> ProductInfoDto.builder()
 				.id(id.getAndIncrement())
-				.code(p.getProductCode())
+				.code(code)
 				.build())
 			.toList();
 	}

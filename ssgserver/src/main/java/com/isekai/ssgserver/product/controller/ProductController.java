@@ -36,7 +36,7 @@ public class ProductController {
 	@Operation(summary = "카테고리 상품 리스트", description = "카테고리 별 상품 리스트를 내려주고, 정렬과 필터링 가능합니다.")
 	public ResponseEntity<CategoryProductResponseDto> getCategoryProduct(
 		@RequestParam(value = "largeName") String largeName,
-		@RequestParam(value = "mediumName") String mediumName,
+		@RequestParam(value = "mediumName", required = false) String mediumName,
 		@RequestParam(value = "smallName", required = false) String smallName,
 		@RequestParam(value = "page", required = false, defaultValue = "0") Integer index,
 		@RequestParam(value = "sort", required = false) String criteria,
@@ -47,7 +47,7 @@ public class ProductController {
 	) {
 
 		String modifiedLargeName = largeName.replace('-', '/');
-		String modifiedMediumName = mediumName.replace('-', '/');
+		String modifiedMediumName = (mediumName != null) ? mediumName.replace('-', '/') : null;
 		String modifiedSmallName = (smallName != null) ? smallName.replace('-', '/') : null;
 
 		CategoryProductResponseDto categoryProductResponse = productService.getCategoryProduct(modifiedLargeName,

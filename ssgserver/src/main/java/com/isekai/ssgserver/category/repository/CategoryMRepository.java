@@ -13,4 +13,7 @@ public interface CategoryMRepository extends JpaRepository<CategoryM, Long> {
 
 	@Query("SELECT cm.categoryMId FROM CategoryM cm WHERE cm.mediumName = :modifiedMediumName")
 	Long findByMediumName(@Param("modifiedMediumName") String modifiedMediumName);
+
+	@Query("SELECT cm FROM CategoryM cm WHERE cm.categoryMId = :categoryMId")
+	CategoryM findByCategoryMId(@Param("categoryMId") Long categoryMId);
 }

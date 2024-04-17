@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.isekai.ssgserver.member.dto.FavoriteCateResDto;
 import com.isekai.ssgserver.member.dto.FavoriteCountResponseDto;
 import com.isekai.ssgserver.member.dto.FavoriteDelRequestDto;
 import com.isekai.ssgserver.member.dto.FavoritePutReqDto;
@@ -81,13 +83,13 @@ public class MemberFavoriteController {
 
 	@GetMapping("/category-list")
 	@Operation(summary = "찜 카테고리 목록 조회", description = "찜 카테고리 목록을 조회합니다.")
-	public ResponseEntity<Page<FavoriteResDto>> getFavoriteCategoryList(
+	public ResponseEntity<Page<FavoriteCateResDto>> getFavoriteCategoryList(
 		@RequestHeader("Authorization") String token,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "30") int pageSize
 	) {
 		String uuid = jwtProvider.getUuid(token);
-		Page<FavoriteResDto> categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page, pageSize);
+		Page<FavoriteCateResDto> categoryList = memberFavoriteService.getFavoriteCategoryList(uuid, page, pageSize);
 		return ResponseEntity.ok(categoryList);
 	}
 
@@ -111,13 +113,16 @@ public class MemberFavoriteController {
 
 	@GetMapping("/number")
 	@Operation(summary = "찜 갯수", description = "찜 상품, 브랜드, 카테고리 갯수를 구합니다.")
-	public ResponseEntity<FavoriteCountResponseDto> getFavoriteCountList() {
-		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.getFavoriteCountList();
+	public ResponseEntity<FavoriteCountResponseDto> getFavoriteCountList(
+		@RequestHeader("Authorization") String token
+	) {
+		String uuid = jwtProvider.getUuid(token);
+		FavoriteCountResponseDto favoriteCountResponseDto = memberFavoriteService.getFavoriteCountList(uuid);
 
 		return ResponseEntity.ok(favoriteCountResponseDto);
 	}
 
-	@DeleteMapping("/selects")
+	@PutMapping("/selects")
 	@Operation(summary = "찜 선택들 삭제", description = "찜 선택한거 모두 삭제합니다.")
 	public ResponseEntity<Void> removeFavoriteList(
 		@RequestHeader("Authorization") String token,
