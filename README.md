@@ -1,4 +1,4 @@
-# 이세계 쓱닷컴
+# 🏆이세계 쓱닷컴🥇
 
 <p align="center">
   <img alt="로고" src="https://github.com/KwanHoo/CNU_Brightling/assets/49335804/7d0ffc58-24ea-4ab8-8f05-d73fb12413c5" width="250" height="250">
